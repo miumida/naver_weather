@@ -52,7 +52,7 @@ sensor:
 area는 기본값으로 '날씨'로 들어갑니다.<br>
 기본적으로 날씨로 지정되면 장비가 있는 위치를 기준으로 날씨가 나오는거 같았습니다.<br>
 추가로 area에 원하시는 지역을 네이버에서 검색하셔서 입력해보시고 날씨가 조회되면 area에 입력하시면 됩니다.<br>
-주소창을 확인하시면 'https://search.naver.com/search.naver?query=`창원시+성산구+대방동+날씨`'와 같은 형태로 확인이 됩니다.<br>
+주소창을 확인하시면 '<https://search.naver.com/search.naver?query=창원시+성산구+대방동+날씨>'와 같은 형태로 확인이 됩니다.<br>
 
 <br>
 
