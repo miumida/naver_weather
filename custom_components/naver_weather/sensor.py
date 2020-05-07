@@ -34,9 +34,12 @@ _INFO = {
     'TodayMinTemp':   ['최저온도',     '°C',    'mdi:thermometer-chevron-down'],
     'TodayMaxTemp':   ['최고온도',     '°C',    'mdi:thermometer-chevron-up'],
     'Ozon':           ['오존',         'ppm',   'mdi:alpha-o-circle'],
+    'OzonGrade':      ['오존등급',     '',      'mdi:alpha-o-circle'],
     'TodayUV':        ['자외선지수',   '',      'mdi:weather-sunny-alert'],
     'UltraFineDust':  ['초미세먼지',   '㎍/㎥', 'mdi:blur-linear'],
     'FineDust':       ['미세먼지',     '㎍/㎥', 'mdi:blur'],
+    'UltraFineDustGrade': ['초미세먼지등급', '', 'mdi:blur-linear'],
+    'FineDustGrade':  ['미세먼지등급', '',      'mdi:blur'],
     'tomorrowAState': ['내일오전날씨', '',      'mdi:weather-cloudy'],
     'tomorrowATemp':  ['내일최고온도', '°C',    'mdi:thermometer-chevron-up'],
     'tomorrowMState': ['내일오후날씨', '',      'mdi:weather-cloudy'],
@@ -105,12 +108,12 @@ class NWeatherAPI:
             WeatherCast = soup.find('p', {'class' : 'cast_txt'}).text
 
             # 오늘 오전온도, 오후온도, 체감온도
-            TodayMinTemp = soup.find('span', {'class' : 'min'}).text[:-1]
-            TodayMaxTemp = soup.find('span', {'class' : 'max'}).text[:-1]
-            TodayFeelTemp = soup.find('span', {'class' : 'sensible'}).text[5:-1]
+            TodayMinTemp  = soup.find('span', {'class' : 'min'}).select('span.num')[0].text
+            TodayMaxTemp  = soup.find('span', {'class' : 'max'}).select('span.num')[0].text
+            TodayFeelTemp = soup.find('span', {'class' : 'sensible'}).select('em > span.num')[0].text
 
             # 자외선 지수
-            TodayUV = soup.find('span', {'class' : 'indicator'}).text[4:].replace("\ub0ae\uc74c","").replace("\ubcf4\ud1b5","").replace("\ub192\uc74c","").replace("\ub9e4\uc6b0","").replace("\uc704\ud5d8","")
+            TodayUV = soup.find('span', {'class' : 'indicator'}).select('span > span.num')[0].text
 
             # 미세먼지, 초미세먼지, 오존 지수
             CheckDust1 = soup.find('div', {'class': 'sub_info'})
@@ -119,15 +122,18 @@ class NWeatherAPI:
             for i in CheckDust2.select('dd'):
                 CheckDust.append(i.text)
 
-            FineDust = CheckDust[0][:-5]
-            UltraFineDust = CheckDust[1][:-5]
-            Ozon = CheckDust[2][:-5]
+            FineDust      = CheckDust[0].split('㎍/㎥')[0]
+            FineDustGrade = CheckDust[0].split('㎍/㎥')[1]
+            UltraFineDust = CheckDust[1].split('㎍/㎥')[0]
+            UltraFineDustGrade = CheckDust[1].split('㎍/㎥')[1]
+            Ozon      = CheckDust[2].split('ppm')[0]
+            OzonGrade = CheckDust[2].split('ppm')[1]
 
             # 현재 습도
             Humidity1 = soup.find('div', {'class': 'info_list humidity _tabContent'})
             Humidity2 = Humidity1.find('li', {'class': 'on now'})
             Humidity3 = Humidity2.find('dd', {'class': 'weather_item _dotWrapper'})
-            Humidity = Humidity3.find('span').text.strip()
+            Humidity  = Humidity3.find('span').text.strip()
 
 
             # 내일 오전, 오후 온도 및 상태 체크
@@ -162,8 +168,11 @@ class NWeatherAPI:
             weather["WeatherCast"]    = WeatherCast
             weather["TodayUV"]        = TodayUV
             weather["FineDust"]       = FineDust
-            weather["UltraFineDust"]  = UltraFineDust
+            weather["FineDustGrade"]  = FineDustGrade
+            weather["UltraFineDust"]      = UltraFineDust
+            weather["UltraFineDustGrade"] = UltraFineDustGrade
             weather["Ozon"]           = Ozon
+            weather["OzonGrade"]      = OzonGrade
             weather["tomorrowMTemp"]  = tomorrowMTemp
             weather["tomorrowMState"] = tomorrowMState
             weather["tomorrowATemp"]  = tomorrowATemp
@@ -281,4 +290,3 @@ class childSensor(Entity):
         data[self._key] = self._value
 
         return data
-
