@@ -35,6 +35,7 @@ _INFO = {
     'TodayMaxTemp':   ['최고온도',     '°C',    'mdi:thermometer-chevron-up'],
     'Ozon':           ['오존',         'ppm',   'mdi:alpha-o-circle'],
     'OzonGrade':      ['오존등급',     '',      'mdi:alpha-o-circle'],
+    'Rainfall':       ['시간당강수량', 'mm',    'mdi:weather-pouring'],
     'TodayUV':        ['자외선지수',   '',      'mdi:weather-sunny-alert'],
     'UltraFineDust':  ['초미세먼지',   '㎍/㎥', 'mdi:blur-linear'],
     'FineDust':       ['미세먼지',     '㎍/㎥', 'mdi:blur'],
@@ -112,8 +113,19 @@ class NWeatherAPI:
             TodayMaxTemp  = soup.find('span', {'class' : 'max'}).select('span.num')[0].text
             TodayFeelTemp = soup.find('span', {'class' : 'sensible'}).select('em > span.num')[0].text
 
+            # 시간당 강수량
+            TodayRainfallSelect = soup.find('span', {'class' : 'rainfall'}).select('em > span.num')
+            Rainfall = '-'
+
+            for rain in TodayRainfallSelect:
+                Rainfall = rain.text
+
             # 자외선 지수
-            TodayUV = soup.find('span', {'class' : 'indicator'}).select('span > span.num')[0].text
+            TodayUVSelect = soup.find('span', {'class' : 'indicator'}).select('span > span.num')
+            TodayUV = '-'
+
+            for uv in TodayUVSelect:
+                TodayUV = uv.text
 
             # 미세먼지, 초미세먼지, 오존 지수
             CheckDust1 = soup.find('div', {'class': 'sub_info'})
@@ -166,6 +178,7 @@ class NWeatherAPI:
             weather["TodayMinTemp"]   = TodayMinTemp
             weather["TodayMaxTemp"]   = TodayMaxTemp
             weather["WeatherCast"]    = WeatherCast
+            weather['Rainfall']       = Rainfall
             weather["TodayUV"]        = TodayUV
             weather["FineDust"]       = FineDust
             weather["FineDustGrade"]  = FineDustGrade
