@@ -198,7 +198,7 @@ class NWeatherAPI:
 
 
 class NWeatherSensor(Entity):
-    """Representation of a KWeather Sensor."""
+    """Representation of a NWeather Sensor."""
 
     def __init__(self, name, api, child):
         """Initialize the NWeather sensor."""
@@ -250,7 +250,7 @@ class NWeatherSensor(Entity):
         return data
 
 class childSensor(Entity):
-    """Representation of a KWeather Sensor."""
+    """Representation of a NWeather Sensor."""
     _STATE = None
 
     def __init__(self, name, key, value):
