@@ -118,7 +118,7 @@ class NWeatherAPI:
             Rainfall = '-'
 
             if TodayRainfall is not None:
-                TodayRainfallselect = TodayRainfall.select('em > span.num')
+                TodayRainfallSelect = TodayRainfall.select('em > span.num')
 
                 for rain in TodayRainfallSelect:
                     Rainfall = rain.text
