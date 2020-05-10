@@ -114,11 +114,14 @@ class NWeatherAPI:
             TodayFeelTemp = soup.find('span', {'class' : 'sensible'}).select('em > span.num')[0].text
 
             # 시간당 강수량
-            TodayRainfallSelect = soup.find('span', {'class' : 'rainfall'}).select('em > span.num')
+            TodayRainfall = soup.find('span', {'class' : 'rainfall'})
             Rainfall = '-'
 
-            for rain in TodayRainfallSelect:
-                Rainfall = rain.text
+            if TodayRainfall is not None:
+                TodayRainfallselect = TodayRainfall.select('em > span.num')
+
+                for rain in TodayRainfallSelect:
+                    Rainfall = rain.text
 
             # 자외선 지수
             TodayUVSelect = soup.find('span', {'class' : 'indicator'}).select('span > span.num')
