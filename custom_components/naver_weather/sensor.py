@@ -29,18 +29,18 @@ _INFO = {
     'LocationInfo':   ['위치',         '',      'mdi:map-marker-radius'],
     'WeatherCast':    ['현재날씨',     '',      'mdi:weather-cloudy'],
     'NowTemp':        ['현재온도',     '°C',    'mdi:thermometer'],
-    'Humidity':       ['현재습도',     '%',     'mdi:water-percent'],
-    'TodayFeelTemp':  ['체감온도',     '°C',    'mdi:thermometer'],
     'TodayMinTemp':   ['최저온도',     '°C',    'mdi:thermometer-chevron-down'],
     'TodayMaxTemp':   ['최고온도',     '°C',    'mdi:thermometer-chevron-up'],
-    'Ozon':           ['오존',         'ppm',   'mdi:alpha-o-circle'],
-    'OzonGrade':      ['오존등급',     '',      'mdi:alpha-o-circle'],
+    'TodayFeelTemp':  ['체감온도',     '°C',    'mdi:thermometer'],
+    'Humidity':       ['현재습도',     '%',     'mdi:water-percent'],
     'Rainfall':       ['시간당강수량', 'mm',    'mdi:weather-pouring'],
     'TodayUV':        ['자외선지수',   '',      'mdi:weather-sunny-alert'],
     'UltraFineDust':  ['초미세먼지',   '㎍/㎥', 'mdi:blur-linear'],
     'FineDust':       ['미세먼지',     '㎍/㎥', 'mdi:blur'],
     'UltraFineDustGrade': ['초미세먼지등급', '', 'mdi:blur-linear'],
     'FineDustGrade':  ['미세먼지등급', '',      'mdi:blur'],
+    'Ozon':           ['오존',         'ppm',   'mdi:alpha-o-circle'],
+    'OzonGrade':      ['오존등급',     '',      'mdi:alpha-o-circle'],
     'tomorrowAState': ['내일오전날씨', '',      'mdi:weather-cloudy'],
     'tomorrowATemp':  ['내일최고온도', '°C',    'mdi:thermometer-chevron-up'],
     'tomorrowMState': ['내일오후날씨', '',      'mdi:weather-cloudy'],
@@ -175,20 +175,23 @@ class NWeatherAPI:
             #json 파일로 저장
             weather = dict()
             weather["LocationInfo"]   = LocationInfo
+            weather["WeatherCast"]    = WeatherCast
             weather["NowTemp"]        = NowTemp
-            weather["Humidity"]       = Humidity
-            weather["TodayFeelTemp"]  = TodayFeelTemp
             weather["TodayMinTemp"]   = TodayMinTemp
             weather["TodayMaxTemp"]   = TodayMaxTemp
-            weather["WeatherCast"]    = WeatherCast
+            weather["TodayFeelTemp"]  = TodayFeelTemp
+            weather["Humidity"]       = Humidity
+
             weather['Rainfall']       = Rainfall
             weather["TodayUV"]        = TodayUV
+            
             weather["FineDust"]       = FineDust
             weather["FineDustGrade"]  = FineDustGrade
             weather["UltraFineDust"]      = UltraFineDust
             weather["UltraFineDustGrade"] = UltraFineDustGrade
             weather["Ozon"]           = Ozon
             weather["OzonGrade"]      = OzonGrade
+
             weather["tomorrowMTemp"]  = tomorrowMTemp
             weather["tomorrowMState"] = tomorrowMState
             weather["tomorrowATemp"]  = tomorrowATemp
