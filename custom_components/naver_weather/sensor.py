@@ -148,12 +148,10 @@ class NWeatherAPI:
 
             # 현재 습도
             humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent'})
-            
-            HumiSelect = humi_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')
             Humidity = '-'
             
-            for humi in HumiSelect:
-                Humidity  = humi.text.strip()
+            if humi_tab is not None:
+                Humidity = humi_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')[0].text.strip()
                 
             # 현재풍속
             wind_tab = soup.find('div', {'class': 'info_list wind _tabContent'})
