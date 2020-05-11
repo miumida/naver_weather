@@ -33,6 +33,8 @@ _INFO = {
     'TodayMaxTemp':   ['최고온도',     '°C',    'mdi:thermometer-chevron-up'],
     'TodayFeelTemp':  ['체감온도',     '°C',    'mdi:thermometer'],
     'Humidity':       ['현재습도',     '%',     'mdi:water-percent'],
+    'WindSpeed':      ['현재풍속',     'm/s',   'mdi:weather-windy'],
+    'WindState':      ['현재풍향',     '',      'mdi:weather-windy'],
     'Rainfall':       ['시간당강수량', 'mm',    'mdi:weather-pouring'],
     'TodayUV':        ['자외선지수',   '',      'mdi:weather-sunny-alert'],
     'UltraFineDust':  ['초미세먼지',   '㎍/㎥', 'mdi:blur-linear'],
@@ -145,10 +147,25 @@ class NWeatherAPI:
             OzonGrade = CheckDust[2].split('ppm')[1]
 
             # 현재 습도
-            Humidity1 = soup.find('div', {'class': 'info_list humidity _tabContent'})
-            Humidity2 = Humidity1.find('li', {'class': 'on now'})
-            Humidity3 = Humidity2.find('dd', {'class': 'weather_item _dotWrapper'})
-            Humidity  = Humidity3.find('span').text.strip()
+            humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent'})
+            
+            HumiSelect = humi_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')
+            Humidity = '-'
+            
+            for humi in HumiSelect:
+                Humidity  = humi.text.strip()
+                
+            # 현재풍속
+            wind_tab = soup.find('div', {'class': 'info_list wind _tabContent'})
+            WindSpeed = '-'
+            WindState = '-'
+
+            if wind_tab is not None:
+                windSelect     = wind_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')
+                windstateSelect = wind_tab.select('ul > li.on.now > dl > dd.item_condition > span.wt_status')
+
+                WindSpeed = windSelect[0].text
+                WindState = windstateSelect[0].text.strip()
 
 
             # 내일 오전, 오후 온도 및 상태 체크
@@ -181,6 +198,9 @@ class NWeatherAPI:
             weather["TodayMaxTemp"]   = TodayMaxTemp
             weather["TodayFeelTemp"]  = TodayFeelTemp
             weather["Humidity"]       = Humidity
+            
+            weather["WindSpeed"]      = WindSpeed
+            weather["WindState"]      = WindState
 
             weather['Rainfall']       = Rainfall
             weather["TodayUV"]        = TodayUV
