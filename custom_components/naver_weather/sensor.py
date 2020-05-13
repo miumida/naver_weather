@@ -43,9 +43,9 @@ _INFO = {
     'FineDustGrade':  ['미세먼지등급', '',      'mdi:blur'],
     'Ozon':           ['오존',         'ppm',   'mdi:alpha-o-circle'],
     'OzonGrade':      ['오존등급',     '',      'mdi:alpha-o-circle'],
-    'tomorrowAState': ['내일오전날씨', '',      'mdi:weather-cloudy'],
+    'tomorrowAState': ['내일오후날씨', '',      'mdi:weather-cloudy'],
     'tomorrowATemp':  ['내일최고온도', '°C',    'mdi:thermometer-chevron-up'],
-    'tomorrowMState': ['내일오후날씨', '',      'mdi:weather-cloudy'],
+    'tomorrowMState': ['내일오전날씨', '',      'mdi:weather-cloudy'],
     'tomorrowMTemp':  ['내일최저온도', '°C',    'mdi:thermometer-chevron-down']
 }
 
