@@ -26,6 +26,7 @@ sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 
 | v1.0.4  | 2020.05.10  | 오타수정 |
 | v1.0.5  | 2020.05.12  | - 풍속/풍향 추가<br>- 속성순서 수정 |
 | v1.0.6  | 2020.05.12  | 현재습도 수정 |
+| v1.1.0  | 2020.05.13  | weather.py 추가 |
 
 <br>
 
@@ -35,8 +36,13 @@ sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 
   `<config directory>/custom_components/naver_weather/__init__.py`<br>
   `<config directory>/custom_components/naver_weather/manifest.json`<br>
   `<config directory>/custom_components/naver_weather/sensor.py`<br>
+  `<config directory>/custom_components/naver_weather/weather.py`<br>
 - configuration.yaml 파일에 설정을 추가합니다.<br>
 - Home-Assistant 를 재시작합니다<br>
+### HACS
+- HACS > SETTINGS 메뉴 선택. ADD CUSTOM REPOSITORY에 'https://github.com/miumida/naver_weather' 입력
+- Category에 'integration' 선택 후, 저장
+- HACS > INTEGRATIONS 메뉴 선택 후, naver_weather 검색하여 설치
 
 <br>
 
@@ -49,15 +55,21 @@ sensor:
     name: naver_weather
     area: '날씨'
 ```
+- HA설정에 naver_weather weather를 추가합니다<br>
+```yaml
+weather:
+  - platform: naver_weather
+    area: '날씨'
+```
 <br><br>
 ### 기본 설정값
 
-|옵션|내용|
-|--|--|
-|platform| (필수) naver_weather  |
-|name| (옵션) default(naver_weather) |
-|area| (옵션) 원하는 동네 / default(날씨) |
-|scan_interval| (옵션) Sensor Update Term / default(900s) |
+|옵션|내용|sensor|weather|
+|--|--|--|--|
+|platform| (필수) naver_weather  |O|O|
+|name| (옵션) default(naver_weather) |O|X|
+|area| (옵션) 원하는 동네 / default(날씨) |O|O|
+|scan_interval| (옵션) Sensor Update Term / default(900s) |O|O|
 
 <br>
 
@@ -75,6 +87,6 @@ query= 뒷부분에 있는 부분을 arae로 입력하시면 됩니다.
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v1.0.1-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v1.1.0-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
