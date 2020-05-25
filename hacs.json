@@ -1,6 +1,6 @@
 {
   "name": "[KR] Naver Weather",
   "country": "KR",
-  "domains": ["sensor", "weather"],
+  "domains": ["sensor"],
   "render_readme": true
 }
