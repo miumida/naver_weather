@@ -32,6 +32,7 @@ sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 
 | v1.1.0  | 2020.05.13  | weather.py 추가 |
 | v1.1.1  | 2020.05.14  | 내일오전날씨/내일오후날씨 수정 |
 | v1.1.2  | 2020.05.25  | SUB 지역(area_sub) 추가 |
+| v1.1.3  | 2020.05.25  | 오류 수정 |
 
 <br>
 
@@ -93,6 +94,6 @@ query= 뒷부분에 있는 부분을 arae로 입력하시면 됩니다.
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v1.1.0-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v1.1.3-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
