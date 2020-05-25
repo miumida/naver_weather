@@ -60,6 +60,9 @@ _CONDITIONS = {
     'ws30' : ['snowy',        '눈',          '흐려져 눈']
 }
 
+CONF_AREA    = 'area'
+DEFAULT_AREA = '날씨'
+
 CONF_AREA_SUB    = 'area_sub'
 DEFAULT_AREA_SUB = ''
 
