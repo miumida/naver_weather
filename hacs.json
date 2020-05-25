@@ -1,0 +1,6 @@
+{
+  "name": "[KR] 네이버 날씨",
+  "country": "KR",
+  "domains": ["sensor"],
+  "render_readme": true
+}
