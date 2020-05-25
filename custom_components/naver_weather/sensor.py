@@ -17,13 +17,17 @@ REQUIREMENTS = ["beautifulsoup4==4.9.0"]
 _LOGGER = logging.getLogger(__name__)
 
 CONF_AREA = 'area'
+CONF_AREA_SUB = 'area_sub'
+CONF_SCAN_INTERVAL_SUB = 'scan_interval_sub'
 
 BSE_URL = 'https://search.naver.com/search.naver?query={}'
 
 DEFAULT_NAME = 'naver_weather'
 DEFAULT_AREA = '날씨'
+DEFAULT_AREA_SUB = ''
 
 SCAN_INTERVAL = timedelta(seconds=900)
+SCAN_INTERVAL_SUB = timedelta(seconds=1020)
 
 _INFO = {
     'LocationInfo':   ['위치',         '',      'mdi:map-marker-radius'],
@@ -53,6 +57,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     vol.Optional(CONF_AREA, default=DEFAULT_AREA): cv.string,
     vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
+    vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string,
+    vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period,
 })
 
 
@@ -73,14 +79,33 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     api.update()
 
     for key, value in api.result.items():
-        sensor = childSensor(name, key, value)
+        sensor = childSensor(name, key, value, 'M')
         child   += [sensor]
         sensors += [sensor]
 
-    sensors += [NWeatherSensor(name, api, child)]
+    sensors += [NWeatherSensor(name, api, child, 'M')]
 
     add_entities(sensors, True)
 
+    #SUB AREA
+    area_s = config.get(CONF_AREA_SUB)
+    SCAN_INTERVAL_SUB = config.get(CONF_SCAN_INTERVAL_SUB)
+
+    if (len(area_s) > 0):
+        sensors_s = []
+        child_s   = []
+
+        api_s = NWeatherAPI(area_s)
+        api_s.update()
+
+        for key, value in api_s.result.items():
+            sensor_s = childSensor(name, key, value, 'S')
+            child_s   += [sensor_s]
+            sensors_s += [sensor_s]
+
+        sensors_s += [NWeatherSensor(name, api_s, child_s, 'S')]
+
+        add_entities(sensors_s, True)
 
 class NWeatherAPI:
     """NWeather API."""
@@ -224,17 +249,21 @@ class NWeatherAPI:
 class NWeatherSensor(Entity):
     """Representation of a NWeather Sensor."""
 
-    def __init__(self, name, api, child):
+    def __init__(self, name, api, child, gb):
         """Initialize the NWeather sensor."""
         self._name = name
         self._api   = api
         self._child = child
         self._icon = 'mdi:weather-partly-cloudy'
+        self._gb   = gb
 
     @property
     def entity_id(self):
         """Return the entity ID."""
-        return 'sensor.naver_weather'
+        if self._gb == 'M':
+            return 'sensor.naver_weather'
+        else:
+            return 'sensor.naver_weather_sub'
 
     @property
     def name(self):
@@ -277,17 +306,21 @@ class childSensor(Entity):
     """Representation of a NWeather Sensor."""
     _STATE = None
 
-    def __init__(self, name, key, value):
+    def __init__(self, name, key, value, gb):
         """Initialize the NWeather sensor."""
         self._name  = name
         self._key   = key
         self._value = value
         self._STATE = value
+        self._gb    = gb
 
     @property
     def entity_id(self):
         """Return the entity ID."""
-        return 'sensor.nw_{}'.format(self._key.lower())
+        if self._gb == 'M':
+            return 'sensor.nw_{}'.format(self._key.lower())
+        else:
+            return 'sensor.nw_sub_{}'.format(self._key.lower())
 
     @property
     def name(self):
