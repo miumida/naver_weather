@@ -60,8 +60,11 @@ _CONDITIONS = {
     'ws30' : ['snowy',        '눈',          '흐려져 눈']
 }
 
-CONF_AREA = 'area'
-DEFAULT_AREA = '날씨'
+CONF_AREA_SUB    = 'area_sub'
+DEFAULT_AREA_SUB = ''
+
+CONF_SCAN_INTERVAL_SUB = 'scan_interval_sub'
+SCAN_INTERVAL_SUB = timedelta(seconds=1020)
 
 BSE_URL = 'https://search.naver.com/search.naver?query={}'
 
@@ -69,7 +72,9 @@ SCAN_INTERVAL = timedelta(seconds=900)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_AREA, default=DEFAULT_AREA): cv.string,
-    vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period
+    vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
+    vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string,
+    vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period
 })
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -90,7 +95,25 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     wind_speed = int(rslt['WindSpeed'])
     humidity   = int(rslt['Humidity'])
 
-    add_entities([NaverWeather(condition, temp, humidity, wind_speed, TEMP_CELSIUS, cur, api)])
+    add_entities([NaverWeather(condition, temp, humidity, wind_speed, TEMP_CELSIUS, cur, api, 'M')])
+
+    #sub
+    area_sub = config.get(CONF_AREA_SUB)
+    SCAN_INTERVAL_SUB = config.get(CONF_SCAN_INTERVAL)
+
+    if (len(area_sub) > 0):
+        sub = NWeatherAPI(area_sub)
+        sub.update()
+
+        rslt_sub = sub.result
+        cur_sub  = sub.forecast
+
+        condition_s  = rslt_sub['NowTemp']
+        temp_s       = float(rslt_sub['NowTemp'])
+        wind_speed_s = int(rslt_sub['WindSpeed'])
+        humidity_s   = int(rslt_sub['Humidity'])
+
+        add_entities([NaverWeather(condition_s, temp_s, humidity_s, wind_speed_s, TEMP_CELSIUS, cur_sub, sub, 'S')])
 
 class NWeatherAPI:
     """NWeather API."""
@@ -215,7 +238,7 @@ class NWeatherAPI:
 
 class NaverWeather(WeatherEntity):
     """Representation of a weather condition."""
-    def __init__(self, condition, temperature, humidity, wind_speed, temperature_unit, forecast, api):
+    def __init__(self, condition, temperature, humidity, wind_speed, temperature_unit, forecast, api, gb):
         """Initialize the Demo weather."""
         self._name = 'NaverWeather'
         self._condition        = condition
@@ -225,6 +248,7 @@ class NaverWeather(WeatherEntity):
         self._wind_speed       = wind_speed
         self._forecast         = forecast
         self._api              = api
+        self._gb               = gb
 
     @Throttle(SCAN_INTERVAL)
     def update(self):
@@ -241,7 +265,10 @@ class NaverWeather(WeatherEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return '{}'.format(self._name)
+        if self._gb == 'M':
+            return '{}'.format(self._name)
+        else:
+            return '{}_sub'.format(self._name)
 
     @property
     def temperature(self):
