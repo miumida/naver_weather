@@ -71,7 +71,7 @@ sensor:
 weather:
   - platform: naver_weather
     area: '날씨'
-    sensor_yn: 'Y'
+    sensor_use: 'Y'
 ```
 <br><br>
 ### 기본 설정값
