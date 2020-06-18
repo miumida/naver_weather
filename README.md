@@ -8,6 +8,9 @@
 네이버 날씨 웹페이지를 크롤링하여 센서로 추가해 줍니다.<br>
 아무래도 크롤링을 해서 가져오는 부분이라 센서에서 호출하는 부분은 최소화할 수 있도록 했습니다.<br>
 sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 됩니다.<br>
+weather / weather.naverweather<br>
+　└ sensor / sensor.naver_weather<br>
+　　└ child / sensor.nw_*<br>
 
 부모 센서가 update 되는 시점에 자식 센서에 값을 함께 update 하도록 했습니다.<br>
 
