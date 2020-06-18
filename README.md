@@ -47,9 +47,9 @@ sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 
 - configuration.yaml 파일에 설정을 추가합니다.<br>
 - Home-Assistant 를 재시작합니다<br>
 ### HACS
-- HACS > SETTINGS 메뉴 선택. ADD CUSTOM REPOSITORY에 'https://github.com/miumida/naver_weather' 입력
-- Category에 'integration' 선택 후, 저장
-- HACS > INTEGRATIONS 메뉴 선택 후, naver_weather 검색하여 설치
+- HACS > Integretions > 우측상단 메뉴 > Custom repositories 선택
+- 'https://github.com/miumida/naver_weather' 주소 입력, Category에 'integration' 선택 후, 저장
+- HACS > Integretions 메뉴 선택 후, naver_weather 검색하여 설치
 
 <br>
 
