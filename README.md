@@ -33,6 +33,7 @@ sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 
 | v1.1.1  | 2020.05.14  | 내일오전날씨/내일오후날씨 수정 |
 | v1.1.2  | 2020.05.25  | SUB 지역(area_sub) 추가 |
 | v1.1.3  | 2020.05.25  | 오류 수정 |
+| v1.2.0  | 2020.06.18  | weathe에 sensor 통합 |
 
 <br>
 
@@ -66,6 +67,7 @@ sensor:
 weather:
   - platform: naver_weather
     area: '날씨'
+    sensor_yn: 'Y'
 ```
 <br><br>
 ### 기본 설정값
@@ -78,6 +80,7 @@ weather:
 |scan_interval| (옵션) Sensor Update Term / default(900s) |O|O|
 |area_sub| (옵션) 원하는 추가 동네 / default(날씨) |O|O|
 |scan_interval_sub| (옵션) Sensor Update Term / default(1020s) |O|O|
+|sensor_yn| (옵션) Weather include Sensor / default(N) |X|O|
 <br>
 
 ### area 설정값
