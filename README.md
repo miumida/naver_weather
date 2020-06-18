@@ -8,6 +8,7 @@
 네이버 날씨 웹페이지를 크롤링하여 센서로 추가해 줍니다.<br>
 아무래도 크롤링을 해서 가져오는 부분이라 센서에서 호출하는 부분은 최소화할 수 있도록 했습니다.<br>
 sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 됩니다.<br>
+
 weather / weather.naverweather<br>
 　└ sensor / sensor.naver_weather<br>
 　　└ child / sensor.nw_*<br>
@@ -83,7 +84,7 @@ weather:
 |scan_interval| (옵션) Sensor Update Term / default(900s) |O|O|
 |area_sub| (옵션) 원하는 추가 동네 / default(날씨) |O|O|
 |scan_interval_sub| (옵션) Sensor Update Term / default(1020s) |O|O|
-|sensor_yn| (옵션) Weather include Sensor / default(N) |X|O|
+|sensor_use| (옵션) Sensor Use(Y or N) / default(N) |X|O|
 <br>
 
 ### area 설정값
