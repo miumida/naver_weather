@@ -172,14 +172,14 @@ class NWeatherAPI:
             OzonGrade = CheckDust[2].split('ppm')[1]
 
             # 현재 습도
-            humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent'})
+            humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent _center'})
             Humidity = '-'
             
             if humi_tab is not None:
                 Humidity = humi_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')[0].text.strip()
                 
             # 현재풍속
-            wind_tab = soup.find('div', {'class': 'info_list wind _tabContent'})
+            wind_tab = soup.find('div', {'class': 'info_list wind _tabContent _center'})
             WindSpeed = '-'
             WindState = '-'
 
