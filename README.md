@@ -38,6 +38,7 @@ weather / weather.naverweather<br>
 | v1.1.2  | 2020.05.25  | SUB 지역(area_sub) 추가 |
 | v1.1.3  | 2020.05.25  | 오류 수정 |
 | v1.2.0  | 2020.06.18  | weathe에 sensor 통합 |
+| v1.2.1  | 2020.10.14  | weathe, sensor 현재습도, 현재풍속 가져오기 수정 |
 
 <br>
 
@@ -59,19 +60,20 @@ weather / weather.naverweather<br>
 
 ## Usage
 ### configuration
-- HA 설정에 naver_weather sensor를 추가합니다.<br>
-```yaml
-sensor:
-  - platform: naver_weather
-    name: naver_weather
-    area: '날씨'
-```
 - HA설정에 naver_weather weather를 추가합니다<br>
+- sensor_use를 'Y'로 설정한 경우, sensor에 설정을 추가하실 필요없습니다.
 ```yaml
 weather:
   - platform: naver_weather
     area: '날씨'
     sensor_use: 'Y'
+```
+- HA 설정에 naver_weather sensor를 추가합니다.(sensor만 사용하고 싶은 경우)<br>
+```yaml
+sensor:
+  - platform: naver_weather
+    name: naver_weather
+    area: '날씨'
 ```
 <br><br>
 ### 기본 설정값
