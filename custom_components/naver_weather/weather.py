@@ -239,11 +239,11 @@ class NWeatherAPI:
             condition = _CONDITIONS[condition_main][0]
 
             # 현재 습도
-            humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent'})
+            humi_tab = soup.find('div', {'class': 'info_list humidity _tabContent _center'})
             Humidity = humi_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')[0].text
 
             # 현재풍속
-            wind_tab = soup.find('div', {'class': 'info_list wind _tabContent'})
+            wind_tab = soup.find('div', {'class': 'info_list wind _tabContent _center'})
             WindSpeed  = wind_tab.select('ul > li.on.now > dl > dd.weather_item._dotWrapper > span')[0].text
             WindState  = wind_tab.select('ul > li.on.now > dl > dd.item_condition > span.wt_status')[0].text
 
