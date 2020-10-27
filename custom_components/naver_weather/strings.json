@@ -8,7 +8,7 @@
         "data": {
           "area": "[%key:common::config_flow::data::area%]",
           "sensor_use": "[%key:common::config_flow::data::sensor_use%]",
-          "interval_time": "[%key:common::config_flow::data::interval_time%]"
+          "scan_interval": "[%key:common::config_flow::data::scan_interval%]"
         }
       }
     },
