@@ -6,5 +6,6 @@
     "dependencies": [],
     "codeowners": [
         "@miumida"
-    ]
+    ],
+    "config_flow": true
 }
