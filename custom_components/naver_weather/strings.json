@@ -1,0 +1,19 @@
+{
+  "title": "Naver Weather",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Naver Weather",
+        "description": "Do you want to set up Naver Weather?"
+        "data": {
+          "area": "[%key:common::config_flow::data::area%]",
+          "sensor_use": "[%key:common::config_flow::data::sensor_use%]",
+          "interval_time": "[%key:common::config_flow::data::interval_time%]"
+        }
+      }
+    },
+    "abort": {
+      "one_instance_allowed": "Only a single instance is necessary."
+    }
+  }
+}
