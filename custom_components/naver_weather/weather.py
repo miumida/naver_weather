@@ -1,6 +1,7 @@
 """Support for Naver Weather Sensors."""
 import logging
 import requests
+import asyncio
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -22,6 +23,8 @@ from homeassistant.components.weather import (
     WeatherEntity,
 )
 from homeassistant.const import (CONF_SCAN_INTERVAL)
+
+from .const import DOMAIN, PLATFORM, SW_VERSION
 
 REQUIREMENTS = ["beautifulsoup4==4.9.0"]
 
@@ -113,11 +116,11 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string,
 })
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Set up the Demo weather."""
     # sensor use
     sensor_use    = config.get(CONF_SENSOR_USE)
-    
+
     # area config
     area          = config.get(CONF_AREA)
     SCAN_INTERVAL = config.get(CONF_SCAN_INTERVAL)
@@ -125,7 +128,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     #API
     api = NWeatherAPI(area)
 
-    api.update()
+    await api.update()
 
     rslt = api.result
     cur  = api.forecast
@@ -142,9 +145,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
         sensors += [NWeatherSensor('naver_weather', api, child, 'M')]
 
-        add_entities(sensors, True)
+        async_add_entities(sensors, True)
 
-    add_entities([NaverWeather(cur, api, 'M')])
+    async_add_entities([NaverWeather(cur, api, 'M')])
 
 
     #sub
@@ -158,8 +161,19 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         rslt_sub = sub.result
         cur_sub  = sub.forecast
 
-        add_entities([NaverWeather(cur_sub, sub, 'S')])
+        async_add_entities([NaverWeather(cur_sub, sub, 'S')])
 
+async def async_setup_entry(hass, config_entry, async_add_devices):
+    """Add a entity from a config_entry."""
+    area = config_entry.data[CONF_AREA]
+
+    api = NWeatherAPI(area)
+
+    await api.update()
+
+    cur = api.forecast
+
+    async_add_devices([NaverWeather(cur, api, 'M')])
 
 class NWeatherAPI:
     """NWeather API."""
@@ -172,7 +186,7 @@ class NWeatherAPI:
 
         self._sensor  = {}
 
-    def update(self):
+    async def update(self):
         """Update function for updating api information."""
         try:
             url = BSE_URL.format(self.area)
@@ -379,7 +393,7 @@ class NaverWeather(WeatherEntity):
     """Representation of a weather condition."""
     def __init__(self, forecast, api, gb):
         """Initialize the Demo weather."""
-        self._name = 'NaverWeather'
+        self._name             = 'Naver Weather'
         self._condition        = api.result["NowTemp"]
         self._temperature      = float(api.result["NowTemp"])
         self._temperature_unit = '°C'
@@ -402,12 +416,20 @@ class NaverWeather(WeatherEntity):
             _LOGGER.info("Don't receive weather data from NAVER!")
 
     @property
+    def unique_id(self):
+        """Return the entity ID."""
+        if self._gb == 'M':
+            return 'weather.naver_weather'
+        else:
+            return 'weather.naver_weather_sub'
+
+    @property
     def name(self):
         """Return the name of the sensor."""
         if self._gb == 'M':
             return '{}'.format(self._name)
         else:
-            return '{}_sub'.format(self._name)
+            return '{} {}'.format(self._name, 'Sub')
 
     @property
     def temperature(self):
@@ -453,6 +475,17 @@ class NaverWeather(WeatherEntity):
     def forecast(self):
         """Return the forecast."""
         return self._forecast
+
+    @property
+    def device_info(self):
+        """Device info."""
+        return {
+            "identifiers": {(DOMAIN, 'weather.naver_weather')},
+            "manufacturer": "NAVER Corp.",
+            "name": "Naver Weather",
+            "model": "naver_weather",
+            "sw_version": SW_VERSION,
+        }
 
 class childSensor(Entity):
     """Representation of a NWeather Sensor."""
@@ -505,17 +538,6 @@ class childSensor(Entity):
         self.update()
 
     @property
-    def device_info(self):
-        """Return information about the device."""
-        return {
-            "identifiers": {('naver_weather', self.unique_id)},
-            'name': 'Naver Weather',
-            'manufacturer': 'naver.com',
-            'model': 'naver_weather',
-            'sw_version': '1.1.4'
-        }
-
-    @property
     def device_state_attributes(self):
         """Attributes."""
         data = {}
@@ -538,7 +560,7 @@ class NWeatherSensor(Entity):
 
     @property
     def entity_id(self):
-        """Return the entity ID."""
+        """Return the unique ID."""
         if self._gb == 'M':
             return 'sensor.naver_weather'
         else:
@@ -559,7 +581,6 @@ class NWeatherSensor(Entity):
         """Return the state of the sensor."""
         return self._api._sensor["WeatherCast"]
 
-#    @Throttle(SCAN_INTERVAL)
     def update(self):
         """Get the latest state of the sensor."""
         if self._api is None:
@@ -587,6 +608,7 @@ class NWeatherSensor(Entity):
         return {
             "identifiers": {('naver_weather', 'quality')},
             'name': 'Naver Weather',
-            'manufacturer': 'naver.com',
-            'model': 'naver_weather'
+            'manufacturer': 'NAVER Corp.',
+            'model': 'naver_weather',
+            'sw_version': SW_VERSION
         }
