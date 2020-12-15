@@ -30,7 +30,7 @@ DEFAULT_SENSOR_USE = 'N'
 CONFIG_SCHEMA = vol.Schema(
     {
         DOMAIN: vol.All(
-            cv.deprecated(CONF_NAME, invalidation_version="0.110"),
+#            cv.deprecated(CONF_NAME, invalidation_version="0.110"),
             vol.Schema({vol.Optional(CONF_AREA, default=DEFAULT_AREA): cv.string}),
             vol.Schema({vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period}),
             vol.Schema({vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string}),
@@ -45,6 +45,7 @@ CONFIG_SCHEMA = vol.Schema(
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up naver_weather from configuration.yaml."""
     conf = config.get(DOMAIN)
+
     if conf:
         hass.async_create_task(
             hass.config_entries.flow.async_init(
@@ -57,9 +58,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up naver_weather from a config entry."""
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, PLATFORM)
-    )
+    hass.async_create_task(hass.config_entries.async_forward_entry_setup(entry, PLATFORM))
 
     return True
 
