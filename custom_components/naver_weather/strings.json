@@ -7,8 +7,8 @@
         "description": "Do you want to set up Naver Weather?"
         "data": {
           "area": "[%key:common::config_flow::data::area%]",
-          "sensor_use": "[%key:common::config_flow::data::sensor_use%]",
           "scan_interval": "[%key:common::config_flow::data::scan_interval%]"
+          "sensor_use": "[%key:common::config_flow::data::sensor_use%]"
         }
       }
     },
