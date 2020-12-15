@@ -5,14 +5,13 @@
         },
         "step": {
             "user": {
-                "description": "Naver Weather\ub97c \uc124\uc815\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c",
+                "description": "Naver Weather\uB97C \uCD94\uAC00\uD558\uAE30 \uC704\uD55C \uC124\uC815\uAC12\uC744 \uC785\uB825\uD558\uC138\uC694.",
                 "title": "Naver Weather \uc124\uc815\ud558\uae30",
                 "data": {
-                    "area": "AREA",
-                    "sensor_use": "Senser Use",
-                    "scan_interval": "Scan Interval"
+                    "area": "Area",
+                    "scan_interval": "Scan Interval",
+                    "sensor_use": "Senser Use"
                 }
-
             }
         }
     },
