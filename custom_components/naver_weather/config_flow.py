@@ -23,7 +23,7 @@ class NaverWeatherConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self):
         """Initialize flow."""
         self._area: Optional[str] = "날씨"
-        self._sensor_use: Optional[str] = "N"
+        self._sensor_use: Optional[bool] = False
         self._interval_time: Optional[int] = 900
  
     async def async_step_user(self, user_input=None):
@@ -52,12 +52,12 @@ class NaverWeatherConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def _show_user_form(self, errors=None):
         default_area       = self._area or '날씨'
-        default_sensor_use = self._sensor_use or 'N'
+        default_sensor_use = self._sensor_use or False
         schema = vol.Schema(
             {
                 vol.Optional(CONF_AREA, default=default_area): str,
-                vol.Optional(CONF_SENSOR_USE, default=default_sensor_use): str,
                 vol.Optional(CONF_SCAN_INTERVAL, default=self._interval_time): int,
+                vol.Optional(CONF_SENSOR_USE, default=default_sensor_use): bool,
             }
         )
 
