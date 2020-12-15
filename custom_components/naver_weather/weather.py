@@ -113,7 +113,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
     vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string,
     vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period,
-    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string,
+#    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string,
+    vol.Optional(CONF_SENSOR_USE, default=False): cv.boolean,
 })
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -134,7 +135,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     cur  = api.forecast
 
     # sensor add
-    if sensor_use == 'Y':
+    if sensor_use == True:
         sensors = []
         child   = []
 
@@ -167,11 +168,29 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     """Add a entity from a config_entry."""
     area = config_entry.data[CONF_AREA]
 
+    # sensor use
+    sensor_use    = config_entry.data[CONF_SENSOR_USE]
+
     api = NWeatherAPI(area)
 
     await api.update()
 
     cur = api.forecast
+
+    # sensor add
+    if sensor_use == True:
+        sensors = []
+        child   = []
+
+        for key, value in api._sensor.items():
+            sensor = childSensor('naver_weather', key, value, 'M')
+            child   += [sensor]
+            sensors += [sensor]
+
+        sensors += [NWeatherSensor('naver_weather', api, child, 'M')]
+
+        async_add_devices(sensors, True)
+
 
     async_add_devices([NaverWeather(cur, api, 'M')])
 
@@ -485,6 +504,7 @@ class NaverWeather(WeatherEntity):
             "name": "Naver Weather",
             "model": "naver_weather",
             "sw_version": SW_VERSION,
+            "entry_type": "service",
         }
 
 class childSensor(Entity):
