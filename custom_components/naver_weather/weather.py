@@ -104,7 +104,7 @@ SCAN_INTERVAL_SUB = timedelta(seconds=1020)
 
 # sensor 사용여부
 CONF_SENSOR_USE = 'sensor_use'
-DEFAULT_SENSOR_USE = 'N'
+DEFAULT_SENSOR_USE = False
 
 BSE_URL = 'https://search.naver.com/search.naver?query={}'
 
@@ -113,8 +113,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
     vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string,
     vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period,
-#    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string,
-    vol.Optional(CONF_SENSOR_USE, default=False): cv.boolean,
+    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.boolean,
 })
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -157,7 +156,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
     if (len(area_sub) > 0):
         sub = NWeatherAPI(area_sub)
-        sub.update()
+        await sub.update()
 
         rslt_sub = sub.result
         cur_sub  = sub.forecast
