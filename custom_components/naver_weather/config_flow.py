@@ -43,8 +43,6 @@ class NaverWeatherConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is None:
             return self._show_user_form(errors)
 
-        #return self.async_create_entry(title=DOMAIN, data=user_input)
-
     async def async_step_import(self, import_info):
         """Handle import from config file."""
         return await self.async_step_user(import_info)
