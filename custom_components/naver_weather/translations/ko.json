@@ -15,5 +15,18 @@
             }
         }
     },
+    "options": {
+        "step": {
+            "user": {
+                "data": {
+                    "area": "Area",
+                    "scan_interval": "Scan Interval",
+                    "sensor_use": "Sensor Use",
+                    "area_sub": "Area(Sub)",
+                    "scan_interval_sub": "Scan Interval(Sub)"
+                }
+            }
+        }
+    },
     "title": "Naver Weather"
 }
