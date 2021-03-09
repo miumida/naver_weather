@@ -1,4 +1,5 @@
 """Naver Weather Sensor for Homeassistant"""
+"""Naver Weather Sensor for Homeassistant"""
 import voluptuous as vol
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
@@ -24,7 +25,7 @@ SCAN_INTERVAL_SUB = timedelta(seconds=1020)
 
 # sensor 사용여부
 CONF_SENSOR_USE = 'sensor_use'
-DEFAULT_SENSOR_USE = 'N'
+DEFAULT_SENSOR_USE = False
 
 
 CONFIG_SCHEMA = vol.Schema(
@@ -35,7 +36,7 @@ CONFIG_SCHEMA = vol.Schema(
             vol.Schema({vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period}),
             vol.Schema({vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string}),
             vol.Schema({vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period}),
-            vol.Schema({vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string}),
+            vol.Schema({vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.boolean}),
         )
     },
     extra=vol.ALLOW_EXTRA,
