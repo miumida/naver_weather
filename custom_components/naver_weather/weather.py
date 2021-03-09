@@ -11,6 +11,8 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import Throttle
 
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
 from homeassistant.components.weather import (
     ATTR_FORECAST_CONDITION,
     ATTR_FORECAST_PRECIPITATION,
@@ -104,7 +106,7 @@ SCAN_INTERVAL_SUB = timedelta(seconds=1020)
 
 # sensor 사용여부
 CONF_SENSOR_USE = 'sensor_use'
-DEFAULT_SENSOR_USE = False
+DEFAULT_SENSOR_USE = 'N'
 
 BSE_URL = 'https://search.naver.com/search.naver?query={}'
 
@@ -113,7 +115,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
     vol.Optional(CONF_AREA_SUB, default=DEFAULT_AREA_SUB): cv.string,
     vol.Optional(CONF_SCAN_INTERVAL_SUB, default=SCAN_INTERVAL_SUB): cv.time_period,
-    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.boolean,
+#    vol.Optional(CONF_SENSOR_USE, default=DEFAULT_SENSOR_USE): cv.string,
+    vol.Optional(CONF_SENSOR_USE, default=False): cv.boolean,
 })
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -126,7 +129,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     SCAN_INTERVAL = config.get(CONF_SCAN_INTERVAL)
 
     #API
-    api = NWeatherAPI(area)
+    api = NWeatherAPI(hass, area)
 
     await api.update()
 
@@ -155,8 +158,8 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     SCAN_INTERVAL_SUB = config.get(CONF_SCAN_INTERVAL)
 
     if (len(area_sub) > 0):
-        sub = NWeatherAPI(area_sub)
-        await sub.update()
+        sub = NWeatherAPI(hass, area_sub)
+        sub.update()
 
         rslt_sub = sub.result
         cur_sub  = sub.forecast
@@ -165,12 +168,29 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Add a entity from a config_entry."""
-    area = config_entry.data[CONF_AREA]
+
+    area       = None
+    sensor_use = False
+    area_sub   = ''
+
+    if CONF_AREA in config_entry.options:
+        area = config_entry.options[CONF_AREA]
+    else:
+        area = config_entry.data[CONF_AREA]
 
     # sensor use
-    sensor_use    = config_entry.data[CONF_SENSOR_USE]
+    if CONF_SENSOR_USE in config_entry.options:
+        sensor_use    = config_entry.options[CONF_SENSOR_USE]
+    else:
+        sensor_use    = config_entry.data[CONF_SENSOR_USE]
 
-    api = NWeatherAPI(area)
+    if CONF_AREA_SUB in config_entry.options:
+        area_sub = config_entry.options[CONF_AREA_SUB]
+    else:
+        if CONF_AREA_SUB in config_entry.data:
+            area_sub = config_entry.data[CONF_AREA_SUB]
+
+    api = NWeatherAPI(hass, area)
 
     await api.update()
 
@@ -193,16 +213,30 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
     async_add_devices([NaverWeather(cur, api, 'M')])
 
+    #sub
+    if (len(area_sub) > 0):
+        sub = NWeatherAPI(hass, area_sub)
+
+        await sub.update()
+
+        cur_sub  = sub.forecast
+
+        async_add_devices([NaverWeather(cur_sub, sub, 'S')])
+
+
+
 class NWeatherAPI:
     """NWeather API."""
 
-    def __init__(self, area):
+    def __init__(self, hass, area):
         """Initialize the NWeather API.."""
         self.area     = area
         self.result   = {}
         self.forecast = []
 
         self._sensor  = {}
+
+        self._hass    = hass
 
     async def update(self):
         """Update function for updating api information."""
@@ -211,10 +245,13 @@ class NWeatherAPI:
 
             hdr = {'User-Agent': ('mozilla/5.0 (windows nt 10.0; win64; x64) applewebkit/537.36 (khtml, like gecko) chrome/78.0.3904.70 safari/537.36')}
 
-            response = requests.get(url, headers=hdr, timeout=10)
+            session = async_get_clientsession(self._hass)
+
+            #response = requests.get(url, headers=hdr, timeout=10)
+            response = await session.get(url, headers=hdr, timeout=10)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup( await response.text(), 'html.parser')
 
             NowTemp = ""
             CheckDust = []
@@ -581,9 +618,9 @@ class NWeatherSensor(Entity):
     def entity_id(self):
         """Return the unique ID."""
         if self._gb == 'M':
-            return 'sensor.naver_weather'
+            return ('sensor.naver_weather')
         else:
-            return 'sensor.naver_weather_sub'
+            return ('sensor.naver_weather_sub')
 
     @property
     def name(self):
