@@ -459,13 +459,14 @@ class NaverWeather(WeatherEntity):
         self._gb               = gb
 
     @Throttle(SCAN_INTERVAL)
-    def update(self):
+    async def async_update(self):
         """Update current conditions."""
-        print ('weather updateing')
 
-        self._api.update()
+        await self._api.update()
 
         self._forecast = self._api.forecast
+
+        #_LOGGER.debug("[Check] async_update() : %s", self._api.result["NowTemp"])
 
         if not self._forecast:
             _LOGGER.info("Don't receive weather data from NAVER!")
