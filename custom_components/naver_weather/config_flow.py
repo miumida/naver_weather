@@ -5,12 +5,15 @@ import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.core import callback
-from homeassistant.const import (CONF_SCAN_INTERVAL)
 
 from .const import DOMAIN
 
-CONF_AREA        = 'area'
-CONF_SENSOR_USE  = 'sensor_use'
+CONF_AREA          = 'area'
+CONF_SENSOR_USE    = 'sensor_use'
+CONF_SCAN_INTERVAL = 'scan_interval'
+
+CONF_AREA_SUB          = 'area_sub'
+CONF_SCAN_INTERVAL_SUB = 'scan_interval_sub'
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,8 +25,8 @@ class NaverWeatherConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self):
         """Initialize flow."""
-        self._area: Optional[str] = "날씨"
-        self._sensor_use: Optional[bool] = False
+        self._area: Optional[str]          = "날씨"
+        self._sensor_use: Optional[bool]   = False
         self._interval_time: Optional[int] = 900
 
 
@@ -95,21 +98,49 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
             self.data = {}
 
-            self.data[CONF_AREA]           = user_input.get(CONF_AREA)
-            self.data["scan_interval"]     = user_input.get("scan_interval")
-            self.data["sensor_use"]        = user_input.get("sensor_use")
-            self.data["area_sub"]          = user_input.get("area_sub", "")
-            self.data["scan_interval_sub"] = user_input.get("scan_interval_sub", 1020)
+            self.data[CONF_AREA]              = user_input.get(CONF_AREA)
+            self.data[CONF_SCAN_INTERVAL]     = user_input.get(CONF_SCAN_INTERVAL)
+            self.data[CONF_SENSOR_USE]        = user_input.get(CONF_SENSOR_USE)
+            self.data[CONF_AREA_SUB]          = user_input.get(CONF_AREA_SUB, "")
+            self.data[CONF_SCAN_INTERVAL_SUB] = user_input.get(CONF_SCAN_INTERVAL_SUB, 1020)
 
             return self.async_create_entry(title="", data=self.data)
 
-        schema = {
-                   vol.Optional(CONF_AREA, default=self.config_entry.data.get("area")): str,
-                   vol.Optional(CONF_SCAN_INTERVAL, default=self.config_entry.data.get("scan_interval")): int,
-                   vol.Optional(CONF_SENSOR_USE, default=self.config_entry.data.get("sensor_use")): bool,
+        if CONF_AREA in self.config_entry.options:
+            area = self.config_entry.options.get(CONF_AREA)
+        else:
+            area = self.config_entry.data.get(CONF_AREA)
 
-                   vol.Optional("area_sub", default=self.config_entry.options.get("area_sub")): str,
-                   vol.Optional("scan_interval_sub", default=1020): int,
+        if CONF_SCAN_INTERVAL in self.config_entry.options:
+            scan_interval = self.config_entry.options.get(CONF_SCAN_INTRERVAL)
+        else:
+            scan_interval = self.config_entry.data.get(CONF_SCAN_INTERVAL)
+
+        if CONF_SENSOR_USE in self.config_entry.options:
+            sensor_use = self.config_entry.options.get(CONF_SENSOR_USE)
+        else:
+            sensor_use = self.config_entry.data.get(CONF_SENSOR_USE)
+
+        if CONF_AREA_SUB in self.config_entry.options:
+            area_sub = self.config_entry.options.get(CONF_AREA_SUB)
+        else:
+            area_sub = self.config_entry.data.get(CONF_AREA_SUB)
+
+        if CONF_SCAN_INTERVAL_SUB in self.config_entry.options:
+            scan_interval_sub = self.config_entry.options.get(CONF_SCAN_INTERVAL_SUB)
+        else:
+            if CONF_SCAN_INTERVAL_SUB in self.config_entry.data:
+                scan_interval_sub = self.config_entry.data.get(CONF_SCAN_INTERVAL_SUB)
+            else:
+                scan_intercal_sub = 1020
+
+        schema = {
+                   vol.Optional(CONF_AREA,          default=area): str,
+                   vol.Optional(CONF_SCAN_INTERVAL, default=scan_interval): int,
+                   vol.Optional(CONF_SENSOR_USE,    default=sensor_use): bool,
+
+                   vol.Optional(CONF_AREA_SUB,          default=area_sub): str,
+                   vol.Optional(CONF_SCAN_INTERVAL_SUB, default=scan_interval_sub): int,
                   }
 
         return self.async_show_form(step_id="user", data_schema=vol.Schema(schema))
