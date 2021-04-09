@@ -1,4 +1,172 @@
-DOMAIN = "naver_weather"
-PLATFORM = "weather"
+"""Const for Naver Weather."""
+import voluptuous as vol
+import homeassistant.helpers.config_validation as cv
+from homeassistant.const import (
+    DEVICE_CLASS_HUMIDITY,
+    DEVICE_CLASS_TEMPERATURE,
+    TEMP_CELSIUS,
+    PERCENTAGE,
+    SPEED_METERS_PER_SECOND,
+    CONCENTRATION_PARTS_PER_MILLION,
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+    PRECIPITATION_MILLIMETERS_PER_HOUR,
+)
 
-SW_VERSION = "1.3.0"
+DOMAIN = "naver_weather"
+BRAND = "Naver Weather"
+MODEL = "NWeather"
+PLATFORMS = ["weather", "sensor"]
+
+DEVICE_STATE = "state"
+DEVICE_UPDATE = "update"
+DEVICE_REG = "register"
+DEVICE_UNREG = "unregister"
+
+SW_VERSION = "2.0.0"
+BSE_URL = "https://search.naver.com/search.naver?query={}"
+
+# area
+CONF_AREA = "area"
+DEFAULT_AREA = "날씨"
+
+OPT_SCAN_INT = "scan_interval"
+DEFAULT_SCAN_INT = 15
+
+
+def int_between(min_int, max_int):
+    """Return an integer between 'min_int' and 'max_int'."""
+    return vol.All(vol.Coerce(int), vol.Range(min=min_int, max=max_int))
+
+
+NW_OPTIONS = [
+    (CONF_AREA, DEFAULT_AREA, cv.string),
+]
+
+
+CONDITIONS = {
+    "ws1": ["sunny", "맑음", "맑음(낮)"],
+    "ws2": ["clear-night", "맑음 (밤)", "맑음(밤)"],
+    "ws3": ["partlycloudy", "대체로 흐림", "구름조금(낮)"],
+    "ws4": ["partlycloudy", "대체로 흐림", "구름조금(밤)"],
+    "ws5": ["partlycloudy", "대체로 흐림", "구름많음(낮)"],
+    "ws6": ["partlycloudy", "대체로 흐림", "구름많음(밤)"],
+    "ws7": ["cloudy", "흐림", "흐림"],
+    "ws8": ["rainy", "비", "약한비"],
+    "ws9": ["rainy", "비", "비"],
+    "ws10": ["pouring", "호우", "강한비"],
+    "ws11": ["snowy", "눈", "약한눈"],
+    "ws12": ["snowy", "눈", "눈"],
+    "ws13": ["snowy", "눈", "강한눈"],
+    "ws14": ["snowy", "눈", "진눈깨비"],
+    "ws15": ["rainy", "비", "소나기"],
+    "ws16": ["snowy-rainy", "진눈개비", "소낙 눈"],
+    "ws17": ["fog", "안개", "안개"],
+    "ws18": ["lightning", "번개", "번개,뇌우"],
+    "ws19": ["snowy", "눈", "우박"],
+    "ws20": ["fog", "안개", "황사"],
+    "ws21": ["snowy-rainy", "진눈개비", "비 또는 눈"],
+    "ws22": ["rainy", "비", "가끔 비"],
+    "ws23": ["snowy", "눈", "가끔 눈"],
+    "ws24": ["snowy-rainy", "진눈개비", "가끔 비 또는 눈"],
+    "ws25": ["partlycloudy", "대체로 흐림", "흐린 후 갬"],
+    "ws26": ["partlycloudy", "대체로 흐림", "뇌우 후 갬"],
+    "ws27": ["partlycloudy", "대체로 흐림", "비 후 갬"],
+    "ws28": ["partlycloudy", "대체로 흐림", "눈 후 갬"],
+    "ws29": ["rainy", "비", "흐려져 비"],
+    "ws30": ["snowy", "눈", "흐려져 눈"],
+}
+
+# naver provide infomation
+LOCATION = ["LocationInfo", "위치", "", "mdi:map-marker-radius", ""]
+CONDITION = ["Condition", "날씨", "", "", ""]
+NOW_CAST = ["WeatherCast", "현재날씨", "", "mdi:weather-cloudy", ""]
+NOW_TEMP = [
+    "NowTemp",
+    "현재온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer",
+    DEVICE_CLASS_TEMPERATURE,
+]
+MIN_TEMP = [
+    "TodayMinTemp",
+    "최저온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer-chevron-down",
+    DEVICE_CLASS_TEMPERATURE,
+]
+MAX_TEMP = [
+    "TodayMaxTemp",
+    "최고온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer-chevron-up",
+    DEVICE_CLASS_TEMPERATURE,
+]
+FEEL_TEMP = [
+    "TodayFeelTemp",
+    "체감온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer",
+    DEVICE_CLASS_TEMPERATURE,
+]
+NOW_HUMI = ["Humidity", "현재습도", PERCENTAGE, "mdi:water-percent", DEVICE_CLASS_HUMIDITY]
+WIND_SPEED = ["WindSpeed", "현재풍속", SPEED_METERS_PER_SECOND, "mdi:weather-windy", ""]
+WIND_DIR = ["WindBearing", "현재풍향", "", "mdi:weather-windy", ""]
+RAINFALL = [
+    "Rainfall",
+    "시간당강수량",
+    PRECIPITATION_MILLIMETERS_PER_HOUR,
+    "mdi:weather-pouring",
+    "",
+]
+UV = ["TodayUV", "자외선지수", "", "mdi:weather-sunny-alert", ""]
+UDUST = [
+    "UltraFineDust",
+    "초미세먼지",
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+    "mdi:blur-linear",
+    "",
+]
+NDUST = ["FineDust", "미세먼지", CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "mdi:blur", ""]
+UDUST_GRADE = ["UltraFineDustGrade", "초미세먼지등급", "", "mdi:blur-linear", ""]
+NDUST_GRADE = ["FineDustGrade", "미세먼지등급", "", "mdi:blur", ""]
+OZON = ["Ozon", "오존", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-o-circle", ""]
+OZON_GRADE = ["OzonGrade", "오존등급", "", "mdi:alpha-o-circle", ""]
+TOMORROW_PM = ["tomorrowAState", "내일오후날씨", "", "mdi:weather-cloudy", ""]
+TOMORROW_MAX = [
+    "tomorrowATemp",
+    "내일최고온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer-chevron-up",
+    DEVICE_CLASS_TEMPERATURE,
+]
+TOMORROW_AM = ["tomorrowMState", "내일오전날씨", "", "mdi:weather-cloudy", ""]
+TOMORROW_MIN = [
+    "tomorrowMTemp",
+    "내일최저온도",
+    TEMP_CELSIUS,
+    "mdi:thermometer-chevron-down",
+    DEVICE_CLASS_TEMPERATURE,
+]
+WEATHER_INFO = {
+    LOCATION[0]: LOCATION,
+    NOW_CAST[0]: NOW_CAST,
+    NOW_TEMP[0]: NOW_TEMP,
+    MIN_TEMP[0]: MIN_TEMP,
+    MAX_TEMP[0]: MAX_TEMP,
+    FEEL_TEMP[0]: FEEL_TEMP,
+    NOW_HUMI[0]: NOW_HUMI,
+    WIND_SPEED[0]: WIND_SPEED,
+    WIND_DIR[0]: WIND_DIR,
+    RAINFALL[0]: RAINFALL,
+    UV[0]: UV,
+    UDUST[0]: UDUST,
+    NDUST[0]: NDUST,
+    UDUST_GRADE[0]: UDUST_GRADE,
+    NDUST_GRADE[0]: NDUST_GRADE,
+    OZON[0]: OZON,
+    OZON_GRADE[0]: OZON_GRADE,
+    TOMORROW_PM[0]: TOMORROW_PM,
+    TOMORROW_MAX[0]: TOMORROW_MAX,
+    TOMORROW_AM[0]: TOMORROW_AM,
+    TOMORROW_MIN[0]: TOMORROW_MIN,
+}

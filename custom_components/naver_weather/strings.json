@@ -1,19 +1,31 @@
 {
   "title": "Naver Weather",
   "config": {
+    "abort": {
+      "single_instance_allowed": "[%key:common::config_flow::abort::single_instance_allowed%]",
+      "no_devices_found": "[%key:common::config_flow::abort::no_devices_found%]"
+    },
     "step": {
+      "confirm": {
+        "description": "[%key:common::config_flow::description::confirm_setup%]"
+      },
       "user": {
         "title": "Set up Naver Weather",
-        "description": "Do you want to set up Naver Weather?"
+        "description": "Do you want to set up Naver Weather?",
         "data": {
-          "area": "[%key:common::config_flow::data::area%]",
-          "scan_interval": "[%key:common::config_flow::data::scan_interval%]"
-          "sensor_use": "[%key:common::config_flow::data::sensor_use%]"
+          "area": "Area : Where you want to know."
         }
       }
-    },
-    "abort": {
-      "one_instance_allowed": "Only a single instance is necessary."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Naver Weather Options.",
+        "data": {
+          "area": "Area : Where you want to know."
+        }
+      }
     }
   }
 }

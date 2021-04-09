@@ -1,32 +1,30 @@
 {
+    "title": "\uB124\uC774\uBC84 \uB0A0\uC528",
     "config": {
         "abort": {
-            "single_instance_allowed": "\uD558\uB098\uC758 Naver Weather\uB9CC \uAD6C\uC131\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+            "single_instance_allowed": "\uC774\uBBF8 \uC874\uC7AC\uD569\uB2C8\uB2E4."
         },
         "step": {
+            "confirm": {
+                "description": "\uB2F4\uB2E4 \uD328\uB4DC \uB97C \uC124\uCE58\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?"
+            },
             "user": {
-                "description": "Naver Weather\uB97C \uCD94\uAC00\uD558\uAE30 \uC704\uD55C \uC124\uC815\uAC12\uC744 \uC785\uB825\uD558\uC138\uC694.",
-                "title": "Naver Weather \uc124\uc815\ud558\uae30",
+                "title": "\uB124\uC774\uBC84 \uB0A0\uC528 \uC124\uC815\uD558\uAE30",
+                "description": "\uB124\uC774\uBC84 \uB0A0\uC528\uB97C \uCD94\uAC00\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?",
                 "data": {
-                    "area": "Area",
-                    "scan_interval": "Scan Interval",
-                    "sensor_use": "Senser Use"
+                    "area": "\uC9C0\uC5ED : \uB0A0\uC528\uB97C \uC54C\uACE0\uC2F6\uC740 \uC9C0\uC5ED\uC758 \uC774\uB984"
                 }
             }
         }
     },
     "options": {
         "step": {
-            "user": {
+            "init": {
+                "title": "\uB124\uC774\uBC84 \uB0A0\uC528 \uC0AC\uC6A9\uC790\uC124\uC815.",
                 "data": {
-                    "area": "Area",
-                    "scan_interval": "Scan Interval",
-                    "sensor_use": "Sensor Use",
-                    "area_sub": "Area(Sub)",
-                    "scan_interval_sub": "Scan Interval(Sub)"
+                    "area": "\uC9C0\uC5ED : \uB0A0\uC528\uB97C \uC54C\uACE0\uC2F6\uC740 \uC9C0\uC5ED\uC758 \uC774\uB984"
                 }
             }
         }
-    },
-    "title": "Naver Weather"
+    }
 }
