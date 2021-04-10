@@ -24,7 +24,7 @@ SCAN_INTERVAL = timedelta(minutes=10)
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Add a entity from a config_entry."""
 
-    api = hass.data[DOMAIN][config_entry.entry_id]
+    api = hass.data[DOMAIN]["api"][config_entry.entry_id]
 
     def async_add_entity():
         """Add sensor from sensor."""
@@ -55,7 +55,10 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     @property
     def temperature(self):
         """Return the temperature."""
-        return float(self.api.result.get(NOW_TEMP[0]))
+        try:
+            return float(self.api.result.get(NOW_TEMP[0]))
+        except Exception:
+            return
 
     @property
     def temperature_unit(self):
@@ -65,12 +68,18 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     @property
     def humidity(self):
         """Return the humidity."""
-        return int(self.api.result.get(NOW_HUMI[0]))
+        try:
+            return int(self.api.result.get(NOW_HUMI[0]))
+        except Exception:
+            return
 
     @property
     def wind_speed(self):
         """Return the wind speed."""
-        return float(self.api.result.get(WIND_SPEED[0])) * 3.6
+        try:
+            return float(self.api.result.get(WIND_SPEED[0])) * 3.6
+        except Exception:
+            return
 
     @property
     def wind_bearing(self):
@@ -90,9 +99,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     @property
     def attribution(self):
         """Return the attribution."""
-        return "{} - Weather forecast from Naver, Powered by miumida".format(
-            self.api.result.get(LOCATION[0])
-        )
+        return f"{self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida"
 
     @property
     def forecast(self):

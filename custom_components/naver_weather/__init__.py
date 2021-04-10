@@ -17,10 +17,10 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up naver_weather from a config entry."""
-    hass.data.setdefault(DOMAIN, {})
-    api = API(hass, entry, len(hass.data[DOMAIN]) + 1)
+    hass.data.setdefault(DOMAIN, {"api": {}})
+    api = API(hass, entry, len(hass.data[DOMAIN]["api"]) + 1)
     await api.update()
-    hass.data[DOMAIN][entry.entry_id] = api
+    hass.data[DOMAIN]["api"][entry.entry_id] = api
     for component in PLATFORMS:
         hass.async_create_task(
             hass.config_entries.async_forward_entry_setup(entry, component)
@@ -32,7 +32,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a config entry."""
     try:
-        # hass.data[DOMAIN][entry.entry_id].stop(False)
         unload_ok = all(
             await asyncio.gather(
                 *[
@@ -42,7 +41,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
             )
         )
         if unload_ok:
-            hass.data[DOMAIN].pop(entry.entry_id)
+            hass.data[DOMAIN]["api"].pop(entry.entry_id)
 
         return unload_ok
     except Exception:

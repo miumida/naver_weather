@@ -37,6 +37,7 @@ from .const import (
     UDUST,
     UDUST_GRADE,
     UV,
+    WEATHER_INFO,
     WIND_DIR,
     WIND_SPEED,
 )
@@ -92,9 +93,10 @@ class NWeatherAPI:
         """Get device info."""
         return self.unique.get(unique_id, {}).get(key)
 
-    def device_update(self, unique_id):
+    def device_update(self, device_id):
         """Update device state."""
-        device_update = self.unique[unique_id][DEVICE_UPDATE]
+        unique_id = self.area + ":" + device_id
+        device_update = self.unique.get(unique_id, {}).get(DEVICE_UPDATE)
         if device_update is not None:
             device_update()
 
@@ -322,7 +324,12 @@ class NWeatherAPI:
                 TOMORROW_PM[0]: tomorrowMState,
                 TOMORROW_MAX[0]: tomorrowMTemp,
             }
-            print(self.result)
+            _LOGGER.info(f"[{BRAND}] Update weather information -> {self.result}")
+            for id in WEATHER_INFO.keys():
+                try:
+                    self.device_update(id)
+                except Exception as ex:
+                    _LOGGER.info(f"[{BRAND}] Update weather fail -> {ex}")
         except Exception as ex:
             _LOGGER.error("Failed to update NWeather API status Error: %s", ex)
             raise

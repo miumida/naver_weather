@@ -11,10 +11,18 @@ from .const import DOMAIN, WEATHER_INFO
 _LOGGER = logging.getLogger(__name__)
 
 
+def isfloat(v):
+    try:
+        float(v)
+        return True
+    except ValueError:
+        return False
+
+
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up sensor for Naver Weather sensors."""
 
-    api = hass.data[DOMAIN][config_entry.entry_id]
+    api = hass.data[DOMAIN]["api"][config_entry.entry_id]
 
     def async_add_entity():
         """Add sensor from sensor."""
@@ -26,6 +34,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             async_add_entities(entities)
 
     async_add_entity()
+    await api.update()
 
 
 class NWeatherSensor(NWeatherDevice, Entity):
@@ -34,14 +43,6 @@ class NWeatherSensor(NWeatherDevice, Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-
-        def isfloat(v):
-            try:
-                float(v)
-                return True
-            except ValueError:
-                return False
-
         value = self.api.result.get(self.device[0])
         if value.isdigit():
             if isfloat(value):
