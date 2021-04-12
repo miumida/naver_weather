@@ -1,6 +1,6 @@
 # 네이버 날씨 센서
 # 네이버 날씨 2.0.0을 위해 테스트 중입니다.
-# 설치는 release를 이용해주세요!
+# 설치는 releases를 이용해주세요!
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
@@ -14,8 +14,7 @@
 sensor.naver_weather(부모) - sensor.nw_*(자식) 센서라고 생각하시면 됩니다.<br>
 
 weather / weather.naverweather<br>
-　└ sensor / sensor.naver_weather<br>
-　　└ child / sensor.nw_*<br>
+sensor / sensor.naver_weather<br>
 
 부모 센서가 update 되는 시점에 자식 센서에 값을 함께 update 하도록 했습니다.<br>
 
@@ -43,7 +42,7 @@ weather / weather.naverweather<br>
 | v1.1.3  | 2020.05.25  | 오류 수정 |
 | v1.2.0  | 2020.06.18  | weathe에 sensor 통합 |
 | v1.2.1  | 2020.10.14  | weathe, sensor 현재습도, 현재풍속 가져오기 수정 |
-| v2.0.0  | 2021.04.12  | 통합구성요소 적용 테스트중 |
+| v2.0.0  | 2021.04.12  | 통합구성요소 적용(테스트중) |
 
 
 <br>
@@ -87,12 +86,7 @@ sensor:
 |옵션|내용|sensor|weather|
 |--|--|--|--|
 |platform| (필수) naver_weather  |O|O|
-|name| (옵션) default(naver_weather) |O|X|
 |area| (옵션) 원하는 동네 / default(날씨) |O|O|
-|scan_interval| (옵션) Sensor Update Term / default(900s) |O|O|
-|area_sub| (옵션) 원하는 추가 동네 / default(날씨) |O|O|
-|scan_interval_sub| (옵션) Sensor Update Term / default(1020s) |O|O|
-|sensor_use| (옵션) Sensor Use(Y or N) / default(N) |X|O|
 <br>
 
 ### area 설정값
