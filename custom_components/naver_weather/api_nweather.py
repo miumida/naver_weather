@@ -5,7 +5,6 @@ import logging
 
 from bs4 import BeautifulSoup
 
-from homeassistant.components.damda_pad.const import DEVICE_UNREG
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
@@ -40,6 +39,7 @@ from .const import (
     WEATHER_INFO,
     WIND_DIR,
     WIND_SPEED,
+    DEVICE_UNREG
 )
 
 _LOGGER = logging.getLogger(__name__)
