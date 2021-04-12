@@ -1,12 +1,10 @@
 {
-    "domain": "naver_weather",
-    "name": "Naver Weather",
-    "documentation": "https://github.com/miumida/naver_weather",
-    "requirements": ["beautifulsoup4==4.9.0"],
-    "dependencies": [],
-    "codeowners": [
-        "@miumida"
-    ],
-    "config_flow": true,
-    "version": "1.2.1"
+  "domain": "naver_weather",
+  "name": "Naver Weather",
+  "config_flow": true,
+  "documentation": "https://github.com/miumida/naver_weather",
+  "requirements": ["beautifulsoup4==4.9.3"],
+  "dependencies": [],
+  "codeowners": ["@miumida"],
+  "version": "2.0.0"
 }
