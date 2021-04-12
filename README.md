@@ -1,4 +1,6 @@
 # 네이버 날씨 센서
+# 네이버 날씨 2.0.0을 위해 테스트 중입니다.
+# 설치는 release를 이용해주세요!
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
@@ -41,6 +43,8 @@ weather / weather.naverweather<br>
 | v1.1.3  | 2020.05.25  | 오류 수정 |
 | v1.2.0  | 2020.06.18  | weathe에 sensor 통합 |
 | v1.2.1  | 2020.10.14  | weathe, sensor 현재습도, 현재풍속 가져오기 수정 |
+| v2.0.0  | 2021.04.12  | 통합구성요소 적용 테스트중 |
+
 
 <br>
 
@@ -105,6 +109,6 @@ query= 뒷부분에 있는 부분을 arae로 입력하시면 됩니다.
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v1.2.1-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.0.0-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
