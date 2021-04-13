@@ -13,20 +13,20 @@ from homeassistant.const import (
 )
 
 DOMAIN = "naver_weather"
-BRAND = "Naver Weather"
-MODEL = "NWeather"
+BRAND  = "Naver Weather"
+MODEL  = "NWeather"
 PLATFORMS = ["weather", "sensor"]
 
-DEVICE_STATE = "state"
+DEVICE_STATE  = "state"
 DEVICE_UPDATE = "update"
-DEVICE_REG = "register"
-DEVICE_UNREG = "unregister"
+DEVICE_REG    = "register"
+DEVICE_UNREG  = "unregister"
 
 SW_VERSION = "2.0.0"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
-CONF_AREA = "area"
+CONF_AREA    = "area"
 DEFAULT_AREA = "날씨"
 
 OPT_SCAN_INT = "scan_interval"
@@ -145,8 +145,27 @@ TOMORROW_MIN = [
     "내일최저온도",
     TEMP_CELSIUS,
     "mdi:thermometer-chevron-down",
+    "",
+]
+
+RAINY_START = [
+    "rainyStart",
+    "오늘비시작시간",
+    "",
+    "mdi:weather-pouring",
     DEVICE_CLASS_TEMPERATURE,
 ]
+
+
+RAINY_START_TMR = [
+    "rainyStartTmr",
+    "오늘내일비시작시간",
+    "",
+    "mdi:weather-pouring",
+    "",
+]
+
+
 WEATHER_INFO = {
     LOCATION[0]: LOCATION,
     NOW_CAST[0]: NOW_CAST,
@@ -169,4 +188,6 @@ WEATHER_INFO = {
     TOMORROW_MAX[0]: TOMORROW_MAX,
     TOMORROW_AM[0]: TOMORROW_AM,
     TOMORROW_MIN[0]: TOMORROW_MIN,
+    RAINY_START[0]: RAINY_START,
+    RAINY_START_TMR[0]:  RAINY_START_TMR,
 }
