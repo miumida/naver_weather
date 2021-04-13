@@ -45,11 +45,8 @@ sensor / sensor.naver_weather<br>
 
 ## Installation
 ### Manual
-- HA 설치 경로 아래 custom_components 에 파일을 넣어줍니다.<br>
-  `<config directory>/custom_components/naver_weather/__init__.py`<br>
-  `<config directory>/custom_components/naver_weather/manifest.json`<br>
-  `<config directory>/custom_components/naver_weather/sensor.py`<br>
-  `<config directory>/custom_components/naver_weather/weather.py`<br>
+- HA 설치 경로 아래 custom_components에 naver_weather폴더 안의 전체 파일을 복사해줍니다.<br>
+  `<config directory>/custom_components/naver_weather/`<br>
 - configuration.yaml 파일에 설정을 추가합니다.<br>
 - Home-Assistant 를 재시작합니다<br>
 ### HACS
