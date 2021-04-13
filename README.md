@@ -59,7 +59,10 @@
 <br>
 
 ## Usage
-### configuration
+### Custom Integration
+- 구성 > 통합구성요소 > 통합구성요소 추가하기 > 네이버 날씨 선택 > 지역(area) 입력후, 확인.
+
+### Configuration : Custom Integration으로 등록해주세요!
 - HA설정에 naver_weather weather를 추가합니다<br>
 ```yaml
 weather:
@@ -72,8 +75,6 @@ sensor:
   - platform: naver_weather
     area: '날씨'
 ```
-### Custom Integration
-- 구성 > 통합구성요소 > 통합구성요소 추가하기 > 네이버 날씨 선택 > 지역(area) 입력후, 확인.
 
 <br>
 
