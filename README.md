@@ -71,13 +71,11 @@ sensor / sensor.naver_weather<br>
 weather:
   - platform: naver_weather
     area: '날씨'
-    sensor_use: 'Y'
 ```
 - HA 설정에 naver_weather sensor를 추가합니다.(sensor만 사용하고 싶은 경우)<br>
 ```yaml
 sensor:
   - platform: naver_weather
-    name: naver_weather
     area: '날씨'
 ```
 <br><br>
