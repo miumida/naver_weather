@@ -62,7 +62,6 @@ sensor / sensor.naver_weather<br>
 ## Usage
 ### configuration
 - HA설정에 naver_weather weather를 추가합니다<br>
-- sensor_use를 'Y'로 설정한 경우, sensor에 설정을 추가하실 필요없습니다.
 ```yaml
 weather:
   - platform: naver_weather
@@ -74,7 +73,11 @@ sensor:
   - platform: naver_weather
     area: '날씨'
 ```
-<br><br>
+### Custom Integration
+- 구성 > 통합구성요소 > 통합구성요소 추가하기 > 네이버 날씨 선택 > 지역(area) 입력후, 확인.
+
+<br>
+
 ### 기본 설정값
 
 |옵션|내용|sensor|weather|
@@ -87,9 +90,8 @@ sensor:
 area는 기본값으로 '날씨'로 들어갑니다.<br>
 기본적으로 날씨로 지정되면 장비가 있는 위치를 기준으로 날씨가 나오는거 같았습니다.<br>
 추가로 area에 원하시는 지역을 네이버에서 검색하셔서 입력해보시고 날씨가 조회되면 area에 입력하시면 됩니다.<br>
-'<https://search.naver.com/search.naver?query=창원시+성산구+대방동+날씨>' 와 같은 형태로 확인이 됩니다.<br>
-query= 뒷부분에 있는 부분을 arae로 입력하시면 됩니다.
-띄워쓰기를 + 또는 %20으로 변경하시면 됩니다. 물론 네이버에 정상적으로 검색되는지 확인이 필요합니다.
+물론 네이버에 정상적으로 검색되는지 확인이 필요합니다.<br>
+창원시 대방동 날씨로 검색했을 때, 정상적으로 날씨정보가 조회된다면 '창원시 대방동'으로 area를 입력하시면 됩니다.<br>
 ![screenshot_3](https://github.com/miumida/naver_weather/blob/master/images/naver_weather_search.png?raw=true)<br>
 
 <br>
