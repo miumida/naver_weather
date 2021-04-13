@@ -1,6 +1,4 @@
-# 네이버 날씨 센서
-# 네이버 날씨 2.0.0을 위해 테스트 중입니다.
-# 설치는 releases를 이용해주세요!
+# 네이버 날씨 for HA
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
@@ -8,7 +6,7 @@
 
 <a href="https://www.buymeacoffee.com/miumida" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee"></a>
 
-네이버 날씨 Sensor for Home Assistant 입니다.<br>
+네이버 날씨 for Home Assistant 입니다.<br>
 네이버 날씨 웹페이지를 크롤링하여 센서로 추가해 줍니다.<br>
 아무래도 크롤링을 해서 가져오는 부분이라 센서에서 호출하는 부분은 최소화할 수 있도록 했습니다.<br>
 
