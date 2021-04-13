@@ -12,6 +12,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def isfloat(v):
+    """Check number is float."""
     try:
         float(v)
         return True
