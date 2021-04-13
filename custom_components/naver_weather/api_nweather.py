@@ -39,6 +39,8 @@ from .const import (
     WEATHER_INFO,
     WIND_DIR,
     WIND_SPEED,
+    RAINY_START,
+    RAINY_START_TMR,
     DEVICE_UNREG
 )
 
@@ -180,10 +182,12 @@ class NWeatherAPI:
             for i in CheckDust2.select("dd"):
                 CheckDust.append(i.text)
 
-            FineDust = CheckDust[0].split("㎍/㎥")[0]
+            FineDust      = CheckDust[0].split("㎍/㎥")[0]
             FineDustGrade = CheckDust[0].split("㎍/㎥")[1]
             UltraFineDust = CheckDust[1].split("㎍/㎥")[0]
             UltraFineDustGrade = CheckDust[1].split("㎍/㎥")[1]
+
+            # 오존
             Ozon = CheckDust[2].split("ppm")[0]
             OzonGrade = CheckDust[2].split("ppm")[1]
 
@@ -239,6 +243,29 @@ class NWeatherAPI:
             weekly = soup.find("div", {"class": "table_info weekly _weeklyWeather"})
 
             date_info = weekly.find_all("li", {"class": "date_info today"})
+
+            # 비시작시간
+            rain_tab = soup.find('div', {'class': 'info_list weather_condition _tabContent'})
+            rainyStart    = '-'
+            rainyStartTmr = '-'
+
+            if rain_tab is not None:
+                #오늘
+                rainyStart = '비안옴'
+                for rain_li in rain_tab.select('ul > li'):
+                    if rain_li.select('dl > dd.item_time')[0].find('span', {'class' : 'tomorrow'}) is not None:
+                        break
+
+                    if rain_li.select('dl > dd.item_condition > span')[0].text == '비':
+                        rainyStart = rain_li.select('dl > dd.item_time')[0].find('span', {'class' : None}).text
+                        break
+
+                #오늘 ~ 내일
+                rainyStartTmr = '비안옴'
+                for rain_li in rain_tab.select('ul > li'):
+                    if rain_li.select('dl > dd.item_condition > span')[0].text == '비':
+                        rainyStartTmr = rain_li.select('dl > dd.item_time')[0].find('span', {'class' : None}).text
+                        break
 
             forecast = []
 
@@ -323,6 +350,8 @@ class NWeatherAPI:
                 TOMORROW_MIN[0]: tomorrowATemp,
                 TOMORROW_PM[0]: tomorrowMState,
                 TOMORROW_MAX[0]: tomorrowMTemp,
+                RAINY_START[0]: rainyStart,
+                RAINY_START_TMR[0]: rainyStartTmr,
             }
             _LOGGER.info(f"[{BRAND}] Update weather information -> {self.result}")
             for id in WEATHER_INFO.keys():
