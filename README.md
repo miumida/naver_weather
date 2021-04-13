@@ -123,6 +123,10 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 
 <br>
 
+## thanks to.
+- 네이버 HomeAssistant 카페 | 랜이님
+- 네이버 HomeAssistant 카페 | 초후님
+
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
