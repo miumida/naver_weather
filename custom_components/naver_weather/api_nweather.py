@@ -128,7 +128,7 @@ class NWeatherAPI:
             session = async_get_clientsession(self.hass)
 
             # response = requests.get(url, headers=hdr, timeout=10)
-            response = await session.get(url, headers=hdr, timeout=10)
+            response = await session.get(url, headers=hdr, timeout=30)
             response.raise_for_status()
 
             soup = BeautifulSoup(await response.text(), "html.parser")
@@ -361,10 +361,10 @@ class NWeatherAPI:
                 UDUST_GRADE[0]: UltraFineDustGrade,
                 OZON[0]: Ozon,
                 OZON_GRADE[0]: OzonGrade,
-                TOMORROW_AM[0]: tomorrowAState,
-                TOMORROW_MIN[0]: tomorrowATemp,
-                TOMORROW_PM[0]: tomorrowMState,
-                TOMORROW_MAX[0]: tomorrowMTemp,
+                TOMORROW_AM[0]: tomorrowMState,
+                TOMORROW_MIN[0]: tomorrowMTemp,
+                TOMORROW_PM[0]: tomorrowAState,
+                TOMORROW_MAX[0]: tomorrowATemp,
                 RAINY_START[0]: rainyStart,
                 RAINY_START_TMR[0]: rainyStartTmr,
             }
