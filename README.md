@@ -40,6 +40,7 @@
 | v1.2.1  | 2020.10.14  | weathe, sensor 현재습도, 현재풍속 가져오기 수정 |
 | v2.0.0  | 2021.04.12  | Renewal - 통합구성요소 적용 |
 | v2.0.2  | 2021.04.13  | bug Fix |
+| v2.0.3  | 2021.04.14  | bug Fix |
 
 
 <br>
@@ -133,6 +134,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.0.2-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.0.3-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
