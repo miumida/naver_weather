@@ -13,8 +13,6 @@ from .const import (
     NOW_TEMP,
     WIND_DIR,
     WIND_SPEED,
-    UDUST,
-    NDUST,
 )
 from .nweather_device import NWeatherDevice
 
