@@ -11,10 +11,10 @@ from .const import DOMAIN, WEATHER_INFO
 _LOGGER = logging.getLogger(__name__)
 
 
-def isfloat(v):
+def isInt(v):
     """Check number is float."""
     try:
-        float(v)
+        int(v)
         return True
     except ValueError:
         return False
@@ -46,10 +46,10 @@ class NWeatherSensor(NWeatherDevice, Entity):
         """Return the state of the sensor."""
         value = self.api.result.get(self.device[0])
         if value.isdigit():
-            if isfloat(value):
-                return float(value)
-            else:
+            if isInt(value):
                 return int(value)
+            else:
+                return float(value)
         return value
 
     @property
