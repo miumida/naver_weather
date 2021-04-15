@@ -116,19 +116,3 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     async def async_update(self):
         """Update current conditions."""
         await self.api.update()
-
-    #기압대신 미세먼지
-    @property
-    def pressure(self):
-        try:
-            return int(self.api.result.get(NDUST[0]))
-        except Exception:
-            return
-
-    #시정대신 초미세먼지
-    @property
-    def visibility(self):
-        try:
-            return int(self.api.result.get(UDUST[0]))
-        except Exception:
-            return
