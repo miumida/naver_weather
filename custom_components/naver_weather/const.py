@@ -119,6 +119,7 @@ RAINFALL = [
     "",
 ]
 UV = ["TodayUV", "자외선지수", "", "mdi:weather-sunny-alert", ""]
+UV_GRADE = ["TodayUVGrade", "자외선등급", "", "mdi:weather-sunny-alert", ""]
 UDUST = [
     "UltraFineDust",
     "초미세먼지",
@@ -174,6 +175,7 @@ WEATHER_INFO = {
     WIND_DIR[0]: WIND_DIR,
     RAINFALL[0]: RAINFALL,
     UV[0]: UV,
+    UV_GRADE[0]: UV_GRADE,
     UDUST[0]: UDUST,
     NDUST[0]: NDUST,
     UDUST_GRADE[0]: UDUST_GRADE,
