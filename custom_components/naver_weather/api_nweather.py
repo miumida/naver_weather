@@ -224,7 +224,7 @@ class NWeatherAPI:
             )[0].text
             WindState = wind_tab.select(
                 "ul > li.on.now > dl > dd.item_condition > span.wt_status"
-            )[0].text
+            )[0].text.strip()
 
             # 내일 오전, 오후 온도 및 상태 체크
             tomorrowArea = soup.find("div", {"class": "tomorrow_area"})
