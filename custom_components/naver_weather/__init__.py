@@ -19,7 +19,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up naver_weather from a config entry."""
     hass.data.setdefault(DOMAIN, {"api": {}})
     api = API(hass, entry, len(hass.data[DOMAIN]["api"]) + 1)
-    await api.update()
     hass.data[DOMAIN]["api"][entry.entry_id] = api
     for component in PLATFORMS:
         hass.async_create_task(

@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def isInt(v):
-    """Check number is float."""
+    """Check number is integer."""
     try:
         int(v)
         return True
@@ -35,7 +35,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             async_add_entities(entities)
 
     async_add_entity()
-    await api.update()
 
 
 class NWeatherSensor(NWeatherDevice, Entity):
