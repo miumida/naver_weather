@@ -36,6 +36,7 @@ from .const import (
     UDUST,
     UDUST_GRADE,
     UV,
+    UV_GRADE,
     WEATHER_INFO,
     WIND_DIR,
     WIND_SPEED,
@@ -174,6 +175,15 @@ class NWeatherAPI:
 
             for uv in TodayUVSelect:
                 TodayUV = uv.text
+                
+            # 자외선 등급
+            TodayUVGradeSelect = soup.find("span", {"class": "indicator"}).select(
+                "span"
+            )
+            TodayUVGrade = "-"
+
+            for uv in TodayUVGradeSelect:
+                TodayUVGrade = uv.text.replace(TodayUV, "")
 
             # 미세먼지, 초미세먼지, 오존 지수
             CheckDust1 = soup.find("div", {"class": "sub_info"})
@@ -355,6 +365,7 @@ class NWeatherAPI:
                 FEEL_TEMP[0]: TodayFeelTemp,
                 RAINFALL[0]: Rainfall,
                 UV[0]: TodayUV,
+                UV_GRADE[0]: TodayUVGrade,
                 NDUST[0]: FineDust,
                 NDUST_GRADE[0]: FineDustGrade,
                 UDUST[0]: UltraFineDust,
