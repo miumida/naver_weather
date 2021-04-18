@@ -43,7 +43,7 @@ class NWeatherSensor(NWeatherDevice, Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        value = self.api.result.get(self.device[0])
+        value = self.api.result.get(self.device[0]) or ""
         if value.isdigit():
             if isInt(value):
                 return int(value)
