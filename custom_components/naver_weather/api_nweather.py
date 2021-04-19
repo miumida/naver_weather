@@ -182,8 +182,10 @@ class NWeatherAPI:
             )
             TodayUVGrade = "-"
 
-            for uv in TodayUVGradeSelect:
-                TodayUVGrade = uv.text.replace(TodayUV, "")
+            try:
+                TodayUVGrade = TodayUVGradeSelect[0].text.replace(TodayUV, "")
+            except Exception as ex:
+                _LOGGER.error("naver_weather update TodayUVGrade Error : %s", ex )
 
             # 미세먼지, 초미세먼지, 오존 지수
             CheckDust1 = soup.find("div", {"class": "sub_info"})
