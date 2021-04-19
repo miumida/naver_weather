@@ -43,6 +43,7 @@
 | v2.0.3  | 2021.04.14  | bug Fix |
 | v2.0.4  | 2021.04.15  | bug Fix |
 | v2.0.5  | 2021.04.19  | bug Fix + 자외선등급 추가 |
+| v2.0.6  | 2021.04.20  | bug Fix |
 
 <br>
 
@@ -136,6 +137,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.0.5-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.0.6-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
