@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.0.6"
+SW_VERSION = "2.0.7"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
@@ -152,14 +152,14 @@ RAINY_START = [
     "rainyStart",
     "오늘비시작시간",
     "",
-    "mdi:weather-pouring",
+    "mdi:weather-rainy",
     "",
 ]
 RAINY_START_TMR = [
     "rainyStartTmr",
     "오늘내일비시작시간",
     "",
-    "mdi:weather-pouring",
+    "mdi:weather-rainy",
     "",
 ]
 
