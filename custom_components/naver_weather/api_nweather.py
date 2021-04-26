@@ -128,7 +128,6 @@ class NWeatherAPI:
 
             session = async_get_clientsession(self.hass)
 
-            # response = requests.get(url, headers=hdr, timeout=10)
             response = await session.get(url, headers=hdr, timeout=30)
             response.raise_for_status()
 
