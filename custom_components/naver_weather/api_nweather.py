@@ -138,34 +138,75 @@ class NWeatherAPI:
             CheckDust = []
 
             # 지역
-            LocationInfo = soup.find("span", {"class": "btn_select"}).text
+            LocationInfo = '-'
+            try:
+                LocationInfo = soup.find("span", {"class": "btn_select"}).text
+            except Exception as ex:
+                LocationInfo = 'Error'
+                _LOGGER.error("naver_weather update NowTemp Error : %s", ex )
+
 
             # 현재 온도
-            NowTemp = soup.find("span", {"class": "todaytemp"}).text
+            try:
+                NowTemp = soup.find("span", {"class": "todaytemp"}).text
+            except Exception as ex:
+                NowTemp = 'Error'
+                _LOGGER.error("naver_weather update NowTemp Error : %s", ex )
+
 
             # 날씨 캐스트
-            WeatherCast = soup.find("p", {"class": "cast_txt"}).text
+            WeatherCast = '-'
+            try:
+                WeatherCast = soup.find("p", {"class": "cast_txt"}).text
+            except Exception as ex:
+                WeatherCast = 'Error'
+                _LOGGER.error("naver_weather update WeatherCast Error : %s", ex )
+
 
             # 오늘 오전온도, 오후온도, 체감온도
-            TodayMinTemp = (
-                soup.find("span", {"class": "min"}).select("span.num")[0].text
-            )
-            TodayMaxTemp = (
-                soup.find("span", {"class": "max"}).select("span.num")[0].text
-            )
-            TodayFeelTemp = (
-                soup.find("span", {"class": "sensible"}).select("em > span.num")[0].text
-            )
+            TodayMinTemp = '-'
+            TodayMaxTemp = '-'
+            TodayFeelTemp = '-'
+
+            try:
+                TodayMinTemp = (
+                    soup.find("span", {"class": "min"}).select("span.num")[0].text
+                )
+            except Exception as ex:
+                TodayMinTemp = 'Error'
+                _LOGGER.error("naver_weather update TodayMinTemp Error : %s", ex )
+
+            try:
+                TodayMaxTemp = (
+                    soup.find("span", {"class": "max"}).select("span.num")[0].text
+                )
+            except Exception as ex:
+                TodayMaxTemp = 'Error'
+                _LOGGER.error("naver_weather update TodayMaxTemp Error : %s", ex )
+
+            try:
+                TodayFeelTemp = (
+                    soup.find("span", {"class": "sensible"}).select("em > span.num")[0].text
+                )
+            except Exception as ex:
+                TodayFeelTemp = 'Error'
+                _LOGGER.error("naver_weather update TodayFeelTemp Error : %s", ex )
+
 
             # 시간당 강수량
             TodayRainfall = soup.find("span", {"class": "rainfall"})
             Rainfall = "-"
 
-            if TodayRainfall is not None:
-                TodayRainfallSelect = TodayRainfall.select("em > span.num")
+            try:
+                if TodayRainfall is not None:
+                    TodayRainfallSelect = TodayRainfall.select("em > span.num")
 
-                for rain in TodayRainfallSelect:
-                    Rainfall = rain.text
+                    for rain in TodayRainfallSelect:
+                        Rainfall = rain.text
+            except Exception as ex:
+                Rainfall = 'Error'
+                _LOGGER.error("naver_weather update Rainfall Error : %s", ex )
+
 
             # 자외선 지수
             TodayUVSelect = soup.find("span", {"class": "indicator"}).select(
@@ -173,9 +214,14 @@ class NWeatherAPI:
             )
             TodayUV = "-"
 
-            for uv in TodayUVSelect:
-                TodayUV = uv.text
-                
+            try:
+                for uv in TodayUVSelect:
+                    TodayUV = uv.text
+            except Exception as ex:
+                TodayUV = 'Error'
+                _LOGGER.error("naver_weather update TodayUV Error : %s", ex )
+
+
             # 자외선 등급
             TodayUVGradeSelect = soup.find("span", {"class": "indicator"}).select(
                 "span"
@@ -185,6 +231,7 @@ class NWeatherAPI:
             try:
                 TodayUVGrade = TodayUVGradeSelect[0].text.replace(TodayUV, "")
             except Exception as ex:
+                TodayUVGrade = 'Error'
                 _LOGGER.error("naver_weather update TodayUVGrade Error : %s", ex )
 
             # 미세먼지, 초미세먼지, 오존 지수
@@ -215,18 +262,41 @@ class NWeatherAPI:
             humi_tab = soup.find(
                 "div", {"class": "info_list humidity _tabContent _center"}
             )
-            Humidity = humi_tab.select(
-                "ul > li.on.now > dl > dd.weather_item._dotWrapper > span"
-            )[0].text
 
-            # 현재풍속
+            Humidity = '-'
+
+            try:
+                Humidity = humi_tab.select(
+                    "ul > li.on.now > dl > dd.weather_item._dotWrapper > span"
+                )[0].text
+            except Exception as ex:
+                Humidity = 'Error'
+                _LOGGER.error("naver_weather update Humidity Error : %s", ex )
+
+
+            # 현재풍속/풍향
             wind_tab = soup.find("div", {"class": "info_list wind _tabContent _center"})
-            WindSpeed = wind_tab.select(
-                "ul > li.on.now > dl > dd.weather_item._dotWrapper > span"
-            )[0].text
-            WindState = wind_tab.select(
-                "ul > li.on.now > dl > dd.item_condition > span.wt_status"
-            )[0].text.strip()
+            WindSpeed = '-'
+            WindState = '-'
+
+            #현재풍속
+            try:
+                WindSpeed = wind_tab.select(
+                    "ul > li.on.now > dl > dd.weather_item._dotWrapper > span"
+                )[0].text
+            except Exception as ex:
+                WindSpeed = 'Error'
+                _LOGGER.error("naver_weather update WindSpeed Error : %s", ex )
+
+            #현재풍향
+            try:
+                WindState = wind_tab.select(
+                    "ul > li.on.now > dl > dd.item_condition > span.wt_status"
+                )[0].text.strip()
+            except Exception as ex:
+                WindState = 'Error'
+                _LOGGER.error("naver_weather update WindState Error : %s", ex )
+
 
             # 내일 오전, 오후 온도 및 상태 체크
             tomorrowArea = soup.find("div", {"class": "tomorrow_area"})
@@ -235,26 +305,47 @@ class NWeatherAPI:
             )
 
             # 내일 오전온도
-            tomorrowMTemp = tomorrowCheck[0].find("span", {"class": "todaytemp"}).text
+            tomorrowMTemp = '-'
+            try:
+                tomorrowMTemp = tomorrowCheck[0].find("span", {"class": "todaytemp"}).text
+            except Exception as ex:
+                tomorrowMTemp = 'Error'
+                _LOGGER.error("naver_weather update tomorrowMTemp Error : %s", ex )
+
 
             # 내일 오전상태
             tomorrowMState1 = tomorrowCheck[0].find("div", {"class": "info_data"})
             tomorrowMState2 = tomorrowMState1.find("ul", {"class": "info_list"})
-            tomorrowMState = tomorrowMState2.find("p", {"class": "cast_txt"}).text
+
+            tomorrowMState = '-'
+            try:
+                tomorrowMState = tomorrowMState2.find("p", {"class": "cast_txt"}).text
+            except Exception as ex:
+                tomorrowMState = 'Error'
+                _LOGGER.error("naver_weather update tomorrowMState Error : %s", ex )
+
 
             # 내일 오후온도
             tomorrowATemp1 = tomorrowCheck[1].find("p", {"class": "info_temperature"})
-            tomorrowATemp = tomorrowATemp1.find("span", {"class": "todaytemp"}).text
+
+            tomorrowATemp = '-'
+            try:
+                tomorrowATemp = tomorrowATemp1.find("span", {"class": "todaytemp"}).text
+            except Exception as ex:
+                tomorrowATemp = 'Error'
+                _LOGGER.error("naver_weather update tomorrowATemp Error : %s", ex )
+
 
             # 내일 오후상태
             tomorrowAState1 = tomorrowCheck[1].find("div", {"class": "info_data"})
             tomorrowAState2 = tomorrowAState1.find("ul", {"class": "info_list"})
-            tomorrowAState = tomorrowAState2.find("p", {"class": "cast_txt"}).text
 
-            # 주간날씨
-            weekly = soup.find("div", {"class": "table_info weekly _weeklyWeather"})
-
-            date_info = weekly.find_all("li", {"class": "date_info today"})
+            tomorrowAState = '-'
+            try:
+                tomorrowAState = tomorrowAState2.find("p", {"class": "cast_txt"}).text
+            except Exception as ex:
+                tomorrowAState = 'Error'
+                _LOGGER.error("naver_weather update tomorrowAState Error : %s", ex )
 
             # 비시작시간
             rain_tab = soup.find(
@@ -266,6 +357,7 @@ class NWeatherAPI:
             if rain_tab is not None:
                 # 오늘
                 rainyStart = "비안옴"
+
                 for rain_li in rain_tab.select("ul > li"):
                     if (
                         rain_li.select("dl > dd.item_time")[0].find(
@@ -275,24 +367,31 @@ class NWeatherAPI:
                     ):
                         break
 
-                    if rain_li.select("dl > dd.item_condition > span")[0].text == "비":
-                        rainyStart = (
-                            rain_li.select("dl > dd.item_time")[0]
-                            .find("span", {"class": None})
-                            .text
-                        )
-                        break
+                    try:
+                        if rain_li.select("dl > dd.item_condition > span")[0].text == "비":
+                            rainyStart = rain_li.select("dl > dd.item_time")[0].text
+                            break
+                    except Exception as ex:
+                        rainyStart = 'Error'
+                        _LOGGER.error("naver_weather update rainyStart Error : %s", ex )
+
 
                 # 오늘 ~ 내일
                 rainyStartTmr = "비안옴"
+
                 for rain_li in rain_tab.select("ul > li"):
-                    if rain_li.select("dl > dd.item_condition > span")[0].text == "비":
-                        rainyStartTmr = (
-                            rain_li.select("dl > dd.item_time")[0]
-                            .find("span", {"class": None})
-                            .text
-                        )
-                        break
+                    try:
+                        if rain_li.select("dl > dd.item_condition > span")[0].text == "비":
+                            rainyStartTmr = rain_li.select("dl > dd.item_time")[0].text
+                            break
+                    except Exception as ex:
+                        rainyStartTmr = 'Error'
+                        _LOGGER.error("naver_weather update rainyStartTmr Error : %s", ex )
+
+            # 주간날씨
+            weekly = soup.find("div", {"class": "table_info weekly _weeklyWeather"})
+
+            date_info = weekly.find_all("li", {"class": "date_info today"})
 
             forecast = []
 
