@@ -207,28 +207,31 @@ class NWeatherAPI:
                 _LOGGER.error("Failed to update NWeather API Rainfall Error : %s", ex )
 
 
+            # indicator
+            indicator = soup.find("span", {"class": "indicator"})
+
             # 자외선 지수
-            TodayUVSelect = soup.find("span", {"class": "indicator"}).select(
-                "span > span.num"
-            )
             TodayUV = "-"
 
             try:
-                for uv in TodayUVSelect:
-                    TodayUV = uv.text
+                if indicator is not None:
+                    TodayUVSelect = indicator.select("span > span.num")
+
+                    for uv in TodayUVSelect:
+                        TodayUV = uv.text
             except Exception as ex:
                 TodayUV = 'Error'
                 _LOGGER.error("Failed to update NWeather API TodayUV Error : %s", ex )
 
 
             # 자외선 등급
-            TodayUVGradeSelect = soup.find("span", {"class": "indicator"}).select(
-                "span"
-            )
             TodayUVGrade = "-"
 
             try:
-                TodayUVGrade = TodayUVGradeSelect[0].text.replace(TodayUV, "")
+                if indicator is not None:
+                    TodayUVGradeSelect = indicator.select("span")
+
+                    TodayUVGrade = TodayUVGradeSelect[0].text.replace(TodayUV, "")
             except Exception as ex:
                 TodayUVGrade = 'Error'
                 _LOGGER.error("Failed to update NWeather API TodayUVGrade Error : %s", ex )
@@ -240,14 +243,53 @@ class NWeatherAPI:
             for i in CheckDust2.select("dd"):
                 CheckDust.append(i.text)
 
-            FineDust = CheckDust[0].split("㎍/㎥")[0]
-            FineDustGrade = CheckDust[0].split("㎍/㎥")[1]
-            UltraFineDust = CheckDust[1].split("㎍/㎥")[0]
-            UltraFineDustGrade = CheckDust[1].split("㎍/㎥")[1]
+            FineDust = '-'
+            FineDustGrade = '-'
+            UltraFineDust = '-'
+            UltraFineDustGrade = '-'
+
+            try:
+                FineDust = CheckDust[0].split("㎍/㎥")[0]
+            except Exception as ex:
+                FineDust = 'Error'
+                _LOGGER.error("Failed to update NWeather API FineDust Error : %s", ex )
+
+            try:
+                FineDustGrade = CheckDust[0].split("㎍/㎥")[1]
+            except Exception as ex:
+                FineDustGrade = 'Error'
+                _LOGGER.error("Failed to update NWeather API FineDustGrade Error : %s", ex )
+
+            try:
+                UltraFineDust = CheckDust[1].split("㎍/㎥")[0]
+            except Exception as ex:
+                UltraFineDust = 'Error'
+                _LOGGER.error("Failed to update NWeather API UtraFineDust Error : %s", ex )
+
+            try:
+                UltraFineDustGrade = CheckDust[1].split("㎍/㎥")[1]
+            except Exception as ex:
+                UltraFineDustGrade = 'Error'
+                _LOGGER.error("Failed to update NWeather API UtraFineDustGrade Error : %s", ex )
+
 
             # 오존
-            Ozon = CheckDust[2].split("ppm")[0]
-            OzonGrade = CheckDust[2].split("ppm")[1]
+            Ozon = '-'
+            OzonGrade = '-'
+
+            try:
+                Ozon = CheckDust[2].split("ppm")[0]
+            except Exception as ex:
+                Ozon = 'Error'
+                _LOGGER.error("Failed to update NWeather API Ozon Error : %s", ex )
+
+            #오존등급
+            try:
+                OzonGrade = CheckDust[2].split("ppm")[1]
+            except Exception as ex:
+                OzonGrade = 'Error'
+                _LOGGER.error("Failed to update NWeather API OzonGrade Error : %s", ex )
+
 
             # condition
             today_area = soup.find("div", {"class": "today_area _mainTabContent"})
