@@ -206,9 +206,11 @@ class NWeatherAPI:
                 Rainfall = 'Error'
                 _LOGGER.error("Failed to update NWeather API Rainfall Error : %s", ex )
 
+            # today_area
+            today_area = soup.find("div", {"class": "today_area _mainTabContent"})
 
-            # indicator
-            indicator = soup.find("span", {"class": "indicator"})
+            # today_area > indicator
+            indicator = today_area.find("span", {"class": "indicator"})
 
             # 자외선 지수
             TodayUV = "-"
@@ -292,8 +294,6 @@ class NWeatherAPI:
 
 
             # condition
-            today_area = soup.find("div", {"class": "today_area _mainTabContent"})
-
             condition_main = today_area.select("div.main_info > span.ico_state")[0][
                 "class"
             ][1]
