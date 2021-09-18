@@ -59,20 +59,18 @@ def re2num(val):
 def re2key(key,val):
     r = re.compile(f"{key} \d+")
     rtn = r.findall(val)
-    eLog(rtn)
+
     return rtn[0]
 
 def re2keyW(val):
     r = re.compile("바람\(\w+풍\) \d+m/s")
     rtn = r.findall(val)
-    eLog(rtn)
 
     return rtn[0]
 
 def re2keyWD(val):
     r = re.compile("[동|서|남|북]+")
     rtn = r.findall(val)
-    eLog(rtn)
 
     return rtn[0]
 
@@ -330,7 +328,7 @@ class NWeatherAPI:
                         hourly_tmr = False
                         rainyStartTmr = "내일 {}".format(tm)
 
-                eLog( '{} {}'.format(tm, wt) )
+                #eLog( '{} {}'.format(tm, wt) )
 
             # 주간날씨
             #weekly = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.inner > div > div.list_box > ul.week_list > li.week_item")
@@ -384,7 +382,6 @@ class NWeatherAPI:
                 if di.select("div > div.cell_date > span > strong.day")[0].text == "내일":
                     # 내일 오전온도
                     tomorrowMTemp = low
-                    eLog(low)
 
                     # 내일 오전상태
                     tomorrowMState = CONDITIONS[condition_am][1]
