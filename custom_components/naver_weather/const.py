@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.0.9"
+SW_VERSION = "2.1.0"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
@@ -44,36 +44,47 @@ NW_OPTIONS = [
 
 
 CONDITIONS = {
-    "ws1": ["sunny", "맑음", "맑음(낮)"],
-    "ws2": ["clear-night", "맑음 (밤)", "맑음(밤)"],
-    "ws3": ["partlycloudy", "대체로 흐림", "구름조금(낮)"],
-    "ws4": ["partlycloudy", "대체로 흐림", "구름조금(밤)"],
-    "ws5": ["partlycloudy", "대체로 흐림", "구름많음(낮)"],
-    "ws6": ["partlycloudy", "대체로 흐림", "구름많음(밤)"],
-    "ws7": ["cloudy", "흐림", "흐림"],
-    "ws8": ["rainy", "비", "약한비"],
-    "ws9": ["rainy", "비", "비"],
-    "ws10": ["pouring", "호우", "강한비"],
-    "ws11": ["snowy", "눈", "약한눈"],
-    "ws12": ["snowy", "눈", "눈"],
-    "ws13": ["snowy", "눈", "강한눈"],
-    "ws14": ["snowy", "눈", "진눈깨비"],
-    "ws15": ["rainy", "비", "소나기"],
-    "ws16": ["snowy-rainy", "진눈개비", "소낙 눈"],
-    "ws17": ["fog", "안개", "안개"],
-    "ws18": ["lightning", "번개", "번개,뇌우"],
-    "ws19": ["snowy", "눈", "우박"],
-    "ws20": ["fog", "안개", "황사"],
-    "ws21": ["snowy-rainy", "진눈개비", "비 또는 눈"],
-    "ws22": ["rainy", "비", "가끔 비"],
-    "ws23": ["snowy", "눈", "가끔 눈"],
-    "ws24": ["snowy-rainy", "진눈개비", "가끔 비 또는 눈"],
-    "ws25": ["partlycloudy", "대체로 흐림", "흐린 후 갬"],
-    "ws26": ["partlycloudy", "대체로 흐림", "뇌우 후 갬"],
-    "ws27": ["partlycloudy", "대체로 흐림", "비 후 갬"],
-    "ws28": ["partlycloudy", "대체로 흐림", "눈 후 갬"],
-    "ws29": ["rainy", "비", "흐려져 비"],
-    "ws30": ["snowy", "눈", "흐려져 눈"],
+    "wt1": ["sunny", "맑음", "맑음(낮)"],
+    "wt2": ["clear-night", "맑음 (밤)", "맑음(밤)"],
+    "wt3": ["partlycloudy", "대체로 흐림", "구름조금(낮)"],
+    "wt4": ["partlycloudy", "대체로 흐림", "구름조금(밤)"],
+    "wt5": ["partlycloudy", "대체로 흐림", "구름많음(낮)"],
+    "wt6": ["partlycloudy", "대체로 흐림", "구름많음(밤)"],
+    "wt7": ["cloudy", "흐림", "흐림"],
+    "wt8": ["rainy", "비", "약한비"],
+    "wt9": ["rainy", "비", "비"],
+    "wt10": ["pouring", "호우", "강한비"],
+    "wt11": ["svnowy", "눈", "약한눈"],
+    "wt12": ["snowy", "눈", "눈"],
+    "wt13": ["snowy", "눈", "강한눈"],
+    "wt14": ["snowy", "눈", "진눈깨비"],
+    "wt15": ["rainy", "비", "소나기"],
+    "wt16": ["snowy-rainy", "진눈개비", "소낙 눈"],
+    "wt17": ["fog", "안개", "안개"],
+    "wt18": ["lightning", "번개", "번개,뇌우"],
+    "wt19": ["snowy", "눈", "우박"],
+    "wt20": ["fog", "안개", "황사"],
+    "wt21": ["snowy-rainy", "진눈개비", "비 또는 눈"],
+    "wt22": ["rainy", "비", "가끔 비"],
+    "wt23": ["snowy", "눈", "가끔 눈"],
+    "wt24": ["snowy-rainy", "진눈개비", "가끔 비 또는 눈"],
+    "wt25": ["partlycloudy", "대체로 흐림", "흐린 후 갬"],
+    "wt26": ["partlycloudy", "대체로 흐림", "뇌우 후 갬"],
+    "wt27": ["partlycloudy", "대체로 흐림", "비 후 갬"],
+    "wt28": ["partlycloudy", "대체로 흐림", "눈 후 갬"],
+    "wt29": ["rainy", "비", "흐려져 비"],
+    "wt30": ["snowy", "눈", "흐려져 눈"],
+    "wt31": ["rainy", "비", "가끔 비(밤)"],
+    "wt32": ["snowy", "눈", "가끔 눈(밤)"],
+    "wt33": ["snowy-rainy", "진눈개비", "가끔 비 또는 눈(밤)"],
+    "wt34": ["partlycloudy", "대체로 흐림", "흐린 후, 갬(밤)"],
+    "wt35": ["partlycloudy", "대체로 흐림", "뇌우 후 갬(밤)"],
+    "wt36": ["partlycloudy", "대체로 흐림", "비 후 갬(밤)"],
+    "wt37": ["partlycloudy", "대체로 흐림", "눈 후 갬(밤)"],
+    "wt38": ["rainy", "비", "흐려져 (밤)"],
+    "wt39": ["snowy", "눈", "흐려져 눈(밤)"],
+    "wt40": ["fog", "안개", "안개(밤)"],
+    "wt41": ["fog", "안개", "황사(밤)"],
 }
 
 # naver provide infomation
@@ -163,19 +174,31 @@ RAINY_START_TMR = [
     "",
 ]
 
+RAIN_PERCENT = [
+    "rainPercent",
+    "강수확률",
+    "%",
+    "mdi:weather-rainy",
+    "",
+]
+
+PUBLIC_TIME_C = ["publicTimeC", "현재날씨 발표시간",   "", "mdi:time", ""]
+PUBLIC_TIME_H = ["publicTimeH", "시간별날씨 발표시간", "", "mdi:time", ""]
+PUBLIC_TIME_W = ["publicTimeW", "주간날씨 발표시간",   "", "mdi:time", ""]
+
 WEATHER_INFO = {
     LOCATION[0]: LOCATION,
     NOW_CAST[0]: NOW_CAST,
     NOW_TEMP[0]: NOW_TEMP,
     MIN_TEMP[0]: MIN_TEMP,
     MAX_TEMP[0]: MAX_TEMP,
-    FEEL_TEMP[0]: FEEL_TEMP,
+#    FEEL_TEMP[0]: FEEL_TEMP,
     NOW_HUMI[0]: NOW_HUMI,
     WIND_SPEED[0]: WIND_SPEED,
     WIND_DIR[0]: WIND_DIR,
     RAINFALL[0]: RAINFALL,
-    UV[0]: UV,
-    UV_GRADE[0]: UV_GRADE,
+#    UV[0]: UV,
+#    UV_GRADE[0]: UV_GRADE,
     UDUST[0]: UDUST,
     NDUST[0]: NDUST,
     UDUST_GRADE[0]: UDUST_GRADE,
@@ -188,4 +211,5 @@ WEATHER_INFO = {
     TOMORROW_MIN[0]: TOMORROW_MIN,
     RAINY_START[0]: RAINY_START,
     RAINY_START_TMR[0]: RAINY_START_TMR,
+    RAIN_PERCENT[0]: RAIN_PERCENT,
 }
