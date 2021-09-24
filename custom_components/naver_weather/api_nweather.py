@@ -182,7 +182,7 @@ class NWeatherAPI:
 
             # 현재 온도
             try:
-                NowTemp = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div.weather_graphic > div.temperature_text")[0].text
+                NowTemp = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div.weather_graphic > div.temperature_text")[0].text
                 NowTemp = re2num(NowTemp)
             except Exception as ex:
                 NowTemp = 'Error'
@@ -192,7 +192,7 @@ class NWeatherAPI:
             # 날씨 캐스트
             WeatherCast = '-'
             try:
-                WeatherCast = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div.temperature_info > p")[0].text
+                WeatherCast = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div.temperature_info > p")[0].text
             except Exception as ex:
                 WeatherCast = 'Error'
                 _LOGGER.error("Failed to update NWeather API WeatherCast Error : %s", ex )
@@ -276,7 +276,7 @@ class NWeatherAPI:
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
 
             # 현재풍속/풍향
-            summ = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div.temperature_info > dl")[0].text
+            summ = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div.temperature_info > dl")[0].text
             rainPercent = re2num(re2key("강수확률", summ))
             Humidity = re2num(re2key("습도", summ))
 
