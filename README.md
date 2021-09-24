@@ -49,6 +49,7 @@
 | v2.0.9  | 2021.07.10  | bug Fix(자외선등급 처리) |
 | v2.1.0  | 2021.09.19  | 웹페이지 개편에 따른 api 수정 |
 | v2.1.1  | 2021.09.19  | 로그출력 삭제 |
+| v2.1.2  | 2021.09.24  | bs4 select 수정  |
 
 <br>
 
@@ -102,7 +103,7 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 |정보|
 |-------|
 |위치|
-|체감온도       |
+|~~체감온도~~       |
 |현재온도       |
 |현재습도       |
 |현재풍속       |
@@ -117,8 +118,8 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 |초미세먼지등급   |
 |오존         |
 |오존등급       |
-|자외선지수      |
-|자외선등급      |
+|~~자외선지수~~      |
+|~~자외선등급~~      |
 |시간당강수량     |
 |오늘비시작시간   |
 |오늘내일비시작시간 |
@@ -138,6 +139,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.1.1-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.1.2-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
