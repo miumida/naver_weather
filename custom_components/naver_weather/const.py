@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.1.1"
+SW_VERSION = "2.1.2"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
