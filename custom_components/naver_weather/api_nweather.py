@@ -259,10 +259,10 @@ class NWeatherAPI:
             UltraFineDustGrade = '-'
 
             try:
-                FineDust      = bs4air.select("div > div.detail_content._details > div.state_info._fine_dust > div.grade > span.num_value")[0].text
-                FineDustGrade = bs4air.select("div > div.detail_content._details > div.state_info._fine_dust > div.grade > span.text_text")[0].text
-                UltraFineDust      = bs4air.select("div > div.detail_content._details > div.state_info._ultrafine_dust > div.grade > span.num_value")[0].text
-                UltraFineDustGrade = bs4air.select("div > div.detail_content._details > div.state_info._ultrafine_dust > div.grade > span.text_text")[0].text
+                FineDust      = bs4air.select("div > div.detail_content > div.state_info._fine_dust > div.grade > span.num")[0].text
+                FineDustGrade = bs4air.select("div > div.detail_content > div.state_info._fine_dust > div.grade > span.text")[0].text
+                UltraFineDust      = bs4air.select("div > div.detail_content > div.state_info._ultrafine_dust > div.grade > span.num")[0].text
+                UltraFineDustGrade = bs4air.select("div > div.detail_content > div.state_info._ultrafine_dust > div.grade > span.text")[0].text
             except Exception as ex:
                 _LOGGER.error("Failed to update NWeather API Dust Info Error :  %s", ex)
 
