@@ -51,7 +51,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def re2num(val):
-    r = re.compile("\d+")
+    r = re.compile("-?\d+")
     rtn = r.findall(val)
 
     return rtn[0]
