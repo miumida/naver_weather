@@ -90,3 +90,9 @@ class NWeatherDevice(NWeatherBase, Entity):
     def should_poll(self) -> bool:
         """No polling needed for this device."""
         return False
+
+    @property
+    def device_state_attributes(self):
+        """Return the state attributes of the sensor."""
+        attr = {}
+        return attr
