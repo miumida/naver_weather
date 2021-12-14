@@ -43,7 +43,7 @@ class NWeatherBase:
             "name": f"{self.api.brand_name} {self.area}",
             "sw_version": self.api.version,
             "via_device": (DOMAIN, self.area),
-            "entry_type": "service",
+            "DeviceEntryType": "service",
         }
 
 
@@ -92,7 +92,7 @@ class NWeatherDevice(NWeatherBase, Entity):
         return False
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes (self):
         """Return the state attributes of the sensor."""
         attr = {}
         return attr
