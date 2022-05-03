@@ -198,7 +198,7 @@ class NWeatherAPI:
             LocationInfo = '-'
             try:
                 LocationInfo = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.top_wrap > div.title_area._area_panel > h2.title").text.strip()
-                eLog(LocationInfo)
+                #eLog(LocationInfo)
             except Exception as ex:
                 LocationInfo = 'Error'
                 _LOGGER.error("Failed to update NWeather API NowTemp Error : %s", ex )
