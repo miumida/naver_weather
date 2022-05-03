@@ -52,6 +52,7 @@
 | v2.1.2  | 2021.09.24  | bs4 select 수정  |
 | v2.1.4  | 2021.10.01  | 미세먼지 관련 오류   |
 | v2.1.6  | 2021.12.15  | Fixed bug |
+| v2.1.7  | 2022.05.04  | Fixed bug |
 
 <br>
 
@@ -105,7 +106,7 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 |정보|
 |-------|
 |위치|
-|~~체감온도~~       |
+|체감온도       |
 |현재온도       |
 |현재습도       |
 |현재풍속       |
@@ -142,6 +143,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.1.6-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.1.7-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
