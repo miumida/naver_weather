@@ -78,7 +78,7 @@ def re2float(val):
 def re2key(key,val):
     r = re.compile(f"{key} -?\d+\.?\d+?")
     rtn = r.findall(val)
-    eLog(rtn)
+    #eLog(rtn)
 
     if len(rtn) > 0:
         return rtn[0]
