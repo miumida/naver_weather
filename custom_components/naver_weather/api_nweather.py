@@ -471,7 +471,7 @@ class NWeatherAPI:
                 RAINY_START_TMR[0]: rainyStartTmr,
                 RAIN_PERCENT[0]: rainPercent,
             }
-            _LOGGER.error(f"[{BRAND}] Update weather information -> {self.result}")
+            _LOGGER.info(f"[{BRAND}] Update weather information -> {self.result}")
             for id in WEATHER_INFO.keys():
                 try:
                     self.device_update(id)
