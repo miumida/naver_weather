@@ -86,7 +86,7 @@ def re2key(key,val):
         return None
 
 def re2keyW(val):
-    r = re.compile("바람\(\w+풍\) \d+m/s")
+    r = re.compile("바람\(\w+풍\) \d+\.?\d?m/s")
     rtn = r.findall(val)
 
     return rtn[0]
@@ -317,7 +317,7 @@ class NWeatherAPI:
             #eLog('습도 ' + str(Humidity))
 
             wind     = re2keyW(summ)
-            WindSpeed = re2num(wind)
+            WindSpeed = re2float(wind)
             WindState = re2keyWD(summ)
 
             # 내일 오전온도
