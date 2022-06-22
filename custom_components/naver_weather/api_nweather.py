@@ -66,7 +66,7 @@ def re2float(val):
     if val is None:
         return None
 
-    r = re.compile("-?\d+\.?\d+?")
+    r = re.compile("-?\d+\.?\d?")
     rtn = r.findall(val)
 
     if len(rtn) > 0:
@@ -76,7 +76,7 @@ def re2float(val):
 
 
 def re2key(key,val):
-    r = re.compile(f"{key} -?\d+\.?\d+?")
+    r = re.compile(f"{key} -?\d+\.?\d?")
     rtn = r.findall(val)
     #eLog(rtn)
 
