@@ -248,9 +248,6 @@ class NWeatherAPI:
                 _LOGGER.error("Failed to update NWeather API TodayMaxTemp Error : %s", ex )
 
             try:
-                #TodayFeelTemp = (
-                #    soup.find("span", {"class": "sensible"}).select("em > span.num")[0].text
-                #)
                 TodayFeelTemp = 0
             except Exception as ex:
                 TodayFeelTemp = 'Error'
@@ -370,8 +367,21 @@ class NWeatherAPI:
 
                 #eLog( '{} {}'.format(tm, wt) )
 
+            # 강수
+            hourly_c_percent = soup.select("div.climate_box > div.icon_wrap > ul > li > em")
+            hourly_c_mm      = soup.select("div.climate_box > div.graph_wrap > ul > li > div")
+
+            try:
+                rainPercent = hourly_c_percent[0].text
+            except Exception as ex:
+                _LOGGER.error(f"[{DOMAIN}] rainPercent Exception, %s", ex)
+
+            try:
+                Rainfall = hourly_c_mm[0].text
+            except Exception as ex:
+                _LOGGER.error(f"[{DOMAIN}] Rainfall Exception, %s", ex)
+
             # 주간날씨
-            #weekly = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.inner > div > div.list_box > ul.week_list > li.week_item")
             weekly = soup.find("div", {"class": "weekly_forecast_area _toggle_panel"})
 
             date_info = weekly.find_all("li", {"class": "week_item"})
