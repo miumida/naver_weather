@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.1.12"
+SW_VERSION = "2.2.0"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
@@ -88,9 +88,10 @@ CONDITIONS = {
 }
 
 # naver provide infomation
-LOCATION = ["LocationInfo", "위치", "", "mdi:map-marker-radius", ""]
-CONDITION = ["Condition", "날씨", "", "", ""]
-NOW_CAST = ["WeatherCast", "현재날씨", "", "mdi:weather-cloudy", ""]
+LOCATION    = ["LocationInfo", "위치", "", "mdi:map-marker-radius", ""]
+CONDITION   = ["Condition",    "날씨", "", "", ""]
+NOW_CAST    = ["WeatherCast",  "현재날씨정보", "", "mdi:weather-cloudy", ""]
+NOW_WEATHER = ["NowWeather",   "현재날씨",     "", "mdi:weather-cloudy", ""]
 NOW_TEMP = [
     "NowTemp",
     "현재온도",
@@ -212,4 +213,5 @@ WEATHER_INFO = {
     RAINY_START[0]: RAINY_START,
     RAINY_START_TMR[0]: RAINY_START_TMR,
     RAIN_PERCENT[0]: RAIN_PERCENT,
+    NOW_WEATHER[0]: NOW_WEATHER,
 }
