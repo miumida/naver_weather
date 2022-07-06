@@ -55,7 +55,7 @@
 | v2.1.8  | 2022.05.04  | Fixed bug |
 | v2.1.11  | 2022.06.22  | Fixed bug |
 | v2.1.12  | 2022.06.28  | 강수확률, 시간당강수량 api 로직 수정 |
-
+| v2.2.0 | 2022.07.07  | 현재날씨, 현재날씨정보 정리 + 현재날씨정보 출력형태 변경  |
 <br>
 
 ## Installation
@@ -130,6 +130,7 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 |오늘비시작시간   |
 |오늘내일비시작시간 |
 |현재날씨       |
+|현재날씨정보    |
 |내일오전날씨     |
 |내일오후날씨     |
 
@@ -145,6 +146,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.1.12-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.2.0-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
