@@ -24,6 +24,7 @@ from .const import (
     NDUST,
     NDUST_GRADE,
     NOW_CAST,
+    NOW_WEATHER,
     NOW_HUMI,
     NOW_TEMP,
     OZON,
@@ -216,11 +217,27 @@ class NWeatherAPI:
 
             # 날씨 캐스트
             WeatherCast = '-'
+            NowWeather  = '-'
             try:
-                WeatherCast = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > p").text
+                wCast    = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > p")
+                cWeather = wCast.select_one("span.weather").text
+                blind    = wCast.select_one("span.blind").text
+
+                WeatherCast = wCast.text
+
+                arrCastTmp = WeatherCast.split(blind)
+
+                convCast = "{}, {}{}".format(arrCastTmp[1], arrCastTmp[0], blind)
+
+                WeatherCast = convCast
+
+                #현재날씨
+                NowWeather = cWeather
+
                 #eLog(WeatherCast)
             except Exception as ex:
                 WeatherCast = 'Error'
+                NowWeather  = 'Error'
                 _LOGGER.error("Failed to update NWeather API WeatherCast Error : %s", ex )
 
 
@@ -456,6 +473,7 @@ class NWeatherAPI:
             self.result = {
                 LOCATION[0]: LocationInfo,
                 NOW_CAST[0]: WeatherCast,
+                NOW_WEATHER[0]: NowWeather,
                 NOW_TEMP[0]: NowTemp,
                 NOW_HUMI[0]: Humidity,
                 CONDITION[0]: condition,
