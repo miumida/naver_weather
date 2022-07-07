@@ -223,16 +223,16 @@ class NWeatherAPI:
                 cWeather = wCast.select_one("span.weather").text
                 blind    = wCast.select_one("span.blind").text
 
-                WeatherCast = wCast.text
+                WeatherCast = wCast.text.strip()
 
                 arrCastTmp = WeatherCast.split(blind)
 
-                convCast = "{}, {}{}".format(arrCastTmp[1], arrCastTmp[0], blind)
+                convCast = "{}, {}{}".format(arrCastTmp[1].strip(), arrCastTmp[0], blind)
 
                 WeatherCast = convCast
 
                 #현재날씨
-                NowWeather = cWeather
+                NowWeather = cWeather.strip()
 
                 #eLog(WeatherCast)
             except Exception as ex:
@@ -293,9 +293,9 @@ class NWeatherAPI:
             TodayUVGrade = "-"
 
             # 미세먼지, 초미세먼지, 오존 지수
-            FineDust = '-'
+            FineDust = '0'
             FineDustGrade = '-'
-            UltraFineDust = '-'
+            UltraFineDust = '0'
             UltraFineDustGrade = '-'
 
             try:
