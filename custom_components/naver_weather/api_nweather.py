@@ -468,6 +468,18 @@ class NWeatherAPI:
             publicTime = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.relate_info > dl > dd").text
             #eLog(publicTime)
 
+            if FineDust == '-':
+                FineDust = '0'
+
+            if UltraFineDust == '-':
+                UltraFineDust = '0'
+
+            if Rainfall == '-':
+                Rainfall = '0'
+
+            if rainPercent == '-':
+                rainPercent = '0'
+
             self.forecast = forecast
 
             self.result = {
