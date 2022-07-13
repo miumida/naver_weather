@@ -40,7 +40,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
-
+    _attr_native_temperature_unit = TEMP_CELSIUS
+    
     @property
     def name(self) -> str:
         """Return the name of the device."""
@@ -53,17 +54,12 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
             return self.device[1]
 
     @property
-    def temperature(self):
+    def native_temperature(self):
         """Return the temperature."""
         try:
             return float(self.api.result.get(NOW_TEMP[0]))
         except Exception:
             return
-
-    @property
-    def temperature_unit(self):
-        """Return the unit of measurement."""
-        return TEMP_CELSIUS
 
     @property
     def humidity(self):
@@ -74,7 +70,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
             return
 
     @property
-    def wind_speed(self):
+    def native_wind_speed(self):
         """Return the wind speed."""
         try:
             return float(self.api.result.get(WIND_SPEED[0])) * 3.6
