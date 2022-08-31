@@ -141,6 +141,7 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 #### thanks to.
 - 네이버 HomeAssistant 카페 | 랜이님
 - 네이버 HomeAssistant 카페 | 초후님
+- 네이버 HomeAssistant 카페 | mahlernim님
 - 네이버 HomeAssistant 카페 | 트루월드님
 
 <br>
