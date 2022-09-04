@@ -372,11 +372,13 @@ class NWeatherAPI:
                         wt = h.select_one("i.wt_icon").text
                         tm = h.select_one("dt.time").text
 
-                        if "비" in wt and hourly_today:
+                        # 비가 오는 예보 혹은 소나기 예보 시 최초 값을 금일 비오는 날짜 설정
+                        if ("비" in wt or "소나기" in wt) and hourly_today:
                             hourly_today = False
                             rainyStart = tm
 
-                        if "비" in wt and hourly_tmr:
+                        # 비가 오는 예보 혹은 소나기 예보 시 최초값을 오늘내일 비 오는 날짜 설정
+                        if ("비" in wt or "소나기" in wt) and hourly_tmr:
                             hourly_tmr = False
                             rainyStartTmr = "내일 {}".format(tm)
                     except Exception as exx:
