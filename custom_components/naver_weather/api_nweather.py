@@ -11,6 +11,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import (
     BRAND,
     BSE_URL,
+    BSE_URL_MOBILE,
     CONDITION,
     CONDITIONS,
     CONF_AREA,
@@ -193,6 +194,12 @@ class NWeatherAPI:
 
             bs4air = BeautifulSoup(await air.text(), "html.parser")
 
+            #자외선
+            url_mobile = BSE_URL_MOBILE.format(self.area)
+            url_uv = url_mobile.replace("날씨", "자외선")
+            uv = await session.get(url_uv, headers=hdr, timeout=30)
+            uv.raise_for_status()
+            bs4uv = BeautifulSoup(await uv.text(), "html.parser")
             NowTemp = ""
 
             # 지역
@@ -305,6 +312,12 @@ class NWeatherAPI:
                 UltraFineDustGrade = bs4air.select_one("div > div.detail_content > div.state_info._ultrafine_dust > div.grade > span.text").text
             except Exception as ex:
                 _LOGGER.error("Failed to update NWeather API Dust Info Error :  %s", ex)
+
+            try:
+                TodayUVGrade = re.sub(r'[0-9\s]+', '', bs4uv.select_one("div.wt_map_cont.rays > strong.life_temp").text)
+                TodayUV = bs4uv.select_one("div.wt_map_cont.rays > strong.life_temp > em").text
+            except Exception as ex:
+                _LOGGER.error("Failed to update NWeather API UV Info Error :  %s", ex)
 
             # 오존
             Ozon = '-'
@@ -479,6 +492,9 @@ class NWeatherAPI:
 
             if rainPercent == '-':
                 rainPercent = '0'
+
+            if TodayUV == '-':
+                TodayUV = '0'
 
             self.forecast = forecast
 

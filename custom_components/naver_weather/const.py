@@ -22,8 +22,9 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.2.2"
+SW_VERSION = "2.2.3"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
+BSE_URL_MOBILE = "https://m.search.naver.com/search.naver?query={}"
 
 # area
 CONF_AREA = "area"
@@ -198,8 +199,8 @@ WEATHER_INFO = {
     WIND_SPEED[0]: WIND_SPEED,
     WIND_DIR[0]: WIND_DIR,
     RAINFALL[0]: RAINFALL,
-#    UV[0]: UV,
-#    UV_GRADE[0]: UV_GRADE,
+    UV[0]: UV,
+    UV_GRADE[0]: UV_GRADE,
     UDUST[0]: UDUST,
     NDUST[0]: NDUST,
     UDUST_GRADE[0]: UDUST_GRADE,
