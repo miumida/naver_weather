@@ -285,12 +285,23 @@ class NWeatherAPI:
                 Rainfall = 'Error'
                 _LOGGER.error("Failed to update NWeather API Rainfall Error : %s", ex )
 
-
             # 자외선 지수
             TodayUV = "-"
 
             # 자외선 등급
             TodayUVGrade = "-"
+
+            reportCardWrap = soup.select("div.report_card_wrap > ul.today_chart_list > li.item_today")
+
+            for li in reportCardWrap:
+                gb    = li.select_one("strong.title").text
+                gbVal = li.select_one("span.txt").text
+
+                if "자외선" in gb:
+                    TodayUVGrade = gbVal
+
+                #_LOGGER.error(f"[{BRAND}] {gb}, {gbVal}")
+
 
             # 미세먼지, 초미세먼지, 오존 지수
             FineDust = '0'
@@ -355,6 +366,7 @@ class NWeatherAPI:
 
             hourly_today = True
             hourly_tmr   = True
+            tommorow     = False
 
             for h in hourly:
 
@@ -362,9 +374,11 @@ class NWeatherAPI:
 
                 if "내일" in time:
                     hourly_today = False
+                    tommorow     = True
 
                 if "모레" in time:
                     hourly_tmr = False
+                    tommorow   = False
 
                 if "시" in time or "내일" in time or "모레" in time:
                     #eLog(h.select_one("i.wt_icon"))
@@ -372,13 +386,19 @@ class NWeatherAPI:
                         wt = h.select_one("i.wt_icon").text
                         tm = h.select_one("dt.time").text
 
-                        if "비" in wt and hourly_today:
+                        if ("비" in wt or "소나기" in wt ) and hourly_today:
                             hourly_today = False
                             rainyStart = tm
 
-                        if "비" in wt and hourly_tmr:
+                        if ( "비" in wt or "소나기" in wt ) and hourly_tmr:
                             hourly_tmr = False
-                            rainyStartTmr = "내일 {}".format(tm)
+                            if "내일" in tm:
+                                rainyStartTmr = "내일 00시"
+                            else:
+                                if tommorow:
+                                    rainyStartTmr = "내일 {}".format(tm)
+                                else:
+                                    rainyStartTmr = tm
                     except Exception as exx:
                         _LOGGER.info("except")
 
@@ -429,6 +449,8 @@ class NWeatherAPI:
                     data["temperature"] = float(high)
 
                     # condition
+                    cell_w = di.select("div.cell_weather > span > i.wt_icon > span")
+
                     condition_am = di.select("div.cell_weather > span > i")[0]["class"][1].replace("ico_", "")
                     condition_pm = di.select("div.cell_weather > span > i")[1]["class"][1].replace("ico_", "")
 
@@ -452,13 +474,13 @@ class NWeatherAPI:
                         tomorrowMTemp = low
 
                         # 내일 오전상태
-                        tomorrowMState = CONDITIONS[condition_am][1]
+                        tomorrowMState = cell_w[0].text #CONDITIONS[condition_am][1]
 
                         # 내일 오후온도
                         tomorrowATemp = high
 
                         # 내일 오후상태
-                        tomorrowAState = CONDITIONS[condition_pm][1]
+                        tomorrowAState = cell_w[1].text #CONDITIONS[condition_pm][1]
 
                 except Exception as ex:
                     eLog(ex)
