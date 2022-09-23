@@ -59,6 +59,7 @@
 | v2.2.1 | 2022.07.08  | Fixed bug  |
 | v2.2.2 | 2022.07.18  | Fixed bug  |
 | v2.2.3 | 2022.09.06  | - 자외선 등급 추가<br> - 내일오전날씨, 내일오후날씨 api 로직 수정<br> - 오늘비시작시간, 오늘내일비시작시간 api 로직 수정  |
+| v2.2.4 | 2022.09.23  | 미세먼지, 초미세먼지 device_class(pm25) 추가  |
 <br>
 
 ## Installation
@@ -150,6 +151,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.2.3-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.2.4-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
