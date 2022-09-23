@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.2.3"
+SW_VERSION = "2.2.4"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
@@ -137,9 +137,9 @@ UDUST = [
     "초미세먼지",
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     "mdi:blur-linear",
-    "",
+    "pm25",
 ]
-NDUST = ["FineDust", "미세먼지", CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "mdi:blur", ""]
+NDUST = ["FineDust", "미세먼지", CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "mdi:blur", "pm25"]
 UDUST_GRADE = ["UltraFineDustGrade", "초미세먼지등급", "", "mdi:blur-linear", ""]
 NDUST_GRADE = ["FineDustGrade", "미세먼지등급", "", "mdi:blur", ""]
 OZON = ["Ozon", "오존", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-o-circle", ""]
