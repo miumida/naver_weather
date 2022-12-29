@@ -22,11 +22,12 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.2.4"
+SW_VERSION = "2.2.5"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
-CONF_AREA = "area"
+CONF_AREA  = "area"
+CONF_TODAY = "today"
 DEFAULT_AREA = "날씨"
 
 OPT_SCAN_INT = "scan_interval"
