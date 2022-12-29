@@ -6,7 +6,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant import config_entries
 from homeassistant.core import callback
 
-from .const import CONF_AREA, DOMAIN, NW_OPTIONS
+from .const import CONF_AREA, CONF_TODAY, DOMAIN, NW_OPTIONS
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -30,6 +30,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Optional(CONF_AREA): cv.string,
+                    vol.Optional(CONF_TODAY, default=False): bool,
                 }
             ),
             errors=errors,
