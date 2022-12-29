@@ -12,7 +12,8 @@
                 "title": "Set up Naver Weather",
                 "description": "Do you want to set up Naver Weather?",
                 "data": {
-                    "area": "Area : Where you want to know."
+                    "area": "Area : Where you want to know.",
+                    "today": "Today: Weekly forecast includes today's weather."
                 }
             }
         }
@@ -22,7 +23,8 @@
             "init": {
                 "title": "Naver Weather Options.",
                 "data": {
-                    "area": "Area : Where you want to know."
+                    "area": "Area : Where you want to know.",
+                    "today": "Today: Weekly forecast includes today's weather."
                 }
             }
         }
