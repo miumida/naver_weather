@@ -14,6 +14,7 @@ from .const import (
     CONDITION,
     CONDITIONS,
     CONF_AREA,
+    CONF_TODAY,
     DEVICE_REG,
     DEVICE_UPDATE,
     FEEL_TEMP,
@@ -136,6 +137,14 @@ class NWeatherAPI:
     def get_data(self, name, default=False):
         """Get entry data."""
         return self.entry.data.get(name, default)
+
+    @property
+    def today(self):
+        """Return area."""
+        today = self.entry.options.get(CONF_TODAY, self.entry.data.get(CONF_TODAY))
+
+        return today
+
 
     def init_device(self, unique_id):
         """Initialize device."""
@@ -465,8 +474,12 @@ class NWeatherAPI:
                     rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
-                    if di.select_one("div > div.cell_date > span > strong.day").text != "오늘":
+
+                    if self.today:
                         forecast.append(data)
+                    else:
+                        if di.select_one("div > div.cell_date > span > strong.day").text != "오늘":
+                            forecast.append(data)
 
                     #내일 날씨
                     if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
