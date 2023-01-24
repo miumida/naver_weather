@@ -1,11 +1,11 @@
 {
-  "domain": "naver_weather",
-  "name": "Naver Weather",
+  "domain": "naver_weather_custom",
+  "name": "Naver Weather Custom",
   "config_flow": true,
-  "documentation": "https://github.com/miumida/naver_weather",
+  "documentation": "https://github.com/ninthsword/naver_weather",
   "requirements": ["beautifulsoup4==4.9.3"],
   "dependencies": [],
-  "codeowners": ["@miumida", "@gugu927"],
-  "version": "2.2.5",
+  "codeowners": ["@miumida", "@gugu927", @ninthsword],
+  "version": "2.2.5-0.1",
   "iot_class": "cloud_polling"
 }
