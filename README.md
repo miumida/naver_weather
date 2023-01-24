@@ -1,3 +1,5 @@
+Custom from [miumi](https://github.com/miumida/naver_weather)
+
 # 네이버 날씨 for HA
 
 ![HAKC)][hakc-shield]
