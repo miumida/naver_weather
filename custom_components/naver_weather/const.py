@@ -12,8 +12,8 @@ from homeassistant.const import (
     PRECIPITATION_MILLIMETERS_PER_HOUR,
 )
 
-DOMAIN = "naver_weather"
-BRAND = "Naver Weather"
+DOMAIN = "naver_weather_custom"
+BRAND = "Naver Weather Custom"
 MODEL = "NWeather"
 PLATFORMS = ["weather", "sensor"]
 
@@ -22,7 +22,7 @@ DEVICE_UPDATE = "update"
 DEVICE_REG = "register"
 DEVICE_UNREG = "unregister"
 
-SW_VERSION = "2.2.5"
+SW_VERSION = "2.2.5-0.1"
 BSE_URL = "https://search.naver.com/search.naver?query={}"
 
 # area
