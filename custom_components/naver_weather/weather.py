@@ -29,7 +29,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     def async_add_entity():
         """Add sensor from sensor."""
         entities = []
-        device = ["Naver Weather", "네이버날씨", "", ""]
+        device = ["Naver Weather Custom", "네이버날씨Custom", "", ""]
         entities.append(NWeatherMain(device, api))
 
         if entities:
