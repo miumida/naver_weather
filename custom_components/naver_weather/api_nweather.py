@@ -430,16 +430,19 @@ class NWeatherAPI:
 
             # 주간날씨
             weekly = soup.find("div", {"class": "weekly_forecast_area _toggle_panel"})
-
             date_info = weekly.find_all("li", {"class": "week_item"})
 
+            daily = soup.find("div", {"class": "graph_inner _hourly_weather"})
+            day_info = daily.find_all("li", {"class": "_li"})
+            
             # 시간설정 및 예보 정의
             forecast = [] 
             
             oritime = datetime.utcnow() + timedelta(hours=9)
             timezone_kst = timezone(timedelta(hours=9))
             reftime = datetime(oritime.year, oritime.month, oritime.day, hour=0, minute=0, second=0, tzinfo=timezone_kst)
-
+            reftimeday = datetime(oritime.year, oritime.month, oritime.day, oritime.hour, minute=0, second=0, tzinfo=timezone_kst)
+            
             for di in date_info:
                 data = {}
 
@@ -502,7 +505,31 @@ class NWeatherAPI:
                     eLog(ex)
 
                 reftime = reftime + timedelta(days=1)
+                
+            for dayi in day_info:
+                daydata = {}
+                
+                reftimeday = reftimeday + timedelta(hours=1)
+                
+                daydata["datetime"] = reftimeday
+                comptimeday = reftimeday.strftime("%H시")
+                    
+                try:
+                    # temp
+                    hourlytemp = dayi.select_one("span.num").text
+                    daydata["temperature"] = float(hourlytemp)
 
+                    # condition
+                    condition_hourly = dayi.select("dd.weather_box > i")[0]["class"][1].replace("ico_", "")
+
+                    daydata["condition"]    = CONDITIONS[condition_hourly][0]
+                    daydata["condition_hour"] = condition_hourly
+                    
+                    forecast.append(daydata)
+                    
+                except Exception as ex:
+                    eLog(ex)
+                 
             publicTime = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.relate_info > dl > dd").text
             #eLog(publicTime)
 
