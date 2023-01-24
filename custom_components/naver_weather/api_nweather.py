@@ -1,6 +1,6 @@
 """API for naver weather component."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import logging
 import re
 
@@ -337,7 +337,8 @@ class NWeatherAPI:
             # condition
             condition_main = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
-
+            weathertype = condition_main.replace("ico_", "")
+            
             # 현재풍속/풍향
             summ = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > dl").text
             #eLog(summ)
@@ -432,9 +433,12 @@ class NWeatherAPI:
 
             date_info = weekly.find_all("li", {"class": "week_item"})
 
-            forecast = []
-
-            reftime = datetime.now()
+            # 시간설정 및 예보 정의
+            forecast = [] 
+            
+            oritime = datetime.utcnow() + timedelta(hours=9)
+            timezone_kst = timezone(timedelta(hours=9))
+            reftime = datetime(oritime.year, oritime.month, oritime.day, hour=0, minute=0, second=0, tzinfo=timezone_kst)
 
             for di in date_info:
                 data = {}
@@ -449,7 +453,10 @@ class NWeatherAPI:
                     # data['datetime'] = dayInfo
 
                 data["datetime"] = reftime
-
+                comptime = reftime.strftime("%m.%d.")
+                if comptime[0] == "0":
+                    comptime = comptime[1:]
+                    
                 try:
                     # temp
                     low  = re2num(di.select_one("span.lowest").text)
@@ -464,8 +471,8 @@ class NWeatherAPI:
                     condition_pm = di.select("div.cell_weather > span > i")[1]["class"][1].replace("ico_", "")
 
                     data["condition"]    = CONDITIONS[condition_pm][0]
-                    data["condition_am"] = CONDITIONS[condition_am][0]
-                    data["condition_pm"] = CONDITIONS[condition_pm][0]
+                    data["condition_am"] = condition_am
+                    data["condition_pm"] = condition_pm
 
                     # rain_rate
                     rain_m = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[0].text
@@ -474,13 +481,9 @@ class NWeatherAPI:
                     rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
-
-                    if self.today:
+                    if di.select_one("div > div.cell_date > span > span.date").text == comptime:
                         forecast.append(data)
-                    else:
-                        if di.select_one("div > div.cell_date > span > strong.day").text != "오늘":
-                            forecast.append(data)
-
+                        
                     #내일 날씨
                     if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
                         # 내일 오전온도
@@ -516,6 +519,7 @@ class NWeatherAPI:
                 rainPercent = '0'
 
             self.forecast = forecast
+            self.weathertype = weathertype
 
             self.result = {
                 LOCATION[0]: LocationInfo,
