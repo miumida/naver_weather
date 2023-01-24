@@ -66,7 +66,7 @@ class NWeatherDevice(NWeatherBase, Entity):
     async def async_added_to_hass(self):
         """Subscribe to device events."""
         self.register(self.unique_id, self.async_update_callback)
-        if self.device[0] == "Naver Weather":
+        if self.device[0] == "Naver Weather Custom":
             await self.api.update()
         self.async_write_ha_state()
 
