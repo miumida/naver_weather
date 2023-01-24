@@ -508,13 +508,17 @@ class NWeatherAPI:
                 
             for dayi in day_info:
                 daydata = {}
-                
+
                 reftimeday = reftimeday + timedelta(hours=1)
-                
                 daydata["datetime"] = reftimeday
+                
                 comptimeday = reftimeday.strftime("%H시")
                     
                 try:
+                    hourlytime = dayi.select_one("dt.time").text
+                    if "내일" in hourlytime or "모레" in hourlytime or "." in hourlytime:
+                        hourlytime = "00시"
+                    
                     # temp
                     hourlytemp = dayi.select_one("span.num").text
                     daydata["temperature"] = float(hourlytemp)
@@ -525,7 +529,8 @@ class NWeatherAPI:
                     daydata["condition"]    = CONDITIONS[condition_hourly][0]
                     daydata["condition_hour"] = condition_hourly
                     
-                    forecast.append(daydata)
+                    if hourlytime == comptimeday:
+                        forecast.append(daydata)
                     
                 except Exception as ex:
                     eLog(ex)
