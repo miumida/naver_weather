@@ -5,7 +5,7 @@
   "documentation": "https://github.com/ninthsword/naver_weather",
   "requirements": ["beautifulsoup4==4.9.3"],
   "dependencies": [],
-  "codeowners": ["@miumida", "@gugu927", @ninthsword],
+  "codeowners": ["@miumida", "@gugu927", "@ninthsword"],
   "version": "2.2.5-0.1",
   "iot_class": "cloud_polling"
 }
