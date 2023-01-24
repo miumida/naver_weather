@@ -431,9 +431,25 @@ class NWeatherAPI:
             # 주간날씨
             weekly = soup.find("div", {"class": "weekly_forecast_area _toggle_panel"})
             date_info = weekly.find_all("li", {"class": "week_item"})
-
+            
+            # 시간별날씨
             daily = soup.find("div", {"class": "graph_inner _hourly_weather"})
             day_info = daily.find_all("li", {"class": "_li"})
+            
+            dayrainpercent = soup.select("div.scroll_box _horizontal_scroll _hourly_rain > div.climate_box > div.icon_wrap > ul")
+            dayrainpercent_info = dayrainpercent.find_all("li", {"class": "data"})
+            
+            dayrainfall = soup.select("div.scroll_box _horizontal_scroll _hourly_rain > div.climate_box > div.graph_wrap rainfall > ul")
+            dayrainfall_info = dayrainfall.find_all("li", {"class": "data"})
+            
+            daywindbearing = soup.select("div.scroll_box _horizontal_scroll _hourly_wind > div.climate_box > div.icon_wrap > ul")
+            daywindbearing_info = daywindbearing.find_all("li", {"class": "data"})
+            
+            daywindspeed = soup.select("div.scroll_box _horizontal_scroll _hourly_wind > div.climate_box > div.graph_wrap > ul")
+            daywindspeed_info = daywindspeed.find_all("li", {"class": "data"})
+            
+            dayhumidity = soup.select("div.humidity_graph_box > div.climate_box > div.graph_wrap > ul")
+            dayhumidity_info = dayhumidity.find_all("li", {"class": "data"})
             
             # 시간설정 및 예보 정의
             forecast = [] 
@@ -521,7 +537,7 @@ class NWeatherAPI:
                     
                     # temp
                     hourlytemp = re2num(dayi.select_one("span.num").text)
-                    daydata["temperature"] = float(hourlytemp)
+                    daydata["native_temperature"] = float(hourlytemp)
 
                     # condition
                     condition_hourly = dayi.select("dd.weather_box > i")[0]["class"][1].replace("ico_", "")
