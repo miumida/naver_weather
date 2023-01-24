@@ -95,7 +95,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     @property
     def attribution(self):
         """Return the attribution."""
-        return f"{self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida"
+        return f"{self.api.weathertype}, {self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida, Custom by ninthsword"
 
     @property
     def forecast(self):
