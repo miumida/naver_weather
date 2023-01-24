@@ -521,10 +521,20 @@ class NWeatherAPI:
                     eLog(ex)
 
                 reftime = reftime + timedelta(days=1)
-                
-            for dayi in day_info:
-                daydata = {}
+            
+            # 시간별
+            daydata = {}
+            
+            for dayj in dayrainpercent_info:
 
+                try:
+                    hourlyrainpercent = re2num(dayj.select_one("em.value").text)
+                    daydata["precipitation_probability"] = int(hourlyrainpercent)
+
+                except Exception as ex:
+                    eLog(ex)
+
+            for dayi in day_info:
                 reftimeday = reftimeday + timedelta(hours=1)
                 daydata["datetime"] = reftimeday
                 
@@ -550,7 +560,7 @@ class NWeatherAPI:
                     
                 except Exception as ex:
                     eLog(ex)
-                 
+                    
             publicTime = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.relate_info > dl > dd").text
             #eLog(publicTime)
 
