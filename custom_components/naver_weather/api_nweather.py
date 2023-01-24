@@ -520,13 +520,13 @@ class NWeatherAPI:
                         hourlytime = "00시"
                     
                     # temp
-                    hourlytemp = dayi.select_one("span.num").text
+                    hourlytemp = re2num(dayi.select_one("span.num").text)
                     daydata["temperature"] = float(hourlytemp)
 
                     # condition
                     condition_hourly = dayi.select("dd.weather_box > i")[0]["class"][1].replace("ico_", "")
 
-                    daydata["condition"]    = CONDITIONS[condition_hourly][0]
+                    daydata["condition"] = CONDITIONS[condition_hourly][0]
                     daydata["condition_hour"] = condition_hourly
                     
                     if hourlytime == comptimeday:
