@@ -436,9 +436,9 @@ class NWeatherAPI:
             daily = soup.find("div", {"class": "graph_inner _hourly_weather"})
             day_info = daily.find_all("li", {"class": "_li"})
             
-            dayrainpercent = soup.select("div > div._hourly_rain > div > div.climate_box > div.icon_wrap > ul > li.data > em.value")
-            dayrainfall = soup.select("div > div._hourly_rain > div > div.climate_box > div.rainfall > ul > li.data > div.data_inner")
-            dayhumidity = soup.select("div > div._hourly_humidity > div.climate_box > div.graph_wrap > ul > li.data > div.data_inner > span > span.num")
+            dayrainpercent = soup.select("div.open > div > div > div> div > div > div._hourly_rain > div > div.climate_box > div.icon_wrap > ul > li.data > em.value")
+            dayrainfall = soup.select("div.open > div > div > div> div > div > div._hourly_rain > div > div.climate_box > div.rainfall > ul > li.data > div.data_inner")
+            dayhumidity = soup.select("div.open > div > div > div> div > div > div._hourly_humidity > div > div.climate_box > div.graph_wrap > ul > li.data > div.data_inner > span.base_bar > span.num")
             
             # 시간설정 및 예보 정의
             forecast = [] 
@@ -489,8 +489,8 @@ class NWeatherAPI:
                     rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
-                    if di.select_one("div > div.cell_date > span > span.date").text == comptime:
-                        forecast.append(data)
+                    #if di.select_one("div > div.cell_date > span > span.date").text == comptime:
+                    #    forecast.append(data)
                         
                     #내일 날씨
                     if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
@@ -551,10 +551,15 @@ class NWeatherAPI:
                 if hourlyrainpercent == "-":
                   hourlyrainpercent = "0%"
 
+                hourlyrainfall = dayrainfall[i].text
+                hourlydumidity = dayhumidity[i].text
+                
                 daydata = daycast[i]
 
                 daydata["precipitation_probability"] = int(re2num(hourlyrainpercent))
-              
+                daydata["native_precipitation"] = float(re2num(hourlyrainfall.strip()))
+                daydata["humidity"] = float(hourlydumidity)
+                
                 forecast.append(daydata)
                 
               except Exception as ex:
