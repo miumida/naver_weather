@@ -431,9 +431,14 @@ class NWeatherAPI:
             # 주간날씨
             weekly = soup.find("div", {"class": "weekly_forecast_area _toggle_panel"})
             date_info = weekly.find_all("li", {"class": "week_item"})
-
+            
+            # 시간별날씨
             daily = soup.find("div", {"class": "graph_inner _hourly_weather"})
             day_info = daily.find_all("li", {"class": "_li"})
+            
+            dayrainpercent = soup.select("div.open > div > div > div> div > div > div._hourly_rain > div > div.climate_box > div.icon_wrap > ul > li.data > em.value")
+            dayrainfall = soup.select("div.open > div > div > div> div > div > div._hourly_rain > div > div.climate_box > div.rainfall > ul > li.data > div.data_inner")
+            dayhumidity = soup.select("div.open > div > div > div> div > div > div._hourly_humidity > div > div.climate_box > div.graph_wrap > ul > li.data > div.data_inner > span.base_bar > span.num")
             
             # 시간설정 및 예보 정의
             forecast = [] 
@@ -484,8 +489,8 @@ class NWeatherAPI:
                     rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
-                    if di.select_one("div > div.cell_date > span > span.date").text == comptime:
-                        forecast.append(data)
+                    #if di.select_one("div > div.cell_date > span > span.date").text == comptime:
+                    #    forecast.append(data)
                         
                     #내일 날씨
                     if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
@@ -505,10 +510,11 @@ class NWeatherAPI:
                     eLog(ex)
 
                 reftime = reftime + timedelta(days=1)
-                
+            
+            # 시간별
+            daycast = []
             for dayi in day_info:
                 daydata = {}
-
                 reftimeday = reftimeday + timedelta(hours=1)
                 daydata["datetime"] = reftimeday
                 
@@ -521,7 +527,7 @@ class NWeatherAPI:
                     
                     # temp
                     hourlytemp = re2num(dayi.select_one("span.num").text)
-                    daydata["temperature"] = float(hourlytemp)
+                    daydata["native_temperature"] = float(hourlytemp)
 
                     # condition
                     condition_hourly = dayi.select("dd.weather_box > i")[0]["class"][1].replace("ico_", "")
@@ -530,11 +536,35 @@ class NWeatherAPI:
                     daydata["condition_hour"] = condition_hourly
                     
                     if hourlytime == comptimeday:
-                        forecast.append(daydata)
+                        daycast.append(daydata)
                     
                 except Exception as ex:
                     eLog(ex)
-                 
+            
+            daycastlength = len(daycast)
+
+            for i in range(0, daycastlength, 1): 
+              daydata={}
+              try:
+                hourlyrainpercent = dayrainpercent[i].text
+
+                if hourlyrainpercent == "-":
+                  hourlyrainpercent = "0%"
+
+                hourlyrainfall = dayrainfall[i].text
+                hourlydumidity = dayhumidity[i].text
+                
+                daydata = daycast[i]
+
+                daydata["precipitation_probability"] = int(re2num(hourlyrainpercent))
+                daydata["native_precipitation"] = float(re2num(hourlyrainfall.strip()))
+                daydata["humidity"] = float(hourlydumidity)
+                
+                forecast.append(daydata)
+                
+              except Exception as ex:
+                eLog(ex)
+            
             publicTime = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.relate_info > dl > dd").text
             #eLog(publicTime)
 
