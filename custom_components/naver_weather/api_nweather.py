@@ -91,13 +91,25 @@ def re2keyW(val):
     r = re.compile("바람\(\w+풍\) \d+\.?\d?m/s")
     rtn = r.findall(val)
 
-    return rtn[0]
+    if len(rtn) > 0:
+        return rtn[0]
+    else:
+        r = re.compile("\d+\.?\d?m/s")
+        rtn = r.findall(val)
+
+        if len(rtn) > 0:
+            return rtn[0]
+        else:
+            return None
 
 def re2keyWD(val):
     r = re.compile("[동|서|남|북]+")
     rtn = r.findall(val)
 
-    return rtn[0]
+    if len(rtn) > 0:
+        return rtn[0]
+    else:
+        return None
 
 def eLog(val):
     _LOGGER.error("[naver_weather] error : %s", val)
