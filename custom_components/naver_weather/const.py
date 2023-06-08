@@ -86,6 +86,7 @@ CONDITIONS = {
     "wt39": ["snowy", "눈", "흐려져 눈(밤)"],
     "wt40": ["fog", "안개", "안개(밤)"],
     "wt41": ["fog", "안개", "황사(밤)"],
+    "wt42": ["rainy", "비", "소나기(밤)"],
 }
 
 # naver provide infomation
