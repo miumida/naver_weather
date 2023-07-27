@@ -62,6 +62,7 @@
 | v2.2.4 | 2022.09.23  | 미세먼지, 초미세먼지 device_class(pm25) 추가  |
 | v2.2.5 | 2022.12.29  | 주간예보에 오늘날씨 포함 옵션   |
 | v2.2.6 | 2023.04.14  | 풍속 정규식 처리    |
+| v2.2.7 | 2023.07.28  | DeviceEntryType -> entry_type   |
 <br>
 
 ## Installation
@@ -154,6 +155,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.2.6-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.2.7-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
