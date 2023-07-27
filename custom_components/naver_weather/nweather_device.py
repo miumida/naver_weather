@@ -43,7 +43,7 @@ class NWeatherBase:
             "name": f"{self.api.brand_name} {self.area}",
             "sw_version": self.api.version,
             "via_device": (DOMAIN, self.area),
-            "DeviceEntryType": "service",
+            "entry_type": "service",
         }
 
 
