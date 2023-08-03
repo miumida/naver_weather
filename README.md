@@ -66,6 +66,8 @@ v2.2.9-0.1
 | v2.2.4 | 2022.09.23  | 미세먼지, 초미세먼지 device_class(pm25) 추가  |
 | v2.2.5 | 2022.12.29  | 주간예보에 오늘날씨 포함 옵션   |
 | v2.2.6 | 2023.04.14  | 풍속 정규식 처리 |
+| v2.2.7 | 2023.07.28  | DeviceEntryType -> entry_type   |
+| v2.2.8 | 2023.07.29  | DeviceEntryType 원복  |
 <br>
 
 ## Installation
