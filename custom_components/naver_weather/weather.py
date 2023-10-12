@@ -110,3 +110,9 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     async def async_update(self):
         """Update current conditions."""
         await self.api.update()
+
+    async def async_forecast_hourly(self) -> list[forecast] | None:
+        """Return the hourly forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
+        """
