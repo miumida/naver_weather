@@ -595,7 +595,7 @@ class NWeatherAPI:
             if rainPercent == '-':
                 rainPercent = '0'
 
-            self.forecast_hourly = forecast
+            self.forecast = forecast
             self.weathertype = weathertype
 
             self.result = {
