@@ -5,6 +5,31 @@ import logging
 from homeassistant.components.weather import WeatherEntity
 from homeassistant.const import TEMP_CELSIUS
 
+from homeassistant.components.weather import (
+    ATTR_CONDITION_CLEAR_NIGHT,
+    ATTR_CONDITION_CLOUDY,
+    ATTR_CONDITION_FOG,
+    ATTR_CONDITION_HAIL,
+    ATTR_CONDITION_LIGHTNING,
+    ATTR_CONDITION_PARTLYCLOUDY,
+    ATTR_CONDITION_POURING,
+    ATTR_CONDITION_RAINY,
+    ATTR_CONDITION_SNOWY,
+    ATTR_CONDITION_SUNNY,
+
+    ATTR_FORECAST_CONDITION,
+    ATTR_FORECAST_PRECIPITATION_PROBABILITY,
+    ATTR_FORECAST_TEMP,
+    ATTR_FORECAST_TEMP_LOW,
+    ATTR_FORECAST_TIME,
+    ATTR_FORECAST_WIND_BEARING,
+    ATTR_FORECAST_WIND_SPEED,
+
+    DOMAIN as SENSOR_DOMAIN,
+    Forecast,
+    WeatherEntityFeature,
+)
+
 from .const import (
     CONDITION,
     DOMAIN,
@@ -98,9 +123,17 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         return f"{self.api.weathertype}, {self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida, Custom by ninthsword"
 
     @property
-    def forecast(self):
+    def forecast(self) -> list[Forecast] | None:
         """Return the forecast."""
-        return self.api.forecast
+        #return self.api.forecast
+        return self._forecast()
+
+    async def async_forecast_hourly(self) -> list[Forecast] | None:
+        """Return the hourly forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
+        """
+        return self._forecast()
 
     @property
     def should_poll(self) -> bool:
@@ -111,8 +144,26 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """Update current conditions."""
         await self.api.update()
 
-    async def async_forecast_hourly(self) -> list[forecast] | None:
-        """Return the hourly forecast in native units.
-        
-        Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
-        """
+        def _forecast(self) -> list[Forecast] | None:
+        forecast = []
+
+        for data in self.api.forecast:
+            next_day = {
+                ATTR_FORECAST_TIME: data["datetime"],
+                ATTR_FORECAST_CONDITION: data["condition"],
+                ATTR_FORECAST_TEMP_LOW: data["templow"],
+                ATTR_FORECAST_TEMP: data["temperature"],
+                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
+                #ATTR_FORECAST_WIND_BEARING: data[""],
+                #ATTR_FORECAST_WIND_SPEED: data[""],
+
+                # Not officially supported, but nice additions.
+                "condition_am": data["condition_am"],
+                "condition_pm": data["condition_pm"],
+
+                "rain_rate_am": data["rain_rate_am"],
+                "rain_rate_pm": data["rain_rate_pm"]
+            }
+            forecast.append(next_day)
+
+        return forecast
