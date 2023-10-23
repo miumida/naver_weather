@@ -98,7 +98,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         return f"{self.api.weathertype}, {self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida, Custom by ninthsword"
 
     @property
-    def forecast(self) -> list[Forecast] | None:
+    def forecast(self):
         """Return the forecast."""
         return self.api.forecast
 
