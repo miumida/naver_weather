@@ -102,7 +102,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """Return the forecast."""
         return self.api.forecast
 
-    async def async_forecast_hourly(self) -> list[Forecast] | None:
+    async def async_forecast_hourly(self) -> list[forecast] | None:
         """Return the hourly forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
