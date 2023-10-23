@@ -5,31 +5,6 @@ import logging
 from homeassistant.components.weather import WeatherEntity
 from homeassistant.const import TEMP_CELSIUS
 
-from homeassistant.components.weather import (
-    ATTR_CONDITION_CLEAR_NIGHT,
-    ATTR_CONDITION_CLOUDY,
-    ATTR_CONDITION_FOG,
-    ATTR_CONDITION_HAIL,
-    ATTR_CONDITION_LIGHTNING,
-    ATTR_CONDITION_PARTLYCLOUDY,
-    ATTR_CONDITION_POURING,
-    ATTR_CONDITION_RAINY,
-    ATTR_CONDITION_SNOWY,
-    ATTR_CONDITION_SUNNY,
-
-    ATTR_FORECAST_CONDITION,
-    ATTR_FORECAST_PRECIPITATION_PROBABILITY,
-    ATTR_FORECAST_TEMP,
-    ATTR_FORECAST_TEMP_LOW,
-    ATTR_FORECAST_TIME,
-    ATTR_FORECAST_WIND_BEARING,
-    ATTR_FORECAST_WIND_SPEED,
-
-    DOMAIN as SENSOR_DOMAIN,
-    Forecast,
-    WeatherEntityFeature,
-)
-
 from .const import (
     CONDITION,
     DOMAIN,
@@ -125,15 +100,13 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     @property
     def forecast(self) -> list[Forecast] | None:
         """Return the forecast."""
-        #return self.api.forecast
-        return self._forecast()
+        return self.api.forecast
 
     async def async_forecast_hourly(self) -> list[Forecast] | None:
         """Return the hourly forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
         """
-        return self._forecast()
 
     @property
     def should_poll(self) -> bool:
