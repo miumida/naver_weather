@@ -143,27 +143,3 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     async def async_update(self):
         """Update current conditions."""
         await self.api.update()
-
-        def _forecast(self) -> list[Forecast] | None:
-        forecast = []
-
-        for data in self.api.forecast:
-            next_day = {
-                ATTR_FORECAST_TIME: data["datetime"],
-                ATTR_FORECAST_CONDITION: data["condition"],
-                ATTR_FORECAST_TEMP_LOW: data["templow"],
-                ATTR_FORECAST_TEMP: data["temperature"],
-                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
-                #ATTR_FORECAST_WIND_BEARING: data[""],
-                #ATTR_FORECAST_WIND_SPEED: data[""],
-
-                # Not officially supported, but nice additions.
-                "condition_am": data["condition_am"],
-                "condition_pm": data["condition_pm"],
-
-                "rain_rate_am": data["rain_rate_am"],
-                "rain_rate_pm": data["rain_rate_pm"]
-            }
-            forecast.append(next_day)
-
-        return forecast
