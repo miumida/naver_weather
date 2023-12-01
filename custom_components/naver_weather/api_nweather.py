@@ -354,7 +354,7 @@ class NWeatherAPI:
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
 
             # 현재풍속/풍향
-            summ = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > dl").text
+            summ = soup.select_one("div.weather_info > div > div > div.temperature_info > dl").text
             #eLog(summ)
 
             TodayFeelTemp = re2float(re2key("체감", summ))
