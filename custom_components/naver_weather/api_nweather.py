@@ -222,16 +222,16 @@ class NWeatherAPI:
             # 지역
             LocationInfo = '-'
             try:
-                LocationInfo = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.top_wrap > div.title_area._area_panel > h2.title").text.strip()
+                LocationInfo = soup.select_one("div.title_area._area_panel > h2.title").text.strip()
                 #eLog(LocationInfo)
             except Exception as ex:
                 LocationInfo = 'Error'
-                _LOGGER.error("Failed to update NWeather API NowTemp Error : %s", ex )
+                _LOGGER.error("Failed to update NWeather API Location Error : %s", ex )
 
 
             # 현재 온도
             try:
-                NowTemp = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.weather_graphic > div.temperature_text").text
+                NowTemp = soup.select_one("div.temperature_text").text
                 #eLog(NowTemp)
                 NowTemp = re2float(NowTemp)
             except Exception as ex:
@@ -243,7 +243,7 @@ class NWeatherAPI:
             WeatherCast = '-'
             NowWeather  = '-'
             try:
-                wCast    = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > p")
+                wCast    = soup.select_one("div.temperature_info > p")
                 cWeather = wCast.select_one("span.weather").text
                 blind    = wCast.select_one("span.blind").text
 
@@ -272,7 +272,7 @@ class NWeatherAPI:
 
             try:
                 TodayMinTemp = (
-                    soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.inner > div > div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.lowest").text
+                    soup.select_one("div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.lowest").text
                 )
                 TodayMinTemp = re2num(TodayMinTemp)
             except Exception as ex:
@@ -281,7 +281,7 @@ class NWeatherAPI:
 
             try:
                 TodayMaxTemp = (
-                    soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.inner > div > div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.highest").text
+                    soup.select_one("div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.highest").text
                 )
                 TodayMaxTemp = re2num(TodayMaxTemp)
             except Exception as ex:
@@ -350,12 +350,12 @@ class NWeatherAPI:
 
 
             # condition
-            condition_main = soup.select("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
+            condition_main = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
             weathertype = condition_main.replace("ico_", "")
             
             # 현재풍속/풍향
-            summ = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div > div > div.weather_info > div > div > div.temperature_info > dl").text
+            summ = soup.select_one("div.weather_info > div > div > div.temperature_info > dl").text
             #eLog(summ)
 
             TodayFeelTemp = re2float(re2key("체감", summ))
@@ -580,7 +580,7 @@ class NWeatherAPI:
               except Exception as ex:
                 eLog(ex)
             
-            publicTime = soup.select_one("section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.content_area > div.relate_info > dl > dd").text
+            publicTime = soup.select_one("div.relate_info > dl > dd").text
             #eLog(publicTime)
 
             if FineDust == '-':
