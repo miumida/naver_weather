@@ -344,9 +344,11 @@ class NWeatherAPI:
             # 오존
             Ozon = '-'
             OzonGrade = '-'
-
-            Ozon      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[0].text
-            OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
+            try:
+                Ozon      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[0].text
+                OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
+            except Exception as ex:
+                _LOGGER.error("Failed to update NWeather API Ozon Info Error :  %s", ex)
 
 
             # condition
