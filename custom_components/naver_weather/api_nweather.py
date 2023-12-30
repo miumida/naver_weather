@@ -30,6 +30,8 @@ from .const import (
     NOW_TEMP,
     OZON,
     OZON_GRADE,
+    AIR_QUALITY,
+    AIR_QUALITY_GRADE,
     RAINFALL,
     SW_VERSION,
     TOMORROW_AM,
@@ -344,11 +346,20 @@ class NWeatherAPI:
             # 오존
             Ozon = '-'
             OzonGrade = '-'
+            try:
+                Ozon      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[0].text
+                OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
+            except Exception as ex:
+                _LOGGER.error("Failed to update NWeather API Ozon Info Error :  %s", ex)
 
-            Ozon      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[0].text
-            OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
-
-
+            # 통합대기
+            AirQuality = '-'
+            AirQualityGrade = '-'
+            try:
+                AirQuality      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[-1].text
+                AirQualityGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[-1].text
+            except Exception as ex:
+                _LOGGER.error("Failed to update NWeather API AirQuality Info Error :  %s", ex)
             # condition
             condition_main = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
@@ -553,6 +564,8 @@ class NWeatherAPI:
                 UDUST_GRADE[0]: UltraFineDustGrade,
                 OZON[0]: Ozon,
                 OZON_GRADE[0]: OzonGrade,
+                AIR_QUALITY[0]: AirQuality,
+                AIR_QUALITY_GRADE[0]: AirQualityGrade,
                 TOMORROW_AM[0]: tomorrowMState,
                 TOMORROW_MIN[0]: tomorrowMTemp,
                 TOMORROW_PM[0]: tomorrowAState,
