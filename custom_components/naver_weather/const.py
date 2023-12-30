@@ -145,6 +145,8 @@ UDUST_GRADE = ["UltraFineDustGrade", "초미세먼지등급", "", "mdi:blur-line
 NDUST_GRADE = ["FineDustGrade", "미세먼지등급", "", "mdi:blur", ""]
 OZON = ["Ozon", "오존", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-o-circle", ""]
 OZON_GRADE = ["OzonGrade", "오존등급", "", "mdi:alpha-o-circle", ""]
+AIR_QUALITY = ["AirQuality", "통합대기", "", "mdi:blur", ""]
+AIR_QUALITY_GRADE = ["AirQualityGrade", "통합대기등급", "", "mdi:blur", ""]
 TOMORROW_PM = ["tomorrowAState", "내일오후날씨", "", "mdi:weather-cloudy", ""]
 TOMORROW_MAX = [
     "tomorrowATemp",
@@ -207,6 +209,8 @@ WEATHER_INFO = {
     NDUST_GRADE[0]: NDUST_GRADE,
     OZON[0]: OZON,
     OZON_GRADE[0]: OZON_GRADE,
+    AIR_QUALITY[0]: AIR_QUALITY,
+    AIR_QUALITY_GRADE[0]: AIR_QUALITY_GRADE,
     TOMORROW_PM[0]: TOMORROW_PM,
     TOMORROW_MAX[0]: TOMORROW_MAX,
     TOMORROW_AM[0]: TOMORROW_AM,
