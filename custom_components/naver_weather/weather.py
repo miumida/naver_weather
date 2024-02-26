@@ -66,6 +66,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_supported_features = WeatherEntityFeature.FORECAST_TWICE_DAILY
     
     @property
     def name(self) -> str:
@@ -135,6 +136,13 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """
         return self._forecast()
 
+    async def async_forecast_twice_daily(self) -> list[Forecast] | None:
+        """Return the daily forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
+        """
+        return self._forecast()
+
     @property
     def should_poll(self) -> bool:
         """No polling needed for this device."""
@@ -148,14 +156,36 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         forecast = []
 
         for data in self.api.forecast:
+            #주간
             next_day = {
                 ATTR_FORECAST_TIME: data["datetime"],
-                ATTR_FORECAST_CONDITION: data["condition"],
+                ATTR_FORECAST_CONDITION: data["condition_am"],
                 ATTR_FORECAST_TEMP_LOW: data["templow"],
                 ATTR_FORECAST_TEMP: data["temperature"],
                 ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
                 #ATTR_FORECAST_WIND_BEARING: data[""],
                 #ATTR_FORECAST_WIND_SPEED: data[""],
+                "is_daytime" : True,
+                
+                # Not officially supported, but nice additions.
+                "condition_am": data["condition_am"],
+                "condition_pm": data["condition_pm"],
+
+                "rain_rate_am": data["rain_rate_am"],
+                "rain_rate_pm": data["rain_rate_pm"]
+            }
+            forecast.append(next_day)
+
+            #야간
+            next_day = {
+                ATTR_FORECAST_TIME: data["datetime"],
+                ATTR_FORECAST_CONDITION: data["condition_pm"],
+                ATTR_FORECAST_TEMP_LOW: data["templow"],
+                ATTR_FORECAST_TEMP: data["temperature"],
+                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_pm"],
+                #ATTR_FORECAST_WIND_BEARING: data[""],
+                #ATTR_FORECAST_WIND_SPEED: data[""],
+                "is_daytime" : False,
                 
                 # Not officially supported, but nice additions.
                 "condition_am": data["condition_am"],
