@@ -56,7 +56,7 @@ def re2num(val):
     if val is None:
         return None
 
-    r = re.compile("-?\d+")
+    r = re.compile(r"-?\d+")
     rtn = r.findall(val)
 
     if len(rtn) > 0:
@@ -68,7 +68,7 @@ def re2float(val):
     if val is None:
         return None
 
-    r = re.compile("-?\d+\.?\d?")
+    r = re.compile(r"-?\d+\.?\d?")
     rtn = r.findall(val)
 
     if len(rtn) > 0:
@@ -78,7 +78,7 @@ def re2float(val):
 
 
 def re2key(key,val):
-    r = re.compile(f"{key} -?\d+\.?\d?")
+    r = re.compile(f"{key} -?\\d+\\.?\\d?")
     rtn = r.findall(val)
     #eLog(rtn)
 
@@ -88,13 +88,13 @@ def re2key(key,val):
         return None
 
 def re2keyW(val):
-    r = re.compile("바람\(\w+풍\) \d+\.?\d?m/s")
+    r = re.compile(r"바람\(\w+풍\) \d+\.?\d?m/s")
     rtn = r.findall(val)
 
     if len(rtn) > 0:
         return rtn[0]
     else:
-        r = re.compile("\d+\.?\d?m/s")
+        r = re.compile(r"\d+\.?\d?m/s")
         rtn = r.findall(val)
         
         if len(rtn) > 0:
@@ -103,7 +103,7 @@ def re2keyW(val):
             return None
 
 def re2keyWD(val):
-    r = re.compile("[동|서|남|북]+")
+    r = re.compile(r"[동|서|남|북]+")
     rtn = r.findall(val)
 
     if len(rtn) > 0:
@@ -349,7 +349,6 @@ class NWeatherAPI:
                 OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
             except Exception as ex:
                 _LOGGER.error("Failed to update NWeather API Ozon Info Error :  %s", ex)
-
 
             # condition
             condition_main = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
