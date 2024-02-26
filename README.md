@@ -65,7 +65,7 @@
 | v2.2.7 | 2023.07.28  | DeviceEntryType -> entry_type   |
 | v2.2.8 | 2023.07.29  | DeviceEntryType 원복  |
 | v2.3.0 | 2023.10.12  | WeatherEntity 업데이트 대응 |
-| v2.3.0 | 2024.02.27  | DeprecatedConstant 업데이트 대응, FORECAST_TWICE_DAILY 적용 |
+| v2.3.3 | 2024.02.27  | DeprecatedConstant 업데이트 대응, FORECAST_TWICE_DAILY 적용 |
 <br>
 
 ## Installation
