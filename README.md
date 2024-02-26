@@ -65,7 +65,7 @@
 | v2.2.7 | 2023.07.28  | DeviceEntryType -> entry_type   |
 | v2.2.8 | 2023.07.29  | DeviceEntryType 원복  |
 | v2.3.0 | 2023.10.12  | WeatherEntity 업데이트 대응 |
-| v2.3.0 | 2024.02.27  | DeprecatedConstant 업데이트 대응 |
+| v2.3.0 | 2024.02.27  | DeprecatedConstant 업데이트 대응, FORECAST_TWICE_DAILY 적용 |
 <br>
 
 ## Installation
@@ -84,15 +84,6 @@
 ## Usage
 ### Custom Integration
 - 구성 > 통합구성요소 > 통합구성요소 추가하기 > 네이버 날씨 선택 > 지역(area) 입력후, 확인.
-
-### Configuration(yaml) : Custom Integration으로 등록해주세요!
-- HA설정에 naver_weather weather를 추가합니다<br>
-- v2.0.7 이상부터는 통합구성요소만 지원합니다.<br>
-```yaml
-weather:
-  - platform: naver_weather
-    area: '날씨'
-```
 
 <br>
 
