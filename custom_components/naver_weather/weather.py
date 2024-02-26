@@ -3,7 +3,7 @@ from datetime import timedelta
 import logging
 
 from homeassistant.components.weather import WeatherEntity
-from homeassistant.const import TEMP_CELSIUS
+from homeassistant.const import UnitOfTemperature
 
 from homeassistant.components.weather import (
     ATTR_CONDITION_CLEAR_NIGHT,
@@ -65,7 +65,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
-    _attr_native_temperature_unit = TEMP_CELSIUS
+    _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
     
     @property
     def name(self) -> str:
