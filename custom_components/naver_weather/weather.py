@@ -159,7 +159,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
             #주간
             next_day = {
                 ATTR_FORECAST_TIME: data["datetime"],
-                ATTR_FORECAST_CONDITION: data["condition_am"],
+                ATTR_FORECAST_CONDITION: self._condition_daily(data["condition_am"], data["condition_pm"]),
                 ATTR_FORECAST_TEMP_LOW: data["templow"],
                 ATTR_FORECAST_TEMP: data["temperature"],
                 ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
@@ -175,6 +175,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
             }
 
             if feature == WeatherEntityFeature.FORECAST_TWICE_DAILY:
+                next_day[ATTR_FORECAST_CONDITION] = data["condition_am"]
                 next_day["is_daytime"] = True
 
             forecast.append(next_day)
@@ -202,3 +203,17 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
                 forecast.append(next_day)
 
         return forecast
+
+    def _condition_daily(self, am, pm):
+
+        list = ["snowy", "pouring", "rainy", "cloudy", "windy"]
+        
+        for feature in list:
+            if ( feature in am or feature in pm ):
+                if feature in am:
+                    return am
+                else:
+                    return pm
+
+        return am
+
