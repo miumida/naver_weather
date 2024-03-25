@@ -452,17 +452,25 @@ class NWeatherAPI:
 
             reftime = datetime.now()
 
+            bStart = False
+
             for di in date_info:
                 data = {}
 
                 # day
                 day = di.select("span.date")
+                dayDesc = di.select_one("div > div.cell_date > span > strong.day").text
+
+                if (dayDesc == "오늘"):
+                    bStart = True
+
+                if ( not bStart ):
+                    continue
 
                 dayInfo = ""
 
                 for t in day:
                     dayInfo = t.text.strip()
-                    # data['datetime'] = dayInfo
 
                 data["datetime"] = reftime
 
@@ -494,11 +502,11 @@ class NWeatherAPI:
                     if self.today:
                         forecast.append(data)
                     else:
-                        if di.select_one("div > div.cell_date > span > strong.day").text != "오늘":
+                        if dayDesc != "오늘":
                             forecast.append(data)
 
                     #내일 날씨
-                    if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
+                    if dayDesc == "내일":
                         # 내일 오전온도
                         tomorrowMTemp = low
 
