@@ -2,7 +2,7 @@
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
-![Version v2.4.0][version-shield]
+![Version v2.4.1][version-shield]
 
 <a href="https://www.buymeacoffee.com/miumida" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee"></a>
 
@@ -66,7 +66,7 @@
 | v2.2.8 | 2023.07.29  | DeviceEntryType 원복  |
 | v2.3.0 | 2023.10.12  | WeatherEntity 업데이트 대응 |
 | v2.3.3 | 2024.02.27  | DeprecatedConstant 업데이트 대응, FORECAST_TWICE_DAILY 적용 |
-| v2.4.0 | 2024.03.25  | FORECAST_DAILY 지원 |
+| v2.4.1 | 2024.03.25  | FORECAST_DAILY 지원 |
 <br>
 
 ## Installation
@@ -150,6 +150,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.4.0-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.4.1-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
