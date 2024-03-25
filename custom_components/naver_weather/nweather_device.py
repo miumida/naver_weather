@@ -5,7 +5,7 @@ import logging
 from homeassistant.core import callback
 from homeassistant.helpers.entity import Entity
 
-from .const import DEVICE_REG, DEVICE_UNREG, DOMAIN
+from .const import DEVICE_REG, DEVICE_UNREG, DOMAIN, BSE_URL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,6 +43,7 @@ class NWeatherBase:
             "name": f"{self.api.brand_name} {self.area}",
             "sw_version": self.api.version,
             "via_device": (DOMAIN, self.area),
+            "configuration_url": BSE_URL.format(self.area),
         }
 
 
