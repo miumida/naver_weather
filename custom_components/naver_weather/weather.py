@@ -66,7 +66,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_supported_features = WeatherEntityFeature.FORECAST_TWICE_DAILY
+    _attr_supported_features = ( WeatherEntityFeature.FORECAST_DAILY | WeatherEntityFeature.FORECAST_TWICE_DAILY )
     
     @property
     def name(self) -> str:
@@ -123,25 +123,19 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """Return the attribution."""
         return f"{self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida"
 
-    @property
-    def forecast(self) -> list[Forecast] | None:
-        """Return the forecast."""
-        #return self.api.forecast
-        return self._forecast()
-
     async def async_forecast_daily(self) -> list[Forecast] | None:
         """Return the daily forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
         """
-        return self._forecast()
+        return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
 
     async def async_forecast_twice_daily(self) -> list[Forecast] | None:
         """Return the daily forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
         """
-        return self._forecast()
+        return self._forecast(WeatherEntityFeature.FORECAST_TWICE_DAILY)
 
     @property
     def should_poll(self) -> bool:
@@ -152,7 +146,13 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """Update current conditions."""
         await self.api.update()
 
-    def _forecast(self) -> list[Forecast] | None:
+
+    @property
+    def forecast(self) -> list[Forecast] | None:
+        """Return the forecast."""
+        return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
+
+    def _forecast(self, feature) -> list[Forecast] | None:
         forecast = []
 
         for data in self.api.forecast:
@@ -165,7 +165,6 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
                 ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
                 #ATTR_FORECAST_WIND_BEARING: data[""],
                 #ATTR_FORECAST_WIND_SPEED: data[""],
-                "is_daytime" : True,
                 
                 # Not officially supported, but nice additions.
                 "condition_am": data["condition_am"],
@@ -174,26 +173,32 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
                 "rain_rate_am": data["rain_rate_am"],
                 "rain_rate_pm": data["rain_rate_pm"]
             }
+
+            if feature == WeatherEntityFeature.FORECAST_TWICE_DAILY:
+                next_day["is_daytime"] = True
+
             forecast.append(next_day)
 
-            #야간
-            next_day = {
-                ATTR_FORECAST_TIME: data["datetime"],
-                ATTR_FORECAST_CONDITION: data["condition_pm"],
-                ATTR_FORECAST_TEMP_LOW: data["templow"],
-                ATTR_FORECAST_TEMP: data["temperature"],
-                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_pm"],
-                #ATTR_FORECAST_WIND_BEARING: data[""],
-                #ATTR_FORECAST_WIND_SPEED: data[""],
-                "is_daytime" : False,
-                
-                # Not officially supported, but nice additions.
-                "condition_am": data["condition_am"],
-                "condition_pm": data["condition_pm"],
+            # FORECAST_TWICE_DAILY 일때만
+            if feature == WeatherEntityFeature.FORECAST_TWICE_DAILY:
+                #야간
+                next_day = {
+                    ATTR_FORECAST_TIME: data["datetime"],
+                    ATTR_FORECAST_CONDITION: data["condition_pm"],
+                    ATTR_FORECAST_TEMP_LOW: data["templow"],
+                    ATTR_FORECAST_TEMP: data["temperature"],
+                    ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_pm"],
+                    #ATTR_FORECAST_WIND_BEARING: data[""],
+                    #ATTR_FORECAST_WIND_SPEED: data[""],
+                    "is_daytime" : False,
+                    
+                    # Not officially supported, but nice additions.
+                    "condition_am": data["condition_am"],
+                    "condition_pm": data["condition_pm"],
 
-                "rain_rate_am": data["rain_rate_am"],
-                "rain_rate_pm": data["rain_rate_pm"]
-            }
-            forecast.append(next_day)
+                    "rain_rate_am": data["rain_rate_am"],
+                    "rain_rate_pm": data["rain_rate_pm"]
+                }
+                forecast.append(next_day)
 
         return forecast
