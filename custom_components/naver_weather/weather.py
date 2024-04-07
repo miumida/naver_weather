@@ -5,6 +5,31 @@ import logging
 from homeassistant.components.weather import WeatherEntity
 from homeassistant.const import UnitOfTemperature
 
+from homeassistant.components.weather import (
+    ATTR_CONDITION_CLEAR_NIGHT,
+    ATTR_CONDITION_CLOUDY,
+    ATTR_CONDITION_FOG,
+    ATTR_CONDITION_HAIL,
+    ATTR_CONDITION_LIGHTNING,
+    ATTR_CONDITION_PARTLYCLOUDY,
+    ATTR_CONDITION_POURING,
+    ATTR_CONDITION_RAINY,
+    ATTR_CONDITION_SNOWY,
+    ATTR_CONDITION_SUNNY,
+
+    ATTR_FORECAST_CONDITION,
+    ATTR_FORECAST_PRECIPITATION_PROBABILITY,
+    ATTR_FORECAST_TEMP,
+    ATTR_FORECAST_TEMP_LOW,
+    ATTR_FORECAST_TIME,
+    ATTR_FORECAST_WIND_BEARING,
+    ATTR_FORECAST_WIND_SPEED,
+
+    DOMAIN as SENSOR_DOMAIN,
+    Forecast,
+    WeatherEntityFeature,
+)
+
 from .const import (
     CONDITION,
     DOMAIN,
@@ -41,6 +66,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_supported_features = ( WeatherEntityFeature.FORECAST_DAILY | WeatherEntityFeature.FORECAST_HOURLY | WeatherEntityFeature.FORECAST_TWICE_DAILY )
     
     @property
     def name(self) -> str:
@@ -96,17 +122,27 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     def attribution(self):
         """Return the attribution."""
         return f"{self.api.weathertype}, {self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida, Custom by ninthsword"
-
-    @property
-    def forecast(self):
-        """Return the forecast."""
-        return self.api.forecast
-
+    
+    async def async_forecast_daily(self) -> list[Forecast] | None:
+        """Return the daily forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
+        """
+        return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
+    
     async def async_forecast_hourly(self) -> list[forecast] | None:
         """Return the hourly forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
         """
+        return self._forecast(WeatherEntityFeature.FORECAST_HOURLY)
+
+    async def async_forecast_twice_daily(self) -> list[Forecast] | None:
+        """Return the daily forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
+        """
+        return self._forecast(WeatherEntityFeature.FORECAST_TWICE_DAILY)
 
     @property
     def should_poll(self) -> bool:
@@ -116,3 +152,8 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     async def async_update(self):
         """Update current conditions."""
         await self.api.update()
+        
+   @property
+    def forecast(self) -> list[Forecast] | None:
+        """Return the forecast."""
+        return self._forecast(WeatherEntityFeature.FORECAST_HOURLY)
