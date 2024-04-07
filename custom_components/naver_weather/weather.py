@@ -156,4 +156,88 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
    @property
     def forecast(self) -> list[Forecast] | None:
         """Return the forecast."""
-        return self._forecast(WeatherEntityFeature.FORECAST_HOURLY)
+        return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
+        
+    def _forecast(self, feature) -> list[Forecast] | None:
+        forecast = []
+
+        for data in self.api.forecast:
+            #주간
+            next_day = {
+                ATTR_FORECAST_TIME: data["datetime"],
+                ATTR_FORECAST_CONDITION: self._condition_daily(data["condition_am"], data["condition_pm"]),
+                ATTR_FORECAST_TEMP_LOW: data["templow"],
+                ATTR_FORECAST_TEMP: data["temperature"],
+                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_am"],
+                #ATTR_FORECAST_WIND_BEARING: data[""],
+                #ATTR_FORECAST_WIND_SPEED: data[""],
+                
+                # Not officially supported, but nice additions.
+                "condition_am": data["condition_am"],
+                "condition_pm": data["condition_pm"],
+
+                "rain_rate_am": data["rain_rate_am"],
+                "rain_rate_pm": data["rain_rate_pm"]
+            }
+
+            if feature == WeatherEntityFeature.FORECAST_TWICE_DAILY:
+                next_day[ATTR_FORECAST_CONDITION] = data["condition_am"]
+                next_day["is_daytime"] = True
+
+            forecast.append(next_day)
+
+            # FORECAST_TWICE_DAILY 일때만
+            if feature == WeatherEntityFeature.FORECAST_TWICE_DAILY:
+                #야간
+                next_day = {
+                    ATTR_FORECAST_TIME: data["datetime"],
+                    ATTR_FORECAST_CONDITION: data["condition_pm"],
+                    ATTR_FORECAST_TEMP_LOW: data["templow"],
+                    ATTR_FORECAST_TEMP: data["temperature"],
+                    ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["rain_rate_pm"],
+                    #ATTR_FORECAST_WIND_BEARING: data[""],
+                    #ATTR_FORECAST_WIND_SPEED: data[""],
+                    "is_daytime" : False,
+                    
+                    # Not officially supported, but nice additions.
+                    "condition_am": data["condition_am"],
+                    "condition_pm": data["condition_pm"],
+
+                    "rain_rate_am": data["rain_rate_am"],
+                    "rain_rate_pm": data["rain_rate_pm"]
+                }
+                forecast.append(next_day)
+                
+            # FORECAST_HOURLY 일때만
+            if feature == WeatherEntityFeature.FORECAST_HOURLY:
+                #시간
+                next_day = {
+                    ATTR_FORECAST_TIME: daydata ["datetime"],
+                    ATTR_FORECAST_CONDITION: daydata ["condition"],
+                    ATTR_FORECAST_TEMP: daydata ["native_temperature"],
+                    ATTR_WEATHER_HUMIDITY: daydata ["humidity"],
+                    ATTR_FORECAST_NATIVE_PRECIPITATION: daydata ["native_precipitation"],
+                    ATTR_FORECAST_PRECIPITATION_PROBABILITY: daydata ["precipitation_probability"],
+                    #ATTR_FORECAST_WIND_BEARING: data[""],
+                    #ATTR_FORECAST_WIND_SPEED: data[""],
+                    "is_daytime" : False,
+                    
+                    # Not officially supported, but nice additions.
+                    "condition_hour": daydata["condition_hour"],
+                }
+                forecast.append(next_day)
+                
+        return forecast
+
+    def _condition_daily(self, am, pm):
+
+        list = ["snowy", "pouring", "rainy", "cloudy", "windy"]
+        
+        for feature in list:
+            if ( feature in am or feature in pm ):
+                if feature in am:
+                    return am
+                else:
+                    return pm
+
+        return am
