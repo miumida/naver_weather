@@ -465,11 +465,20 @@ class NWeatherAPI:
             reftime = datetime(oritime.year, oritime.month, oritime.day, hour=0, minute=0, second=0, tzinfo=timezone_kst)
             reftimeday = datetime(oritime.year, oritime.month, oritime.day, oritime.hour, minute=0, second=0, tzinfo=timezone_kst)
             
+            bStart = False
+            
             for di in date_info:
                 data = {}
 
                 # day
                 day = di.select("span.date")
+                dayDesc = di.select_one("div > div.cell_date > span > strong.day").text
+
+                if (dayDesc == "오늘"):
+                    bStart = True
+
+                if ( not bStart ):
+                    continue
 
                 dayInfo = ""
 
@@ -510,7 +519,7 @@ class NWeatherAPI:
                     #    forecast.append(data)
                         
                     #내일 날씨
-                    if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
+                    if dayDesc == "내일":
                         # 내일 오전온도
                         tomorrowMTemp = low
 
