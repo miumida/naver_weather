@@ -66,7 +66,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_supported_features = ( WeatherEntityFeature.FORECAST_DAILY | WeatherEntityFeature.FORECAST_HOURLY | WeatherEntityFeature.FORECAST_TWICE_DAILY )
+    _attr_supported_features = ( WeatherEntityFeature.FORECAST_DAILY | WeatherEntityFeature.FORECAST_TWICE_DAILY | WeatherEntityFeature.FORECAST_HOURLY )
     
     @property
     def name(self) -> str:
@@ -122,20 +122,13 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     def attribution(self):
         """Return the attribution."""
         return f"{self.api.weathertype}, {self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida, Custom by ninthsword"
-    
+
     async def async_forecast_daily(self) -> list[Forecast] | None:
         """Return the daily forecast in native units.
         
         Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
         """
         return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
-    
-    async def async_forecast_hourly(self) -> list[forecast] | None:
-        """Return the hourly forecast in native units.
-        
-        Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
-        """
-        return self._forecast(WeatherEntityFeature.FORECAST_HOURLY)
 
     async def async_forecast_twice_daily(self) -> list[Forecast] | None:
         """Return the daily forecast in native units.
@@ -144,6 +137,13 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """
         return self._forecast(WeatherEntityFeature.FORECAST_TWICE_DAILY)
 
+    async def async_forecast_hourly(self) -> list[Forecast] | None:
+        """Return the hourly forecast in native units.
+        
+        Only implement this method if `WeatherEntityFeature.FORECAST_HOURLY` is set
+        """
+        return self._forecast_hour(WeatherEntityFeature.FORECAST_HOURLY)
+        
     @property
     def should_poll(self) -> bool:
         """No polling needed for this device."""
@@ -152,12 +152,12 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     async def async_update(self):
         """Update current conditions."""
         await self.api.update()
-        
-   @property
+
+    @property
     def forecast(self) -> list[Forecast] | None:
         """Return the forecast."""
         return self._forecast(WeatherEntityFeature.FORECAST_DAILY)
-        
+
     def _forecast(self, feature) -> list[Forecast] | None:
         forecast = []
 
@@ -207,26 +207,34 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
                     "rain_rate_pm": data["rain_rate_pm"]
                 }
                 forecast.append(next_day)
+
+        return forecast
+
+
+    def _forecast_hour(self, feature) -> list[Forecast] | None:
+        forecast = []
+
+        for data in self.api.forecast_hour:
+            #주간
+            next_day = {
+                ATTR_FORECAST_TIME: data["datetime"],
+                ATTR_FORECAST_CONDITION: data["condition"],
+                #ATTR_FORECAST_TEMP_LOW: data["templow"],
+                ATTR_FORECAST_TEMP: data["native_temperature"],
+                ATTR_FORECAST_PRECIPITATION_PROBABILITY: data["precipitation_probability"],
+                #ATTR_FORECAST_WIND_BEARING: data[""],
+                #ATTR_FORECAST_WIND_SPEED: data[""],
                 
-            # FORECAST_HOURLY 일때만
-            if feature == WeatherEntityFeature.FORECAST_HOURLY:
-                #시간
-                next_day = {
-                    ATTR_FORECAST_TIME: daydata ["datetime"],
-                    ATTR_FORECAST_CONDITION: daydata ["condition"],
-                    ATTR_FORECAST_TEMP: daydata ["native_temperature"],
-                    ATTR_WEATHER_HUMIDITY: daydata ["humidity"],
-                    ATTR_FORECAST_NATIVE_PRECIPITATION: daydata ["native_precipitation"],
-                    ATTR_FORECAST_PRECIPITATION_PROBABILITY: daydata ["precipitation_probability"],
-                    #ATTR_FORECAST_WIND_BEARING: data[""],
-                    #ATTR_FORECAST_WIND_SPEED: data[""],
-                    "is_daytime" : False,
-                    
-                    # Not officially supported, but nice additions.
-                    "condition_hour": daydata["condition_hour"],
-                }
-                forecast.append(next_day)
-                
+                # Not officially supported, but nice additions.
+                "condition_hour": data["condition_hour"],
+                #"condition_pm": data["condition_pm"],
+    
+                "native_precipitation": data["native_precipitation"],
+                "humidity": data["humidity"]
+            }
+
+            forecast.append(next_day)
+    
         return forecast
 
     def _condition_daily(self, am, pm):
