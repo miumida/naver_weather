@@ -465,17 +465,25 @@ class NWeatherAPI:
             reftime = datetime(oritime.year, oritime.month, oritime.day, hour=0, minute=0, second=0, tzinfo=timezone_kst)
             reftimeday = datetime(oritime.year, oritime.month, oritime.day, oritime.hour, minute=0, second=0, tzinfo=timezone_kst)
             
+            bStart = False
+            
             for di in date_info:
                 data = {}
 
                 # day
                 day = di.select("span.date")
+                dayDesc = di.select_one("div > div.cell_date > span > strong.day").text
+
+                if (dayDesc == "오늘"):
+                    bStart = True
+
+                if ( not bStart ):
+                    continue
 
                 dayInfo = ""
 
                 for t in day:
                     dayInfo = t.text.strip()
-                    # data['datetime'] = dayInfo
 
                 data["datetime"] = reftime
                 comptime = reftime.strftime("%m.%d.")
