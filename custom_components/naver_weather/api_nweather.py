@@ -350,7 +350,6 @@ class NWeatherAPI:
             except Exception as ex:
                 _LOGGER.error("Failed to update NWeather API Ozon Info Error :  %s", ex)
 
-
             # condition
             condition_main = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
             condition = CONDITIONS[condition_main.replace("ico_", "")][0]
@@ -458,27 +457,19 @@ class NWeatherAPI:
             dayhumidity = soup.select("div.open > div > div > div> div > div > div._hourly_humidity > div > div.climate_box > div.graph_wrap > ul > li.data > div.data_inner > span.base_bar > span.num")
             
             # 시간설정 및 예보 정의
-            forecast = [] 
+            forecast = []
+            forecast_hour = []
             
             oritime = datetime.utcnow() + timedelta(hours=9)
             timezone_kst = timezone(timedelta(hours=9))
             reftime = datetime(oritime.year, oritime.month, oritime.day, hour=0, minute=0, second=0, tzinfo=timezone_kst)
             reftimeday = datetime(oritime.year, oritime.month, oritime.day, oritime.hour, minute=0, second=0, tzinfo=timezone_kst)
             
-            bStart = False
-            
             for di in date_info:
                 data = {}
 
                 # day
                 day = di.select("span.date")
-                dayDesc = di.select_one("div > div.cell_date > span > strong.day").text
-
-                if (dayDesc == "오늘"):
-                    bStart = True
-
-                if ( not bStart ):
-                    continue
 
                 dayInfo = ""
 
@@ -505,8 +496,8 @@ class NWeatherAPI:
                     condition_pm = di.select("div.cell_weather > span > i")[1]["class"][1].replace("ico_", "")
 
                     data["condition"]    = CONDITIONS[condition_pm][0]
-                    data["condition_am"] = condition_am
-                    data["condition_pm"] = condition_pm
+                    data["condition_am"] = CONDITIONS[condition_am][0]
+                    data["condition_pm"] = CONDITIONS[condition_pm][0]
 
                     # rain_rate
                     rain_m = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[0].text
@@ -515,11 +506,11 @@ class NWeatherAPI:
                     rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
-                    #if di.select_one("div > div.cell_date > span > span.date").text == comptime:
-                    #    forecast.append(data)
+                    if di.select_one("div > div.cell_date > span > span.date").text == comptime:
+                        forecast.append(data)
                         
                     #내일 날씨
-                    if dayDesc == "내일":
+                    if di.select_one("div > div.cell_date > span > strong.day").text == "내일":
                         # 내일 오전온도
                         tomorrowMTemp = low
 
@@ -586,7 +577,7 @@ class NWeatherAPI:
                 daydata["native_precipitation"] = float(re2num(hourlyrainfall.strip()))
                 daydata["humidity"] = float(hourlydumidity)
                 
-                forecast.append(daydata)
+                forecast_hour.append(daydata)
                 
               except Exception as ex:
                 eLog(ex)
@@ -607,6 +598,7 @@ class NWeatherAPI:
                 rainPercent = '0'
 
             self.forecast = forecast
+            self.forecast_hour = forecast_hour
             self.weathertype = weathertype
 
             self.result = {
