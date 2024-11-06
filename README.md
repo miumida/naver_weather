@@ -71,6 +71,9 @@
 <br>
 
 ## Installation
+### _My Home Assistant_ HACS로 설치
+- 아래 링크를 클릭해서 이동 후 다운로드 버튼을 눌러 설치하세요.<br>
+- 다운로드 후 Home Assistant를 재시작합니다.<br>
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=miumida&repository=naver_weather&category=integration)
 ### Manual
 - HA 설치 경로 아래 custom_components에 naver_weather폴더 안의 전체 파일을 복사해줍니다.<br>
