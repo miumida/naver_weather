@@ -71,6 +71,7 @@
 <br>
 
 ## Installation
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=miumida&repository=naver_weather&category=integration)
 ### Manual
 - HA 설치 경로 아래 custom_components에 naver_weather폴더 안의 전체 파일을 복사해줍니다.<br>
   `<config directory>/custom_components/naver_weather/`<br>
