@@ -321,6 +321,8 @@ class NWeatherAPI:
             reportCardWrap = soup.select("div.report_card_wrap > ul.today_chart_list > li.item_today")
 
             arrReportCard = []
+            
+            TodayUVGrade = "데이터 없음"
 
             for li in reportCardWrap:
                 gb    = self._bs4_select_one(li, "strong.title")
@@ -335,7 +337,7 @@ class NWeatherAPI:
 
                 if ( "일몰" in gb or "일출" in gb ):
                     sunflux = gbVal
-                    eLog(gb + " / " + sunflux)
+                    #eLog(gb + " / " + sunflux)
 
 
             # condition
