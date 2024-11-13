@@ -20,11 +20,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {"api": {}})
     api = API(hass, entry, len(hass.data[DOMAIN]["api"]) + 1)
     hass.data[DOMAIN]["api"][entry.entry_id] = api
-    for component in PLATFORMS:
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, component)
-        )
-
+    
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    
     return True
 
 
