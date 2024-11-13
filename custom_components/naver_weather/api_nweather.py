@@ -11,6 +11,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import (
     BRAND,
     BSE_URL,
+    SW_VERSION,
     CONDITION,
     CONDITIONS,
     CONF_AREA,
@@ -30,15 +31,14 @@ from .const import (
     NOW_TEMP,
     OZON,
     OZON_GRADE,
+    CO, SO2, NO2, CAI,
     RAINFALL,
-    SW_VERSION,
     TOMORROW_AM,
     TOMORROW_MAX,
     TOMORROW_MIN,
     TOMORROW_PM,
     UDUST,
     UDUST_GRADE,
-    UV,
     UV_GRADE,
     WEATHER_INFO,
     WIND_DIR,
@@ -78,9 +78,11 @@ def re2float(val):
 
 
 def re2key(key,val):
+    if val is None:
+        return None
+        
     r = re.compile(f"{key} -?\\d+\\.?\\d?")
     rtn = r.findall(val)
-    #eLog(rtn)
 
     if len(rtn) > 0:
         return rtn[0]
@@ -88,6 +90,9 @@ def re2key(key,val):
         return None
 
 def re2keyW(val):
+    if val is None:
+        return None
+
     r = re.compile(r"바람\(\w+풍\) \d+\.?\d?m/s")
     rtn = r.findall(val)
 
@@ -103,6 +108,9 @@ def re2keyW(val):
             return None
 
 def re2keyWD(val):
+    if val is None:
+        return None
+
     r = re.compile(r"[동|서|남|북]+")
     rtn = r.findall(val)
 
@@ -112,7 +120,7 @@ def re2keyWD(val):
         return None
 
 def eLog(val):
-    _LOGGER.error("[naver_weather] error : %s", val)
+    _LOGGER.error(f"[{BRAND}] error : {val}")
 
 class NWeatherAPI:
     """NWeather API."""
@@ -188,7 +196,25 @@ class NWeatherAPI:
         if self.unique[unique_id][DEVICE_UPDATE] is not None:
             _LOGGER.info(f"[{BRAND}] Unregister device => {unique_id} [{self.area}]")
             self.unique[unique_id][DEVICE_UPDATE] = None
+            
+    def _bs4_select_one(self, bs4, selector, bText=True, tag=""):
 
+        try:
+            tmp = bs4.select_one(selector)
+
+            if tmp is not None:
+                if bText:
+                    val = tmp.text.strip()
+                else:
+                    val = tmp
+            else:
+                val = None
+
+            return val;
+        except Exception as e:
+            _LOGGER.error( f"[{BRAND}] _bs4_select_one Error {tag} : {e}" )
+
+    
     async def update(self):
         """Update function for updating api information."""
         try:
@@ -217,35 +243,22 @@ class NWeatherAPI:
 
             bs4air = BeautifulSoup(await air.text(), "html.parser")
 
-            NowTemp = ""
-
             # 지역
-            LocationInfo = '-'
-            try:
-                LocationInfo = soup.select_one("div.title_area._area_panel > h2.title").text.strip()
-                #eLog(LocationInfo)
-            except Exception as ex:
-                LocationInfo = 'Error'
-                _LOGGER.error("Failed to update NWeather API Location Error : %s", ex )
-
+            LocationInfo = self._bs4_select_one(soup, "div.title_area._area_panel > h2.title")
 
             # 현재 온도
-            try:
-                NowTemp = soup.select_one("div.temperature_text").text
-                #eLog(NowTemp)
-                NowTemp = re2float(NowTemp)
-            except Exception as ex:
-                NowTemp = 'Error'
-                _LOGGER.error("Failed to update NWeather API NowTemp Error : %s", ex )
-
+            NowTempRaw = self._bs4_select_one(soup, "div.temperature_text")
+            NowTemp    = re2float(NowTempRaw)
 
             # 날씨 캐스트
-            WeatherCast = '-'
-            NowWeather  = '-'
-            try:
-                wCast    = soup.select_one("div.temperature_info > p")
-                cWeather = wCast.select_one("span.weather").text
-                blind    = wCast.select_one("span.blind").text
+            WeatherCast = None
+            NowWeather  = None
+
+            wCast = self._bs4_select_one(soup, "div.temperature_info > p", False)
+
+            if wCast is not None:
+                cWeather = self._bs4_select_one(wCast, "span.weather")
+                blind    = self._bs4_select_one(wCast, "span.blind")
 
                 WeatherCast = wCast.text.strip()
 
@@ -256,135 +269,91 @@ class NWeatherAPI:
                 WeatherCast = convCast
 
                 #현재날씨
-                NowWeather = cWeather.strip()
+                NowWeather = cWeather
 
-                #eLog(WeatherCast)
-            except Exception as ex:
-                WeatherCast = 'Error'
-                NowWeather  = 'Error'
-                _LOGGER.error("Failed to update NWeather API WeatherCast Error : %s", ex )
+            # 오늘 오전온도, 오후온도
+            TodayMinTemp = self._bs4_select_one(soup, "div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.lowest")
+            TodayMaxTemp = self._bs4_select_one(soup, "div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.highest")
 
+            TodayMinTemp = re2num(TodayMinTemp)
+            TodayMaxTemp = re2num(TodayMaxTemp)
+            
+            # 요약
+            summ = self._bs4_select_one(soup, "div.weather_info > div > div > div.temperature_info > dl")
 
-            # 오늘 오전온도, 오후온도, 체감온도
-            TodayMinTemp = '-'
-            TodayMaxTemp = '-'
-            TodayFeelTemp = '-'
+            # 체감온도
+            TodayFeelTemp = re2float(re2key("체감", summ))
 
-            try:
-                TodayMinTemp = (
-                    soup.select_one("div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.lowest").text
-                )
-                TodayMinTemp = re2num(TodayMinTemp)
-            except Exception as ex:
-                TodayMinTemp = 'Error'
-                _LOGGER.error("Failed to update NWeather API TodayMinTemp Error : %s", ex )
+            # 습도
+            Humidity      = re2num(re2key("습도", summ))
 
-            try:
-                TodayMaxTemp = (
-                    soup.select_one("div.list_box > ul > li.week_item.today > div > div.cell_temperature > span > span.highest").text
-                )
-                TodayMaxTemp = re2num(TodayMaxTemp)
-            except Exception as ex:
-                TodayMaxTemp = 'Error'
-                _LOGGER.error("Failed to update NWeather API TodayMaxTemp Error : %s", ex )
+            # 현재풍속/풍향
+            wind      = re2keyW(summ)
+            WindSpeed = re2float(wind)
+            WindState = re2keyWD(summ)
 
-            try:
-                TodayFeelTemp = 0
-            except Exception as ex:
-                TodayFeelTemp = 'Error'
-                _LOGGER.error("Failed to update NWeather API TodayFeelTemp Error : %s", ex )
-
-
-            # 시간당 강수량
-            TodayRainfall = soup.find("span", {"class": "rainfall"})
-            Rainfall = "-"
-
-            try:
-                if TodayRainfall is not None:
-                    TodayRainfallSelect = TodayRainfall.select("em > span.num")
-
-                    for rain in TodayRainfallSelect:
-                        Rainfall = rain.text
-            except Exception as ex:
-                Rainfall = 'Error'
-                _LOGGER.error("Failed to update NWeather API Rainfall Error : %s", ex )
-
+            # 강수
+            Rainfall    = self._bs4_select_one(soup, "div.climate_box > div.graph_wrap > ul > li > div")
+            
             # 자외선 지수
-            TodayUV = "-"
+            rainPercentVal = soup.select("div.climate_box > div.icon_wrap > ul > li > em")
 
-            # 자외선 등급
-            TodayUVGrade = "-"
+            nCnt = 0
+            rainSum = 0
 
+            for em in rainPercentVal:
+
+                if nCnt > 11:
+                    continue
+
+                if '%' in em.text:
+                    rainSum += int(em.text[:-1])
+
+                nCnt += 1
+
+            rainPercent = str(( round(rainSum/11, 1) if rainSum > 0 else 0 ))
+            
+            # 미세먼지/초미세먼지/자외선(등급)/일몰일출
             reportCardWrap = soup.select("div.report_card_wrap > ul.today_chart_list > li.item_today")
+           
+            arrReportCard = []
+
+            TodayUVGrade = "데이터 없음"
 
             for li in reportCardWrap:
-                gb    = li.select_one("strong.title").text
-                gbVal = li.select_one("span.txt").text
+                gb    = self._bs4_select_one(li, "strong.title")
+                gbVal = self._bs4_select_one(li, "span.txt")
+            
+                tmp = {"id": gb, "val": gbVal}
+
+                arrReportCard.append(tmp)
 
                 if "자외선" in gb:
                     TodayUVGrade = gbVal
 
-                #_LOGGER.error(f"[{BRAND}] {gb}, {gbVal}")
-
-
-            # 미세먼지, 초미세먼지, 오존 지수
-            FineDust = '0'
-            FineDustGrade = '-'
-            UltraFineDust = '0'
-            UltraFineDustGrade = '-'
-
-            try:
-                FineDust      = bs4air.select_one("div > div.detail_content > div.state_info._fine_dust > div.grade > span.num").text
-                FineDustGrade = bs4air.select_one("div > div.detail_content > div.state_info._fine_dust > div.grade > span.text").text
-                UltraFineDust      = bs4air.select_one("div > div.detail_content > div.state_info._ultrafine_dust > div.grade > span.num").text
-                UltraFineDustGrade = bs4air.select_one("div > div.detail_content > div.state_info._ultrafine_dust > div.grade > span.text").text
-            except Exception as ex:
-                _LOGGER.error("Failed to update NWeather API Dust Info Error :  %s", ex)
-
-            # 오존
-            Ozon = '-'
-            OzonGrade = '-'
-            try:
-                Ozon      = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > div > span")[0].text
-                OzonGrade = bs4air.select("div.inner > div.pollutant_content > ul > li > div.graph_area > strong")[0].text
-            except Exception as ex:
-                _LOGGER.error("Failed to update NWeather API Ozon Info Error :  %s", ex)
+                if ( "일몰" in gb or "일출" in gb ):
+                    sunflux = gbVal
+                    #eLog(gb + " / " + sunflux)
 
             # condition
-            condition_main = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")[0]["class"][1]
-            condition = CONDITIONS[condition_main.replace("ico_", "")][0]
-            weathertype = condition_main.replace("ico_", "")
+            condition_raw  = soup.select("div.weather_info > div > div > div.weather_graphic > div.weather_main > i.wt_icon")
+
+            if condition_raw is not None:
+                condition_main = condition_raw[0]["class"][1]
+                            
+                if condition_main is not None:
+                    weathertype = condition_main.replace("ico_", "")
+                    condition = CONDITIONS[condition_main.replace("ico_", "")][0]
+                else:
+                    condition = None
+            else:
+                condition = None
+                
+            contdition_blind_text = self._bs4_select_one(soup, "div.weather_info > div > div > div.weather_graphic > div.weather_main > i > span.blind")
+            #eLog(contdition_blind_text)
             
-            # 현재풍속/풍향
-            summ = soup.select_one("div.weather_info > div > div > div.temperature_info > dl").text
-            #eLog(summ)
-
-            TodayFeelTemp = re2float(re2key("체감", summ))
-            rainPercent = re2num(re2key("강수확률", summ))
-            Humidity = re2num(re2key("습도", summ))
-
-            #eLog('체감 ' + str(TodayFeelTemp))
-            #eLog('강수확률 ' + str(rainPercent))
-            #eLog('습도 ' + str(Humidity))
-
-            wind     = re2keyW(summ)
-            WindSpeed = re2float(wind)
-            WindState = re2keyWD(summ)
-
-            # 내일 오전온도
-            tomorrowMTemp = '-'
-
-            # 내일 오전상태
-            tomorrowMState = '-'
-
-            # 내일 오후온도
-            tomorrowATemp = '-'
-
-            # 내일 오후상태
-            tomorrowAState = '-'
-
             # 비시작시간
-            rainyStart = "비안옴"
+            rainyStart    = "비안옴"
             rainyStartTmr = "비안옴"
 
             #시간별 날씨
@@ -396,8 +365,8 @@ class NWeatherAPI:
 
             for h in hourly:
 
-                time = h.select_one("dt.time").text
-
+                time = self._bs4_select_one(h, "dt.time")
+                
                 if "내일" in time:
                     hourly_today = False
                     tommorow     = True
@@ -407,10 +376,10 @@ class NWeatherAPI:
                     tommorow   = False
 
                 if "시" in time or "내일" in time or "모레" in time:
-                    #eLog(h.select_one("i.wt_icon"))
+
                     try:
-                        wt = h.select_one("i.wt_icon").text
-                        tm = h.select_one("dt.time").text
+                        wt = self._bs4_select_one(h, "i.wt_icon")
+                        tm = self._bs4_select_one(h, "dt.time")
 
                         if ("비" in wt or "소나기" in wt ) and hourly_today:
                             hourly_today = False
@@ -427,22 +396,14 @@ class NWeatherAPI:
                                     rainyStartTmr = tm
                     except Exception as exx:
                         _LOGGER.info("except")
+            
+            # 내일 오전온도/오전상태
+            tomorrowMTemp = '-'
+            tomorrowMState = '-'
 
-                #eLog( '{} {}'.format(tm, wt) )
-
-            # 강수
-            hourly_c_percent = soup.select("div.climate_box > div.icon_wrap > ul > li > em")
-            hourly_c_mm      = soup.select("div.climate_box > div.graph_wrap > ul > li > div")
-
-            try:
-                rainPercent = hourly_c_percent[0].text
-            except Exception as ex:
-                _LOGGER.error(f"[{DOMAIN}] rainPercent Exception, %s", ex)
-
-            try:
-                Rainfall = hourly_c_mm[0].text
-            except Exception as ex:
-                _LOGGER.error(f"[{DOMAIN}] Rainfall Exception, %s", ex)
+            # 내일 오후온도/오후상태
+            tomorrowATemp = '-'
+            tomorrowAState = '-'
 
             # 주간날씨
             weekly = soup.find("div", {"class": "weekly_forecast_area _toggle_panel"})
@@ -471,8 +432,7 @@ class NWeatherAPI:
                 data = {}
 
                 # day
-                day = di.select("span.date")
-                dayDesc = di.select_one("div > div.cell_date > span > strong.day").text
+                dayDesc = self._bs4_select_one(di, "div > div.cell_date > span > strong.day")
 
                 if (dayDesc == "오늘"):
                     bStart = True
@@ -481,6 +441,8 @@ class NWeatherAPI:
                     continue
 
                 dayInfo = ""
+
+                day = di.select("span.date")
 
                 for t in day:
                     dayInfo = t.text.strip()
@@ -492,26 +454,30 @@ class NWeatherAPI:
                     
                 try:
                     # temp
-                    low  = re2num(di.select_one("span.lowest").text)
-                    high = re2num(di.select_one("span.highest").text)
+                    low  = re2num(self._bs4_select_one(di, "span.lowest"))
+                    high = re2num(self._bs4_select_one(di, "span.highest"))
                     data["templow"]     = float(low)
                     data["temperature"] = float(high)
 
                     # condition
                     cell_w = di.select("div.cell_weather > span > i.wt_icon > span")
 
-                    condition_am = di.select("div.cell_weather > span > i")[0]["class"][1].replace("ico_", "")
-                    condition_pm = di.select("div.cell_weather > span > i")[1]["class"][1].replace("ico_", "")
+                    conditionRaw = di.select("div.cell_weather > span > i")
+
+                    condition_am = conditionRaw[0]["class"][1].replace("ico_", "")
+                    condition_pm = conditionRaw[1]["class"][1].replace("ico_", "")
 
                     data["condition"]    = CONDITIONS[condition_pm][0]
                     data["condition_am"] = CONDITIONS[condition_am][0]
                     data["condition_pm"] = CONDITIONS[condition_pm][0]
 
                     # rain_rate
-                    rain_m = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[0].text
+                    rainRaw = di.select("div.cell_weather > span > span.weather_left > span.rainfall")
+
+                    rain_m = rainRaw[0].text
                     data["rain_rate_am"] = int(re2num(rain_m))
 
-                    rain_a = di.select("div.cell_weather > span > span.weather_left > span.rainfall")[1].text
+                    rain_a = rainRaw[1].text
                     data["rain_rate_pm"] = int(re2num(rain_a))
 
                     if di.select_one("div > div.cell_date > span > span.date").text == comptime:
@@ -523,13 +489,13 @@ class NWeatherAPI:
                         tomorrowMTemp = low
 
                         # 내일 오전상태
-                        tomorrowMState = cell_w[0].text #CONDITIONS[condition_am][1]
+                        rain_a = rainRaw[1].text
 
                         # 내일 오후온도
                         tomorrowATemp = high
 
                         # 내일 오후상태
-                        tomorrowAState = cell_w[1].text #CONDITIONS[condition_pm][1]
+                        tomorrowAState = cell_w[1].text
 
                 except Exception as ex:
                     eLog(ex)
@@ -590,20 +556,70 @@ class NWeatherAPI:
               except Exception as ex:
                 eLog(ex)
             
-            publicTime = soup.select_one("div.relate_info > dl > dd").text
-            #eLog(publicTime)
+            publicTime = self._bs4_select_one(soup, "div.relate_info > dl > dd")
 
-            if FineDust == '-':
+            # 미세먼지, 초미세먼지, 오존 지수
+            FineDust           = self._bs4_select_one(bs4air, "div.state_info._fine_dust > div.grade > span.num")
+            FineDustGrade      = self._bs4_select_one(bs4air, "div.state_info._fine_dust > div.grade > span.text")
+            UltraFineDust      = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust > div.grade > span.num")
+            UltraFineDustGrade = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust > div.grade > span.text")
+
+            # 오염물질(오존/일산화탄소/아황산가스/이산화질소/통합대기)
+            pollution = bs4air.find("div", {"class": "pollutant_content"})
+
+            # 초기화
+            Ozon = OzonGrade = None
+            co   = coGrade   = None
+            so2  = so2Grade  = None
+            no2  = no2Grade  = None
+            cai  = caiGrade  = None
+
+            if pollution is not None:
+                survey = pollution.select("ul.survey_result")
+
+                arrSurveyRslt = []
+
+                for ul in survey:
+                    tmp1 = self._bs4_select_one(ul, "span.state") #구분
+                    tmp2 = self._bs4_select_one(ul, "div.figure_box") #수치
+                    tmp3 = self._bs4_select_one(ul, "strong.figure_text") #등급
+
+                    tmpDict = { "id": tmp1, "val": tmp2, "grd": tmp3}            
+            
+                    arrSurveyRslt.append(tmpDict)
+
+                for arr in arrSurveyRslt:
+                    if arr["id"] == OZON[1]:
+                        Ozon      = arr["val"]
+                        OzonGrade = arr["grd"]
+
+                    if arr["id"] == CO[1]:
+                        co      = arr["val"]
+                        coGrade = arr["grd"]
+
+                    if arr["id"] == SO2[1]:
+                        so2      = arr["val"]
+                        so2Grade = arr["grd"]
+
+                    if arr["id"] == NO2[1]:
+                        no2      = arr["val"]
+                        no2Grade = arr["grd"]
+
+                    if arr["id"] == CAI[1]:
+                        cai      = arr["val"]
+                        caiGrade = arr["grd"]
+
+            # 오염물질 제공
+            offerInfo = self._bs4_select_one(bs4air, "div.inner > div.offer_info > span.update")
+
+            if FineDust is None:
                 FineDust = '0'
 
-            if UltraFineDust == '-':
+            if UltraFineDust is None:
                 UltraFineDust = '0'
 
-            if Rainfall == '-':
+            if Rainfall is None:
                 Rainfall = '0'
-
-            if rainPercent == '-':
-                rainPercent = '0'
 
             self.forecast = forecast
             self.forecast_hour = forecast_hour
@@ -622,7 +638,6 @@ class NWeatherAPI:
                 MAX_TEMP[0]: TodayMaxTemp,
                 FEEL_TEMP[0]: TodayFeelTemp,
                 RAINFALL[0]: Rainfall,
-                UV[0]: TodayUV,
                 UV_GRADE[0]: TodayUVGrade,
                 NDUST[0]: FineDust,
                 NDUST_GRADE[0]: FineDustGrade,
@@ -630,6 +645,10 @@ class NWeatherAPI:
                 UDUST_GRADE[0]: UltraFineDustGrade,
                 OZON[0]: Ozon,
                 OZON_GRADE[0]: OzonGrade,
+                CO[0]:  co,
+                SO2[0]: so2,
+                NO2[0]: no2,
+                CAI[0]: cai,
                 TOMORROW_AM[0]: tomorrowMState,
                 TOMORROW_MIN[0]: tomorrowMTemp,
                 TOMORROW_PM[0]: tomorrowAState,
@@ -637,13 +656,16 @@ class NWeatherAPI:
                 RAINY_START[0]: rainyStart,
                 RAINY_START_TMR[0]: rainyStartTmr,
                 RAIN_PERCENT[0]: rainPercent,
+                "airOfferInfoUpdate": offerInfo
             }
+            
             _LOGGER.info(f"[{BRAND}] Update weather information -> {self.result}")
+            
             for id in WEATHER_INFO.keys():
                 try:
                     self.device_update(id)
                 except Exception as ex:
                     _LOGGER.info(f"[{BRAND}] Update weather fail -> {ex}")
         except Exception as ex:
-            _LOGGER.error("Failed to update NWeather API status Error: %s", ex)
+            _LOGGER.error(f"[{BRAND}] Failed to update NWeather API status Error: {ex}")
             raise
