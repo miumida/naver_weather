@@ -219,7 +219,7 @@ class NWeatherAPI:
         """Update function for updating api information."""
         try:
             url = BSE_URL.format(self.area)
-            url_air = url.replace("날씨", "미세먼지")
+            url_air = url.replace("날씨", "통합대기")
 
             hdr = {
                 "User-Agent": (
@@ -504,10 +504,10 @@ class NWeatherAPI:
 
 
             # 미세먼지, 초미세먼지, 오존 지수
-            FineDust           = self._bs4_select_one(bs4air, "div.state_info._fine_dust > div.grade > span.num")
-            FineDustGrade      = self._bs4_select_one(bs4air, "div.state_info._fine_dust > div.grade > span.text")
-            UltraFineDust      = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust > div.grade > span.num")
-            UltraFineDustGrade = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust > div.grade > span.text")
+            FineDust           = self._bs4_select_one(bs4air, "div.state_info._fine_dust span.num._value")
+            FineDustGrade      = self._bs4_select_one(bs4air, "div.state_info._fine_dust span.text._text")
+            UltraFineDust      = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust span.num._value")
+            UltraFineDustGrade = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust span.text._text")
 
             # 오염물질(오존/일산화탄소/아황산가스/이산화질소/통합대기)
             pollution = bs4air.find("div", {"class": "pollutant_content"})
