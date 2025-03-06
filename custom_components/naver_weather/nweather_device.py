@@ -42,7 +42,6 @@ class NWeatherBase:
             "model": f"{self.api.model}_{self.api.version}",
             "name": f"{self.api.brand_name} {self.area}",
             "sw_version": self.api.version,
-            "via_device": (DOMAIN, self.area),
             "configuration_url": BSE_URL.format(self.area),
         }
 
