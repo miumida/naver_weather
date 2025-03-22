@@ -31,7 +31,10 @@ from .const import (
     NOW_TEMP,
     OZON,
     OZON_GRADE,
-    CO, SO2, NO2, CAI,
+    CO_GRADE,
+    SO2_GRADE,
+    NO2_GRADE,
+    CAI_GRADE,
     RAINFALL,
     TOMORROW_AM,
     TOMORROW_MAX,
@@ -504,13 +507,13 @@ class NWeatherAPI:
 
 
             # 미세먼지, 초미세먼지, 오존 지수
-            FineDust           = self._bs4_select_one(bs4air, "div.state_info._fine_dust span.num._value")
-            FineDustGrade      = self._bs4_select_one(bs4air, "div.state_info._fine_dust span.text._text")
-            UltraFineDust      = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust span.num._value")
-            UltraFineDustGrade = self._bs4_select_one(bs4air, "div.state_info._ultrafine_dust span.text._text")
+            FineDust           = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(1) div.grade div.text_box > span.num")
+            FineDustGrade      = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(1) div.grade > span.text")
+            UltraFineDust      = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(2) div.grade div.text_box > span.num")
+            UltraFineDustGrade = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(2) div.grade > span.text")
 
             # 오염물질(오존/일산화탄소/아황산가스/이산화질소/통합대기)
-            pollution = bs4air.find("div", {"class": "pollutant_content"})
+            pollution = bs4air.find("div", {"class": "other_air_info"})
 
             # 초기화
             Ozon = OzonGrade = None
@@ -520,38 +523,32 @@ class NWeatherAPI:
             cai  = caiGrade  = None
 
             if pollution is not None:
-                survey = pollution.select("ul.survey_result")
+                survey = pollution.select("ul.air_info_list")
 
                 arrSurveyRslt = []
 
                 for ul in survey:
-                    tmp1 = self._bs4_select_one(ul, "span.state") #구분
-                    tmp2 = self._bs4_select_one(ul, "div.figure_box") #수치
-                    tmp3 = self._bs4_select_one(ul, "strong.figure_text") #등급
+                    tmp1 = self._bs4_select_one(ul, "span.info_title") #구분
+                    tmp3 = self._bs4_select_one(ul, "span.state") #등급
 
-                    tmpDict = { "id": tmp1, "val": tmp2, "grd": tmp3}
+                    tmpDict = { "id": tmp1, "grd": tmp3}
 
                     arrSurveyRslt.append(tmpDict)
 
                 for arr in arrSurveyRslt:
                     if arr["id"] == OZON[1]:
-                        Ozon      = arr["val"]
                         OzonGrade = arr["grd"]
 
                     if arr["id"] == CO[1]:
-                        co      = arr["val"]
                         coGrade = arr["grd"]
 
                     if arr["id"] == SO2[1]:
-                        so2      = arr["val"]
                         so2Grade = arr["grd"]
 
                     if arr["id"] == NO2[1]:
-                        no2      = arr["val"]
                         no2Grade = arr["grd"]
 
                     if arr["id"] == CAI[1]:
-                        cai      = arr["val"]
                         caiGrade = arr["grd"]
 
             # 오염물질 제공
@@ -588,10 +585,10 @@ class NWeatherAPI:
                 UDUST_GRADE[0]: UltraFineDustGrade,
                 OZON[0]: Ozon,
                 OZON_GRADE[0]: OzonGrade,
-                CO[0]:  co,
-                SO2[0]: so2,
-                NO2[0]: no2,
-                CAI[0]: cai,
+                CO_GRADE[0]: coGrade,
+                SO2_GRADE[0]: so2Grade,
+                NO2_GRADE[0]: no2Grade,
+                CAI_GRADE[0]: caiGrade,
                 TOMORROW_AM[0]: tomorrowMState,
                 TOMORROW_MIN[0]: tomorrowMTemp,
                 TOMORROW_PM[0]: tomorrowAState,
