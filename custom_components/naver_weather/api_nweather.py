@@ -222,7 +222,7 @@ class NWeatherAPI:
         """Update function for updating api information."""
         try:
             url = BSE_URL.format(self.area)
-            url_air = url.replace("날씨", "통합대기")
+            url_air = url.replace("날씨", "미세먼지")
 
             hdr = {
                 "User-Agent": (
