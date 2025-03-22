@@ -522,13 +522,13 @@ class NWeatherAPI:
             cai  = caiGrade  = None
 
             if pollution is not None:
-                survey = pollution.select("ul.air_info_list")
+                survey = pollution.select("ul.air_info_list > li")
 
                 arrSurveyRslt = []
 
-                for ul in survey:
-                    tmp1 = self._bs4_select_one(ul, "span.info_title") #구분
-                    tmp2 = self._bs4_select_one(ul, "span.state") #등급
+                for li in survey:
+                    tmp1 = self._bs4_select_one(li, "span.info_title") #구분
+                    tmp2 = self._bs4_select_one(li, "span.state") #등급
 
                     tmpDict = { "id": tmp1, "grd": tmp2}
 
