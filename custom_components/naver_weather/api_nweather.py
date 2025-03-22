@@ -529,26 +529,26 @@ class NWeatherAPI:
 
                 for ul in survey:
                     tmp1 = self._bs4_select_one(ul, "span.info_title") #구분
-                    tmp3 = self._bs4_select_one(ul, "span.state") #등급
+                    tmp2 = self._bs4_select_one(ul, "span.state") #등급
 
-                    tmpDict = { "id": tmp1, "grd": tmp3}
+                    tmpDict = { "id": tmp1, "grd": tmp2}
 
                     arrSurveyRslt.append(tmpDict)
 
                 for arr in arrSurveyRslt:
-                    if arr["id"] == OZON[1]:
+                    if arr["id"] == OZON_GRADE[1]:
                         OzonGrade = arr["grd"]
 
-                    if arr["id"] == CO[1]:
+                    if arr["id"] == CO_GRADE[1]:
                         coGrade = arr["grd"]
 
-                    if arr["id"] == SO2[1]:
+                    if arr["id"] == SO2_GRADE[1]:
                         so2Grade = arr["grd"]
 
-                    if arr["id"] == NO2[1]:
+                    if arr["id"] == NO2_GRADE[1]:
                         no2Grade = arr["grd"]
 
-                    if arr["id"] == CAI[1]:
+                    if arr["id"] == CAI_GRADE[1]:
                         caiGrade = arr["grd"]
 
             # 오염물질 제공
