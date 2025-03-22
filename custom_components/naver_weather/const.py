@@ -115,13 +115,11 @@ NDUST = ["FineDust", "미세먼지", CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "
 UDUST_GRADE = ["UltraFineDustGrade", "초미세먼지등급", "", "mdi:blur-linear", ""]
 NDUST_GRADE = ["FineDustGrade", "미세먼지등급", "", "mdi:blur", ""]
 
-OZON = ["Ozon", "오존", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-o-circle", ""]
-OZON_GRADE = ["OzonGrade", "오존등급", "", "mdi:alpha-o-circle", ""]
-
-CO  = ["co",  "일산화탄소", CONCENTRATION_PARTS_PER_MILLION, "mdi:molecule-co", ""]
-SO2 = ["so2", "아황산가스", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-s-circle", ""]
-NO2 = ["no2", "이산화질소", CONCENTRATION_PARTS_PER_MILLION, "mdi:alpha-n-circle", ""]
-CAI = ["cai", "통합대기",   "", "mdi:alpha-c-circle", ""]
+OZON_GRADE = ["OzonGrade", "오존", "", "mdi:alpha-o-circle", ""]
+CO_GRADE  = ["coGrade", "일산화탄소", "", "mdi:molecule-co", ""]
+SO2_GRADE = ["so2Grade", "아황산가스", "", "mdi:alpha-s-circle", ""]
+NO2_GRADE = ["no2Grade", "이산화질소", "", "mdi:alpha-n-circle", ""]
+CAI_GRADE = ["caiGrade", "통합대기", "", "mdi:alpha-c-circle", ""]
 
 TOMORROW_AM = ["tomorrowMState", "내일오전날씨", "", "mdi:weather-cloudy", ""]
 TOMORROW_PM = ["tomorrowAState", "내일오후날씨", "", "mdi:weather-cloudy", ""]
@@ -154,12 +152,11 @@ WEATHER_INFO = {
     NDUST[0]: NDUST,
     UDUST_GRADE[0]: UDUST_GRADE,
     NDUST_GRADE[0]: NDUST_GRADE,
-    OZON[0]: OZON,
     OZON_GRADE[0]: OZON_GRADE,
-    CO[0]: CO,
-    SO2[0]: SO2,
-    NO2[0]: NO2,
-    CAI[0]: CAI,
+    CO_GRADE[0]: CO_GRADE,
+    SO2_GRADE[0]: SO2_GRADE,
+    NO2_GRADE[0]: NO2_GRADE,
+    CAI_GRADE[0]: CAI_GRADE,
     TOMORROW_PM[0]: TOMORROW_PM,
     TOMORROW_MAX[0]: TOMORROW_MAX,
     TOMORROW_AM[0]: TOMORROW_AM,
