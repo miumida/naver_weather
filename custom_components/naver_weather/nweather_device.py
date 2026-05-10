@@ -54,7 +54,6 @@ class NWeatherDevice(NWeatherBase, Entity):
     def __init__(self, device, api):
         """Initialize the instance."""
         super().__init__(device, api)
-        self.api.unique[self.unique_id] = {}
         self.api.hass.data[DOMAIN][self.unique_id] = True
 
     @property
@@ -87,8 +86,8 @@ class NWeatherDevice(NWeatherBase, Entity):
 
     @property
     def should_poll(self) -> bool:
-        """No polling needed for this device."""
-        return False
+        """Enable polling for this device."""
+        return True
 
     @property
     def extra_state_attributes (self):

@@ -43,13 +43,17 @@ class NWeatherSensor(NWeatherDevice, Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        value = self.api.result.get(self.device[0]) or ""
-        if value.isdigit():
-            if isInt(value):
-                return int(value)
-            else:
+        value = self.api.result.get(self.device[0])
+        if value is None or value == "":
+            return None
+
+        try:
+            # Try to convert to float if it contains a dot, otherwise try int
+            if "." in str(value):
                 return float(value)
-        return value
+            return int(value)
+        except (ValueError, TypeError):
+            return value
 
     @property
     def name(self) -> str:

@@ -3,7 +3,7 @@ from datetime import timedelta
 import logging
 
 from homeassistant.components.weather import WeatherEntity
-from homeassistant.const import UnitOfTemperature
+from homeassistant.const import UnitOfTemperature, UnitOfSpeed, UnitOfLength
 
 from homeassistant.components.weather import (
     ATTR_CONDITION_CLEAR_NIGHT,
@@ -33,9 +33,12 @@ from homeassistant.components.weather import (
 from .const import (
     CONDITION,
     DOMAIN,
+    FEEL_TEMP,
     LOCATION,
     NOW_HUMI,
     NOW_TEMP,
+    NOW_WEATHER,
+    RAINFALL,
     WIND_DIR,
     WIND_SPEED,
 )
@@ -66,6 +69,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NWeatherMain(NWeatherDevice, WeatherEntity):
     """Representation of a weather condition."""
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_native_wind_speed_unit = UnitOfSpeed.METERS_PER_SECOND
+    _attr_native_precipitation_unit = UnitOfLength.MILLIMETERS
     _attr_supported_features = ( WeatherEntityFeature.FORECAST_DAILY | WeatherEntityFeature.FORECAST_TWICE_DAILY )
     
     @property
@@ -99,7 +104,7 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     def native_wind_speed(self):
         """Return the wind speed."""
         try:
-            return float(self.api.result.get(WIND_SPEED[0])) * 3.6
+            return float(self.api.result.get(WIND_SPEED[0]))
         except Exception:
             return
 
@@ -107,6 +112,25 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
     def wind_bearing(self):
         """Return the wind bearing."""
         return self.api.result.get(WIND_DIR[0])
+
+    @property
+    def native_apparent_temperature(self):
+        """Return the apparent temperature."""
+        try:
+            return float(self.api.result.get(FEEL_TEMP[0]))
+        except Exception:
+            return
+
+    @property
+    def native_precipitation(self):
+        """Return the precipitation."""
+        try:
+            val = self.api.result.get(RAINFALL[0])
+            if val is None or val == "":
+                return 0.0
+            return float(val)
+        except Exception:
+            return 0.0
 
     @property
     def condition(self):
@@ -118,10 +142,6 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         """Return the weather state."""
         return self.api.result.get(CONDITION[0])
 
-    @property
-    def attribution(self):
-        """Return the attribution."""
-        return f"{self.api.result.get(LOCATION[0])} - Weather forecast from Naver, Powered by miumida"
 
     async def async_forecast_daily(self) -> list[Forecast] | None:
         """Return the daily forecast in native units.
@@ -136,6 +156,24 @@ class NWeatherMain(NWeatherDevice, WeatherEntity):
         Only implement this method if `WeatherEntityFeature.FORECAST_DAILY` is set
         """
         return self._forecast(WeatherEntityFeature.FORECAST_TWICE_DAILY)
+
+    @property
+    def extra_state_attributes(self):
+        """Return the device state attributes."""
+        # 제거할 속성 목록 (표준 속성으로 이동했거나 불필요한 것들)
+        exclude_keys = [
+            "airOfferInfoUpdate",
+            NOW_TEMP[0],    # NowTemp
+            NOW_HUMI[0],    # Humidity
+            NOW_WEATHER[0], # NowWeather
+            CONDITION[0],   # Condition
+            WIND_SPEED[0],  # WindSpeed
+            WIND_DIR[0],    # WindBearing
+            # FEEL_TEMP와 RAINFALL은 하단에서 표준 속성으로 이미 제공되므로 중복 필요 없음
+            FEEL_TEMP[0],
+            # RAINFALL[0], # 웨더 카드 호환성을 위해 속성에 유지
+        ]
+        return {k: v for k, v in self.api.result.items() if k not in exclude_keys}
 
     @property
     def should_poll(self) -> bool:
