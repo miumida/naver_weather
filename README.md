@@ -2,7 +2,7 @@
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
-![Version v2.5.3][version-shield]
+![Version v2.5.4][version-shield]
 
 <a href="https://www.buymeacoffee.com/miumida" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee"></a>
 
@@ -69,6 +69,7 @@
 | v2.4.1 | 2024.03.25  | FORECAST_DAILY 지원 |
 | v2.5.1 | 2024.11.06  | api_nweather.py 수정 |
 | v2.5.3 | 2025.03.22  | 네이버 미세먼지 페이지 변경 대응 |
+| v2.5.4 | 2026.07.04  | Fixed bug |
 <br>
 
 ## Installation
@@ -169,6 +170,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.5.3-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.5.4-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
