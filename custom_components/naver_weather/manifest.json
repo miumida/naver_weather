@@ -3,9 +3,9 @@
   "name": "Naver Weather",
   "config_flow": true,
   "documentation": "https://github.com/miumida/naver_weather",
-  "requirements": ["beautifulsoup4==4.9.3"],
+  "requirements": ["beautifulsoup4==4.12.3"],
   "dependencies": [],
   "codeowners": ["@miumida", "@gugu927"],
-  "version": "2.5.2",
+  "version": "2.5.3",
   "iot_class": "cloud_polling"
 }
