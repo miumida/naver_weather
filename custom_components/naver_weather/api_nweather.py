@@ -540,7 +540,11 @@ class NWeatherAPI:
 
                     self.forecast = forecast
 
-                publicTime = self._bs4_select_one(soup, "div.relate_info > dl > dd")
+                layer_pop_desc = soup.select_one("div.layer_pop p.desc")
+                if layer_pop_desc:
+                    publicTime = layer_pop_desc.text.strip().replace("\n", " ")
+                else:
+                    publicTime = self._bs4_select_one(soup, "div.relate_info > dl > dd")
 
 
                 # 미세먼지, 초미세먼지, 오존 지수
@@ -560,21 +564,33 @@ class NWeatherAPI:
                 if bs4air:
                     try:
                         # Try to get numeric values from air page if available
-                        fd_num = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(1) div.grade div.text_box > span.num")
-                        fd_grd = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(1) div.grade > span.text")
+                        fd_num = None
+                        fd_grd = None
+                        ufd_num = None
+                        ufd_grd = None
+                        
+                        grades = bs4air.select("div.detail_content div.state_info div.grade")
+                        for item in grades:
+                            title_el = item.select_one("span.title")
+                            if title_el:
+                                title_text = title_el.text.strip()
+                                num_el = item.select_one("span.num")
+                                text_el = item.select_one("span.text")
+                                if title_text == "미세" and num_el and fd_num is None:
+                                    fd_num = num_el.text.strip()
+                                    if text_el: fd_grd = text_el.text.strip()
+                                elif title_text == "초미세" and num_el and ufd_num is None:
+                                    ufd_num = num_el.text.strip()
+                                    if text_el: ufd_grd = text_el.text.strip()
+
                         if fd_num: FineDust = fd_num
                         if fd_grd: FineDustGrade = fd_grd
-
-                        ufd_num = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(2) div.grade div.text_box > span.num")
-                        ufd_grd = self._bs4_select_one(bs4air, "div.state_info:nth-of-type(2) div.grade > span.text")
                         if ufd_num: UltraFineDust = ufd_num
                         if ufd_grd: UltraFineDustGrade = ufd_grd
 
                         # 오염물질(오존/일산화탄소/아황산가스/이산화질소/통합대기)
-                        pollution = bs4air.find("div", {"class": "other_air_info"})
-
-                        if pollution is not None:
-                            survey = pollution.select("ul.air_info_list > li")
+                        survey = bs4air.select("ul.air_info_list > li")
+                        if survey:
                             arrSurveyRslt = []
 
                             for li in survey:
@@ -598,7 +614,12 @@ class NWeatherAPI:
                         _LOGGER.warning(f"[{BRAND}] Error parsing pollution data: {ex}")
 
                 # 오염물질 제공
-                offerInfo = self._bs4_select_one(bs4air, "div.inner > div.offer_info > span.update") if bs4air else None
+                offerInfo = None
+                if bs4air:
+                    offer_divs = bs4air.select("div.offer_info")
+                    for o in offer_divs:
+                        if "업데이트" in o.text or "기준" in o.text:
+                            offerInfo = o.text.strip()
 
                 if FineDust is None:
                     FineDust = '0'
