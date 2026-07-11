@@ -2,7 +2,7 @@
 
 ![HAKC)][hakc-shield]
 ![HACS][hacs-shield]
-![Version v2.5.4][version-shield]
+![Version v2.5.5][version-shield]
 
 <a href="https://www.buymeacoffee.com/miumida" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee"></a>
 
@@ -26,50 +26,15 @@
 | Version | Date        | 내용              |
 | :-----: | :---------: | --------------------------------------------------------------------------------------- |
 | v1.0.0  | 2020.05.07  | First version  |
-| v1.0.1  | 2020.05.08  | - 미세먼지/초미세먼지/오존/자외선 가져오기 수정<br>- 미세먼지등급/초미세먼지등급/오존등급 추가 |
-| v1.0.2  | 2020.05.09  | - 자외선 가져오기 오류수정<br>- 시간당 강수량 가져오기 추가<br>- 오타수정 |
-| v1.0.3  | 2020.05.10  | 시간당 강수량 가져오기 오류수정 |
-| v1.0.4  | 2020.05.10  | 오타수정 |
-| v1.0.5  | 2020.05.12  | - 풍속/풍향 추가<br>- 속성순서 수정 |
-| v1.0.6  | 2020.05.12  | 현재습도 수정 |
-| v1.1.0  | 2020.05.13  | weather.py 추가 |
-| v1.1.1  | 2020.05.14  | 내일오전날씨/내일오후날씨 수정 |
-| v1.1.2  | 2020.05.25  | SUB 지역(area_sub) 추가 |
-| v1.1.3  | 2020.05.25  | 오류 수정 |
-| v1.2.0  | 2020.06.18  | weathe에 sensor 통합 |
-| v1.2.1  | 2020.10.14  | weathe, sensor 현재습도, 현재풍속 가져오기 수정 |
 | v2.0.0  | 2021.04.12  | Renewal - 통합구성요소 적용 |
-| v2.0.2  | 2021.04.13  | bug Fix |
-| v2.0.3  | 2021.04.14  | bug Fix |
-| v2.0.4  | 2021.04.15  | bug Fix |
-| v2.0.5  | 2021.04.19  | bug Fix + 자외선등급 추가 |
-| v2.0.6  | 2021.04.20  | bug Fix |
-| v2.0.7  | 2021.04.26  | api_nweather.py 예외처리 |
-| v2.0.8  | 2021.07.09  | api_nweather.py 예외처리 |
-| v2.0.9  | 2021.07.10  | bug Fix(자외선등급 처리) |
 | v2.1.0  | 2021.09.19  | 웹페이지 개편에 따른 api 수정 |
-| v2.1.1  | 2021.09.19  | 로그출력 삭제 |
-| v2.1.2  | 2021.09.24  | bs4 select 수정  |
-| v2.1.4  | 2021.10.01  | 미세먼지 관련 오류   |
-| v2.1.6  | 2021.12.15  | Fixed bug |
-| v2.1.8  | 2022.05.04  | Fixed bug |
-| v2.1.11  | 2022.06.22  | Fixed bug |
-| v2.1.12  | 2022.06.28  | 강수확률, 시간당강수량 api 로직 수정 |
 | v2.2.0 | 2022.07.07  | 현재날씨, 현재날씨정보 정리 + 현재날씨정보 출력형태 변경  |
-| v2.2.1 | 2022.07.08  | Fixed bug  |
-| v2.2.2 | 2022.07.18  | Fixed bug  |
-| v2.2.3 | 2022.09.06  | - 자외선 등급 추가<br> - 내일오전날씨, 내일오후날씨 api 로직 수정<br> - 오늘비시작시간, 오늘내일비시작시간 api 로직 수정  |
-| v2.2.4 | 2022.09.23  | 미세먼지, 초미세먼지 device_class(pm25) 추가  |
-| v2.2.5 | 2022.12.29  | 주간예보에 오늘날씨 포함 옵션   |
-| v2.2.6 | 2023.04.14  | 풍속 정규식 처리    |
-| v2.2.7 | 2023.07.28  | DeviceEntryType -> entry_type   |
-| v2.2.8 | 2023.07.29  | DeviceEntryType 원복  |
 | v2.3.0 | 2023.10.12  | WeatherEntity 업데이트 대응 |
 | v2.3.3 | 2024.02.27  | DeprecatedConstant 업데이트 대응, FORECAST_TWICE_DAILY 적용 |
 | v2.4.1 | 2024.03.25  | FORECAST_DAILY 지원 |
 | v2.5.1 | 2024.11.06  | api_nweather.py 수정 |
 | v2.5.3 | 2025.03.22  | 네이버 미세먼지 페이지 변경 대응 |
-| v2.5.4 | 2026.07.04  | Fixed bug |
+| v2.5.5 | 2026.07.11  | Fixed bug |
 <br>
 
 ## Installation
@@ -170,6 +135,6 @@ area는 기본값으로 '날씨'로 들어갑니다.<br>
 ## 참고사이트
 [1] 네이버 HomeAssistant 카페 | af950833님의 [HA] 네이버 날씨 (<https://cafe.naver.com/stsmarthome/19337>)<br>
 
-[version-shield]: https://img.shields.io/badge/version-v2.5.4-orange.svg
+[version-shield]: https://img.shields.io/badge/version-v2.5.5-orange.svg
 [hakc-shield]: https://img.shields.io/badge/HAKC-Enjoy-blue.svg
 [hacs-shield]: https://img.shields.io/badge/HACS-Custom-red.svg
