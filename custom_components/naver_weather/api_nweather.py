@@ -298,6 +298,9 @@ class NWeatherAPI:
             # 습도
             Humidity      = re2num(re2key("습도", summ))
 
+            if Humidity is None and self.result:
+                Humidity = self.result.get(NOW_HUMI[0])
+            
             # 현재풍속/풍향
             wind      = re2keyW(summ)
             WindSpeed = re2float(wind)
