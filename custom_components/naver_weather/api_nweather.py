@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 import logging
 import re
+from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
@@ -246,6 +247,16 @@ class NWeatherAPI:
             soup = BeautifulSoup(await response.text(), "html.parser")
 
             #미세먼지
+            # Naver no longer returns local air quality for a bare "미세먼지" query
+            # (it shows a nationwide map), so use the local air-quality link from
+            # the weather page's report card when it is available.
+            for li in soup.select("div.report_card_wrap > ul.today_chart_list > li.item_today"):
+                title = self._bs4_select_one(li, "strong.title")
+                link  = li.select_one("a[href]")
+                if title == "미세먼지" and link is not None:
+                    url_air = urljoin(url, link["href"])
+                    break
+
             air = await session.get(url_air, headers=hdr, timeout=30)
             air.raise_for_status()
 
