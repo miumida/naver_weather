@@ -83,14 +83,11 @@ def re2key(key,val):
     if val is None:
         return None
 
-    r = re.compile(f"{key} -?\\d+\\.?\\d?")
-    rtn = r.findall(val)
-
-    if len(rtn) > 0:
-        return rtn[0]
-    else:
-        return None
-
+    r = re.compile(rf"{key}\s*[:]?\s*(-?\d+\.?\d?)")
+    m = r.search(val)
+    
+    return m.group(1) if m else None
+    
 def re2keyW(val):
     if val is None:
         return None
