@@ -223,7 +223,9 @@ class NWeatherAPI:
 
             hdr = {
                 "User-Agent": (
-                    "mozilla/5.0 (windows nt 10.0; win64; x64) applewebkit/537.36 (khtml, like gecko) chrome/78.0.3904.70 safari/537.36"
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/131.0.0.0 Safari/537.36"
                 ),
                 "Referer": (
                     "https://naver.com"
